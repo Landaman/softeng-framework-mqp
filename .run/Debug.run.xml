@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Debug" type="CompoundRunConfigurationType">
+    <toRun name="Attach Backend" type="ChromiumRemoteDebugType" />
+    <toRun name="Attach Frontend" type="JavascriptDebugType" />
+    <method v="2" />
+  </configuration>
+</component>

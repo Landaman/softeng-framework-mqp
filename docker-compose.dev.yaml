@@ -1,0 +1,93 @@
+# Exposed ports
+x-port-bindings:
+  # The port that will be openly accessible : the front-port above.
+  # This is required because string concatenation can't work in YAML
+  FRONTEND_EXPOSED: &front-exposed 3000:3000
+
+  # The backend needs an explicit debug port. The frontend is debugged via your browser (Chrome).
+  # This forwarding is used to leave 9229 open in case anything weird happens
+  BACKEND_DEBUGGER: &back-debug 9001:9229
+
+# Arguments used by both front and back
+x-arguments: &dev-args
+  BACKEND_PORT: &back-port 3001 # Port for the backend
+  FRONTEND_PORT: &front-port 3000 # Port for the frontend (exposed)
+  BACKEND_SOURCE: http://backend # Backend URL (points to the backend container)
+
+# This may seem insecure, but the DB container isn't exposed outside of docker, so it doesn't
+# matter since NOBODY except for other containers has access ot it
+x-db-info: &db-args
+  POSTGRES_USER: cordinator
+  POSTGRES_PASSWORD: cordinator
+  POSTGRES_DB: cordintator
+
+# Port and URL for the DB
+x-db-loc: &db-loc
+  POSTGRES_URL: &pg-url http://database
+  POSTGRES_PORT: &pg-port "8080"
+
+# Running containers
+services:
+  # Frontend (UI)
+  frontend:
+    # This is exposed
+    ports:
+      # Expose the standard port
+      - *front-exposed
+    # Use the standard Dockerfile
+    build:
+      # Taken from root
+      context: .
+      # Use the dev-args (defined above)
+      args: *dev-args
+      # Use the dev-frontend stage
+      target: dev-frontend
+    # For the proxy to work, the backend must start first
+    depends_on:
+      - backend
+    # Mount the frontend dev environment, ignore backend
+    volumes:
+      - "./:/app"
+      - "/app/backend/"
+    # This tells create-react-app to use polling (only thing that works in mounts in containers) to look
+    # for file changes
+    environment:
+      - WATCHPACK_POLLING=true
+
+  # Backend (API)
+  backend:
+    # The frontend container must be able to access this, so expose it internally.
+    # Any calls YOU want to make to the DB must be made via the frontend port,
+    # and they will automatically be proxied to the backend
+    expose:
+      - *back-port
+    # Expose ONLY THE DEBUGGER to the host
+    ports:
+      - *back-debug
+    # Use the standard Dockerfile
+    build:
+      # Taken from root
+      context: .
+      # Use the dev-args (defined above), along with the DB info, port, and URL
+      args:
+        <<: *dev-args
+        <<: *db-loc
+      # This time, build the backend
+      target: dev-backend
+    # Mount the backend on the host, ignore frontend
+    volumes:
+      - "./:/app"
+      - "/app/frontend/"
+    # The backend depends on the database being functional
+    depends_on:
+      - database
+
+  # Backend PSQL database
+  database:
+    image: postgres
+    # Expose the PG port
+    expose:
+      - *pg-port
+    # Use the DB args defined above
+    environment:
+      *db-args

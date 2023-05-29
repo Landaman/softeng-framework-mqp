@@ -1,0 +1,14 @@
+**/.gitignore
+Dockerfile
+.dockerignore
+**/.idea
+**/.git
+docker-compose*.yaml
+
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

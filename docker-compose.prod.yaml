@@ -1,0 +1,121 @@
+# Production arguments passed to both containers
+x-prod-args: &prod-args
+  # Port that both servers will run production on
+  PRODUCTION_PORT: &prod-port 80
+
+# This may seem insecure, but the DB container isn't exposed outside of docker, so it doesn't
+# matter since NOBODY except for other containers has access ot it
+x-db-info: &db-args
+  POSTGRES_USER: cordinator
+  POSTGRES_PASSWORD: cordinator
+  POSTGRES_DB: cordintator
+
+# Port and URL for the DB
+x-db-loc: &db-loc
+  POSTGRES_URL: &pg-url http://database
+  POSTGRES_PORT: &pg-port "8080"
+
+# Running containers
+services:
+  # Traefik container, used for production routing. ALL requests will automatically be routed through here
+  # (hence why this is the only service with a "ports") to their appropriate destination based on the routing rules
+  traefik:
+    image: traefik:latest
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+
+      # Expose the standard HTTP port, have it automatically redirect to https
+      - "--entrypoints.web.address=:900"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+
+      # This is what will actually be used
+      - "--entrypoints.websecure.address=:1000"
+    # Everything enters through Traefik, so this exposes the environment
+    ports:
+      - "900:900"
+      - "1000:1000"
+    # Traefik requirement
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  # Frontend (UI)
+  frontend:
+    # This is the exposed production port, so that Traefik routing can access it
+    expose:
+      - *prod-port
+    # Use the standard Dockerfile
+    build:
+      # Taken from our gitlab repo
+      context: "https://rellab.gitlab.local.brooksautomation.com/developers/cordinator.git"
+      # Use SSH to attach to the GitLab repo
+      ssh:
+        - default
+      args:
+        <<: *prod-args
+      # Use the prod-frontend stage
+      target: prod-frontend
+      # Traefik labels
+      labels:
+        - "traefik.enable=true"
+
+        # The 443 entrypoint is the actual site
+        - "traefik.http.routers.frontend-https.entrypoints=websecure"
+        - "traefik.http.routers.frontend-https.rule=Host(`localhost`)"
+        - "traefik.http.routers.frontend-https.tls=true"
+
+        # Despite the "loadbalancer" naming, this just describes what port this container exposes
+        - "traefik.http.services.frontend-https.loadbalancer.server.port=80"
+
+  # Backend (API)
+  backend:
+    # This is the exposed production port, so that Traefik routing can access it
+    expose:
+      - *prod-port
+    # Use the standard Dockerfile
+    build:
+      # Taken from our gitlab repo
+      context: "https://rellab.gitlab.local.brooksautomation.com/developers/cordinator.git"
+      # Use SSH to attach to the GitLab repo
+      ssh:
+        - default
+      args:
+        # Include prod info
+        <<: *prod-args
+        # Include DB info
+        <<: *db-args
+        <<: *db-loc
+      # This time, build the backend
+      target: prod-backend
+    # This is the same as above, except everywhere that it said frontend is now backend, and
+    # it requires the /api prefix on everything
+    labels:
+      - "traefik.enable=true"
+
+      # The 443 entrypoint is the actual site
+      - "traefik.http.routers.backend-https.entrypoints=websecure"
+      - "traefik.http.routers.backend-https.rule=Host(`localhost`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.backend-https.tls=true"
+
+      # Despite the "loadbalancer" naming, this just describes what port this container exposes
+      - "traefik.http.services.backend-https.loadbalancer.server.port=80"
+
+  #PSQL database image
+  database:
+    # Expose the database to other containers
+    expose:
+      - *pg-port
+    image: postgres
+    # Use the DB args above
+    environment:
+      *db-args
+    volumes:
+      # This is the standard path where PSQL persists data
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  # Volume where the permanent PG data will be stored. The PG container can be killed, but as long as this
+  # volume is alive, the data will live on
+  postgres_data:
