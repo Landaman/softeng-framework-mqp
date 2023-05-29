@@ -4233,6 +4233,7 @@ __metadata:
     "@types/node": ^20.2.3
     "@typescript-eslint/eslint-plugin": ^5.59.5
     "@typescript-eslint/parser": ^5.59.5
+    common: "workspace:*"
     cookie-parser: ~1.4.4
     debug: ~2.6.9
     dotenv: ^16.0.3
@@ -4846,6 +4847,12 @@ __metadata:
   checksum: 767a6255a84bbc47df49a60ab583053bb29a7d9687066a18500a516188a062c4e4cd52de341f22de0b07062e699b1b8fe3cfa1cb55b241cb9301aeb4f45b4dff
   languageName: node
   linkType: hard
+
+"common@workspace:*, common@workspace:common":
+  version: 0.0.0-use.local
+  resolution: "common@workspace:common"
+  languageName: unknown
+  linkType: soft
 
 "commondir@npm:^1.0.1":
   version: 1.0.1
@@ -6864,11 +6871,11 @@ __metadata:
     "@typescript-eslint/parser": ^5.59.5
     axios: ^1.4.0
     bootstrap: ^5.2.3
+    common: "workspace:*"
     eslint: ^8.41.0
     eslint-plugin-react: ^7.32.2
     http-proxy-middleware: ^2.0.6
     react: ^18.2.0
-    react-app-alias: ^2.2.2
     react-bootstrap: ^2.7.4
     react-dom: ^18.2.0
     react-scripts: 5.0.1
@@ -11465,13 +11472,6 @@ __metadata:
     iconv-lite: 0.4.24
     unpipe: 1.0.0
   checksum: 5362adff1575d691bb3f75998803a0ffed8c64eabeaa06e54b4ada25a0cd1b2ae7f4f5ec46565d1bec337e08b5ac90c76eaa0758de6f72a633f025d754dec29e
-  languageName: node
-  linkType: hard
-
-"react-app-alias@npm:^2.2.2":
-  version: 2.2.2
-  resolution: "react-app-alias@npm:2.2.2"
-  checksum: f34d8047b599ce17c7dd32cdef7a93fdb69d466621db63a9d589bd720a0ca6298b186e6c340c1ee33f8d614d3dceed87375a81bcd2d57373504c677cb58270f9
   languageName: node
   linkType: hard
 

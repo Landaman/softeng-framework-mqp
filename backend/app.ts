@@ -9,7 +9,11 @@ const debug: debug0.Debugger = debug0("backend:app"); // Create a debug logger
 const app: Express = express(); // Setup the backend
 
 // Setup generic middlewear
-app.use(logger('dev')); // This records all HTTP requests
+app.use(logger('dev', {
+  stream: {
+    write: msg => debug(msg)
+  }
+})); // This records all HTTP requests
 app.use(express.json()); // This processes requests as JSON
 app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser

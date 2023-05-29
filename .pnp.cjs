@@ -20,6 +20,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:backend"\
       },\
       {\
+        "name": "common",\
+        "reference": "workspace:common"\
+      },\
+      {\
         "name": "frontend",\
         "reference": "workspace:frontend"\
       }\
@@ -28,6 +32,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
     "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
     "fallbackExclusionList": [\
       ["backend", ["workspace:backend"]],\
+      ["common", ["workspace:common"]],\
       ["frontend", ["workspace:frontend"]],\
       ["softeng-framework-mqp", ["workspace:."]]\
     ],\
@@ -6549,6 +6554,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:20.2.3"],\
             ["@typescript-eslint/eslint-plugin", "virtual:93b36166c6e57acd847623d7ee49370f62c07d93945b963c9ec902d1cdae2bfe60ed6f719a108d6b0465851e99d579ad9ee7fd3f172e95528823af91aee7346c#npm:5.59.7"],\
             ["@typescript-eslint/parser", "virtual:93b36166c6e57acd847623d7ee49370f62c07d93945b963c9ec902d1cdae2bfe60ed6f719a108d6b0465851e99d579ad9ee7fd3f172e95528823af91aee7346c#npm:5.59.7"],\
+            ["common", "workspace:common"],\
             ["cookie-parser", "npm:1.4.6"],\
             ["debug", "virtual:d8bf9050414812c416c07fc0899a3ff9df7e2f58885fc5a6fe0a26529d22fde0fe54646d8015b5d39f2cefaf29af913d56ede8576e99491b58a68ff70a05481e#npm:2.6.9"],\
             ["dotenv", "npm:16.0.3"],\
@@ -7230,6 +7236,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["commander", "npm:8.3.0"]\
           ],\
           "linkType": "HARD"\
+        }]\
+      ]],\
+      ["common", [\
+        ["workspace:common", {\
+          "packageLocation": "./common/",\
+          "packageDependencies": [\
+            ["common", "workspace:common"]\
+          ],\
+          "linkType": "SOFT"\
         }]\
       ]],\
       ["common-path-prefix", [\
@@ -9832,11 +9847,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/parser", "virtual:93b36166c6e57acd847623d7ee49370f62c07d93945b963c9ec902d1cdae2bfe60ed6f719a108d6b0465851e99d579ad9ee7fd3f172e95528823af91aee7346c#npm:5.59.7"],\
             ["axios", "npm:1.4.0"],\
             ["bootstrap", "virtual:129c180801e06ed395e4da371c76ab19371e66a3c2230c25e2f8aa53715d8f66998096a34403ac325c10f7034d54eaa1a82bf612b0d4bf56a1d1943388d98f11#npm:5.2.3"],\
+            ["common", "workspace:common"],\
             ["eslint", "npm:8.41.0"],\
             ["eslint-plugin-react", "virtual:129c180801e06ed395e4da371c76ab19371e66a3c2230c25e2f8aa53715d8f66998096a34403ac325c10f7034d54eaa1a82bf612b0d4bf56a1d1943388d98f11#npm:7.32.2"],\
             ["http-proxy-middleware", "virtual:129c180801e06ed395e4da371c76ab19371e66a3c2230c25e2f8aa53715d8f66998096a34403ac325c10f7034d54eaa1a82bf612b0d4bf56a1d1943388d98f11#npm:2.0.6"],\
             ["react", "npm:18.2.0"],\
-            ["react-app-alias", "npm:2.2.2"],\
             ["react-bootstrap", "virtual:129c180801e06ed395e4da371c76ab19371e66a3c2230c25e2f8aa53715d8f66998096a34403ac325c10f7034d54eaa1a82bf612b0d4bf56a1d1943388d98f11#npm:2.7.4"],\
             ["react-dom", "virtual:129c180801e06ed395e4da371c76ab19371e66a3c2230c25e2f8aa53715d8f66998096a34403ac325c10f7034d54eaa1a82bf612b0d4bf56a1d1943388d98f11#npm:18.2.0"],\
             ["react-scripts", "virtual:129c180801e06ed395e4da371c76ab19371e66a3c2230c25e2f8aa53715d8f66998096a34403ac325c10f7034d54eaa1a82bf612b0d4bf56a1d1943388d98f11#npm:5.0.1"],\
@@ -15799,15 +15814,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["react", "npm:18.2.0"],\
             ["loose-envify", "npm:1.4.0"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["react-app-alias", [\
-        ["npm:2.2.2", {\
-          "packageLocation": "./.yarn/cache/react-app-alias-npm-2.2.2-5a18ed88ff-f34d8047b5.zip/node_modules/react-app-alias/",\
-          "packageDependencies": [\
-            ["react-app-alias", "npm:2.2.2"]\
           ],\
           "linkType": "HARD"\
         }]\

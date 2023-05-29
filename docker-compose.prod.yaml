@@ -48,11 +48,8 @@ services:
       - *prod-port
     # Use the standard Dockerfile
     build:
-      # Taken from our gitlab repo
-      context: "https://rellab.gitlab.local.brooksautomation.com/developers/cordinator.git"
-      # Use SSH to attach to the GitLab repo
-      ssh:
-        - default
+      # Taken from our github repo
+      context: "https://github.com/Landaman/softeng-framework-mqp.git"
       args:
         <<: *prod-args
       # Use the prod-frontend stage
@@ -76,11 +73,8 @@ services:
       - *prod-port
     # Use the standard Dockerfile
     build:
-      # Taken from our gitlab repo
-      context: "https://rellab.gitlab.local.brooksautomation.com/developers/cordinator.git"
-      # Use SSH to attach to the GitLab repo
-      ssh:
-        - default
+      # Taken from our github repo
+      context: "https://github.com/Landaman/softeng-framework-mqp.git"
       args:
         # Include prod info
         <<: *prod-args

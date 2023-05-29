@@ -1,10 +1,9 @@
 {
   "legacyWatch": true,
-  "watch": [".."],
+  "watch": ["../common", "./"],
   "ext": "js,ts,json",
   "exec": "node --inspect=0.0.0.0 -r ts-node/register bin/www.ts",
   "events": {
-    "start": "yarn run lint:fix",
-    "restart": "yarn run lint:fix"
+    "start": "yarn run lint:fix"
   }
 }

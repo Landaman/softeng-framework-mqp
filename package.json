@@ -6,7 +6,8 @@
   "license": "UNLICENSED",
   "workspaces": [
     "frontend",
-    "backend"
+    "backend",
+    "common"
   ],
   "repository": {
     "type": "git",
