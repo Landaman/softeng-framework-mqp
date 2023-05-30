@@ -2,6 +2,7 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "module": "ESNext",
+    "resolveJsonModule": true,
     "skipLibCheck": true,
 
     /* Bundler mode */
