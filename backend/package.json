@@ -2,7 +2,6 @@
   "private": true,
   "name": "backend",
   "version": "1.0.0",
-  "type": "module",
   "scripts": {
     "start": "nodemon",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max warnings 0",
