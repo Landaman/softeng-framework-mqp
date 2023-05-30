@@ -4,12 +4,12 @@ import eslint from 'vite-plugin-eslint';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  server: {
-    host: "0.0.0.0",
-    port: parseInt(process.env.PORT),
-    proxy: {
-      "/api": process.env.BACKEND_SOURCE + ":" + process.env.BACKEND_PORT
-    }
-  },
-  plugins: [react(), eslint()],
+    server: {
+        host: "0.0.0.0",
+        port: parseInt(process.env.PORT),
+        proxy: {
+            "/api": process.env.BACKEND_SOURCE + ":" + process.env.BACKEND_PORT
+        }
+    },
+    plugins: [react(), eslint()],
 });

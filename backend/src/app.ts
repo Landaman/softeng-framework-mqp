@@ -11,9 +11,9 @@ const app: Express = express(); // Setup the backend
 
 // Setup generic middlewear
 app.use(logger('dev', {
-  stream: {
-    write: msg => debug(msg)
-  }
+    stream: {
+        write: msg => debug(msg)
+    }
 })); // This records all HTTP requests
 app.use(express.json()); // This processes requests as JSON
 app.use(express.urlencoded({ extended: false })); // URL parser
@@ -29,20 +29,20 @@ app.use("/api/numbers", numbersRouter);
  * Catch all 404 errors, and forward them to the error handler
  */
 app.use(function(req: Request, res: Response, next: NextFunction): void {
-  // Have the next (generic error handler) process a 404 error
-  next(createError(404));
+    // Have the next (generic error handler) process a 404 error
+    next(createError(404));
 });
 
 /**
  * Generic error handler,
  */
 app.use((err: HttpError, req: Request, res: Response): void => {
-  res.statusMessage = err.message; // Provide the error message
+    res.statusMessage = err.message; // Provide the error message
 
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // Reply with the error
-  res.status(err.status || 500);
+    // Reply with the error
+    res.status(err.status || 500);
 });
 
 export default app; // Export the backend, so that www.ts can start it

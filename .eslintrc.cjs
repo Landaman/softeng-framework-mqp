@@ -9,6 +9,9 @@ module.exports = {
     rules: {
         "semi": "error",
         "no-empty": "warn",
-        "no-empty-function": "warn"
+        "no-empty-function": "warn",
+        "prefer-const": "warn",
+        "indent": ["warn", 4],
+        "@typescript-eslint/no-empty-interface": "warn"
     }
 };
