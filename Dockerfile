@@ -54,7 +54,7 @@ RUN yarn workspaces focus frontend --production
 
 # Use entrypoint (since this contianer should be run as-is)
 # Simply serve the frontend single (so that everything goes to index.html) and the prod port
-ENTRYPOINT yarn serve /$WORKDIR/frontend/build -s -p $PORT
+ENTRYPOINT yarn workspace frontend serve /$WORKDIR/frontend/build -s -p $PORT
 
 # Healthceck to determine if we're actually still serving stuff, just attempt to get the URL
 HEALTHCHECK CMD curl localhost:$PORT

@@ -70,8 +70,7 @@ services:
       context: .
       # Use the dev-args (defined above), along with the DB info, port, and URL
       args:
-        <<: *dev-args
-        <<: *db-loc
+        <<: [*dev-args, *db-loc]
       # This time, build the backend
       target: dev-backend
     # Mount the backend on the host, ignore frontend

@@ -76,11 +76,8 @@ services:
       # Taken from our github repo
       context: "https://github.com/Landaman/softeng-framework-mqp.git#main"
       args:
-        # Include prod info
-        <<: *prod-args
-        # Include DB info
-        <<: *db-args
-        <<: *db-loc
+        # Ignore the warnings, this just merges those three
+        <<: [*prod-args, *db-args, *db-loc]
       # This time, build the backend
       target: prod-backend
     # This is the same as above, except everywhere that it said frontend is now backend, and
