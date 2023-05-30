@@ -49,11 +49,11 @@ RUN rm /$WORKDIR/.eslintrc.cjs
 FROM prod-base AS prod-frontend
 WORKDIR /$WORKDIR
 
+# Build the frontend (we still need dev dependencies here)
+RUN yarn workspace frontend run build
+
 # Trim to frontend only (even though we don't actually need frontend, we need its build information)
 RUN yarn workspaces focus frontend --production
-
-# Build the frontend
-RUN yarn workspace frontend run build
 
 # Use entrypoint (since this contianer should be run as-is)
 # Simply serve the frontend single (so that everything goes to index.html) and the prod port

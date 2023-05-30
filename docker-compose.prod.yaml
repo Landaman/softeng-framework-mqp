@@ -49,7 +49,7 @@ services:
     # Use the standard Dockerfile
     build:
       # Taken from our github repo
-      context: "https://github.com/Landaman/softeng-framework-mqp.git"
+      context: "https://github.com/Landaman/softeng-framework-mqp.git#main"
       args:
         <<: *prod-args
       # Use the prod-frontend stage
@@ -74,7 +74,7 @@ services:
     # Use the standard Dockerfile
     build:
       # Taken from our github repo
-      context: "https://github.com/Landaman/softeng-framework-mqp.git"
+      context: "https://github.com/Landaman/softeng-framework-mqp.git#main"
       args:
         # Include prod info
         <<: *prod-args
