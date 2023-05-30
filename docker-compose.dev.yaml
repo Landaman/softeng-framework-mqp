@@ -17,9 +17,9 @@ x-arguments: &dev-args
 # This may seem insecure, but the DB container isn't exposed outside of docker, so it doesn't
 # matter since NOBODY except for other containers has access ot it
 x-db-info: &db-args
-  POSTGRES_USER: cordinator
-  POSTGRES_PASSWORD: cordinator
-  POSTGRES_DB: cordintator
+  POSTGRES_USER: dev
+  POSTGRES_PASSWORD: dev
+  POSTGRES_DB: dev
 
 # Port and URL for the DB
 x-db-loc: &db-loc
