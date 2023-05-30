@@ -57,7 +57,7 @@ RUN yarn workspaces focus frontend --production
 ENTRYPOINT yarn workspace frontend serve /$WORKDIR/frontend/build -s -p $PORT
 
 # Healthceck to determine if we're actually still serving stuff, just attempt to get the URL
-HEALTHCHECK CMD wget localhost:$PORT
+HEALTHCHECK CMD wget --spider localhost:$PORT
 
 
 
@@ -81,7 +81,7 @@ ENTRYPOINT ["yarn", "workspace", "backend", "ts-node", "--transpile-only", "./sr
 
 # Healthceck to determine if we're actually still serving stuff, just attempt to get the root. This will be 404,
 # but that is OK
-HEALTHCHECK CMD exit 0
+HEALTHCHECK CMD wget --spider localhost:$PORT/api/users
 
 
 
