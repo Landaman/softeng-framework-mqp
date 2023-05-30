@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import debug0 from "debug";
 import usersRouter from "./routes/users.ts";
+import numbersRouter from "./routes/numbers.ts";
 
 const debug: debug0.Debugger = debug0("backend:app"); // Create a debug logger
 const app: Express = express(); // Setup the backend
@@ -21,6 +22,8 @@ app.use(cookieParser()); // Cookie parser
 // Setup routers. ALL ROUTERS MUST use /api as a start point, or they
 // won't be reached by the default proxy and prod setup
 app.use('/api/users', usersRouter);
+
+app.use("/api/numbers", numbersRouter);
 
 /**
  * Catch all 404 errors, and forward them to the error handler

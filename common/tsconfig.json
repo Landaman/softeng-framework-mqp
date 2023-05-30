@@ -1,9 +1,10 @@
 {
     "extends": "../tsconfig.json",
     "compilerOptions": {
-        "module": "ESNext",
+        "module": "commonjs",
         "skipLibCheck": true,
-        "moduleResolution": "NodeNext",
+        "moduleResolution": "node",
         "allowSyntheticDefaultImports": true
-    }
+    },
+    "include": ["src"]
 }
