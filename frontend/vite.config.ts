@@ -11,5 +11,8 @@ export default defineConfig({
             "/api": process.env.BACKEND_SOURCE + ":" + process.env.BACKEND_PORT
         }
     },
+    build: {
+        outDir: "build"
+    },
     plugins: [react(), eslint()],
 });
