@@ -77,7 +77,7 @@ ENV POSTGRES_PORT=$POSTGRES_PORT
 
 # Use entrypoint (since this contanier should be run as-is)
 # Simply have ts-node run the express start-point. Transpile-only (NO TYPE CHECKING) since prod SHOULDN'T need it
-ENTRYPOINT ["yarn", "workspace", "backend", "ts-node", "--transpile-only", "./bin/www.ts"]
+ENTRYPOINT ["yarn", "workspace", "backend", "ts-node", "--transpile-only", "./src/bin/www.ts"]
 
 # Healthceck to determine if we're actually still serving stuff, just attempt to get the root. This will be 404,
 # but that is OK
