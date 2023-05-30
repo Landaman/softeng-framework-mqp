@@ -10,9 +10,5 @@ module.exports = {
         "semi": "error",
         "no-empty": "warn",
         "no-empty-function": "warn"
-    },
-    env: {
-        node: true,
-        browser: true
     }
 };

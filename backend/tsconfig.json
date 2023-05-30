@@ -1,0 +1,13 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "module": "ESNext",
+        "skipLibCheck": true,
+        "moduleResolution": "NodeNext",
+        "allowSyntheticDefaultImports": true
+    },
+    "ts-node": {
+        "esm": true,
+        "swc": true
+    }
+}
