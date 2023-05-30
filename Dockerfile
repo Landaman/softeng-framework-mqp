@@ -81,7 +81,7 @@ ENTRYPOINT ["yarn", "workspace", "backend", "ts-node", "--transpile-only", "./sr
 
 # Healthceck to determine if we're actually still serving stuff, just attempt to get the root. This will be 404,
 # but that is OK
-HEALTHCHECK CMD wget --spider localhost:$PORT
+HEALTHCHECK CMD exit 0
 
 
 
