@@ -40,9 +40,6 @@ ENV NODE_ENV=production
 # Expose the port
 EXPOSE $PORT
 
-# Wipe out all non-production items from the main folder (note that tsconfig is required)
-RUN rm /$WORKDIR/.eslintrc.cjs
-
 
 
 # Stage to run production frontend
