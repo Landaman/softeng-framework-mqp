@@ -12,8 +12,8 @@ x-db-info: &db-args
 
 # Port and URL for the DB
 x-db-loc: &db-loc
-  POSTGRES_URL: &pg-url http://database
-  POSTGRES_PORT: &pg-port "8080"
+  POSTGRES_CONTAINER: &pg-container database
+  POSTGRES_PORT: &pg-port "5432"
 
 # Health check for all processes
 x-health-check: &health-check

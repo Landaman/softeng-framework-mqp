@@ -1548,6 +1548,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint", "npm:8.41.0"],\
             ["express", "npm:5.0.0-beta.1"],\
             ["http-errors", "npm:1.6.3"],\
+            ["kysely", "npm:0.25.0"],\
+            ["kysely-codegen", "virtual:93b36166c6e57acd847623d7ee49370f62c07d93945b963c9ec902d1cdae2bfe60ed6f719a108d6b0465851e99d579ad9ee7fd3f172e95528823af91aee7346c#npm:0.10.0"],\
             ["morgan", "npm:1.9.1"],\
             ["nodemon", "npm:2.0.22"],\
             ["pg", "virtual:93b36166c6e57acd847623d7ee49370f62c07d93945b963c9ec902d1cdae2bfe60ed6f719a108d6b0465851e99d579ad9ee7fd3f172e95528823af91aee7346c#npm:8.11.0"],\
@@ -3355,6 +3357,53 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/json-stable-stringify-without-jsonify-npm-1.0.1-b65772b28b-cff44156dd.zip/node_modules/json-stable-stringify-without-jsonify/",\
           "packageDependencies": [\
             ["json-stable-stringify-without-jsonify", "npm:1.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["kysely", [\
+        ["npm:0.25.0", {\
+          "packageLocation": "./.yarn/cache/kysely-npm-0.25.0-c1e89e6e57-78a9a9704d.zip/node_modules/kysely/",\
+          "packageDependencies": [\
+            ["kysely", "npm:0.25.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["kysely-codegen", [\
+        ["npm:0.10.0", {\
+          "packageLocation": "./.yarn/cache/kysely-codegen-npm-0.10.0-c7d27e8416-fb8cc854fb.zip/node_modules/kysely-codegen/",\
+          "packageDependencies": [\
+            ["kysely-codegen", "npm:0.10.0"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:93b36166c6e57acd847623d7ee49370f62c07d93945b963c9ec902d1cdae2bfe60ed6f719a108d6b0465851e99d579ad9ee7fd3f172e95528823af91aee7346c#npm:0.10.0", {\
+          "packageLocation": "./.yarn/__virtual__/kysely-codegen-virtual-1a16bf8811/0/cache/kysely-codegen-npm-0.10.0-c7d27e8416-fb8cc854fb.zip/node_modules/kysely-codegen/",\
+          "packageDependencies": [\
+            ["kysely-codegen", "virtual:93b36166c6e57acd847623d7ee49370f62c07d93945b963c9ec902d1cdae2bfe60ed6f719a108d6b0465851e99d579ad9ee7fd3f172e95528823af91aee7346c#npm:0.10.0"],\
+            ["@types/better-sqlite3", null],\
+            ["@types/kysely", null],\
+            ["@types/mysql2", null],\
+            ["@types/pg", null],\
+            ["better-sqlite3", null],\
+            ["chalk", "npm:4.1.2"],\
+            ["dotenv", "npm:16.0.3"],\
+            ["kysely", "npm:0.25.0"],\
+            ["micromatch", "npm:4.0.5"],\
+            ["minimist", "npm:1.2.8"],\
+            ["mysql2", null],\
+            ["pg", "virtual:93b36166c6e57acd847623d7ee49370f62c07d93945b963c9ec902d1cdae2bfe60ed6f719a108d6b0465851e99d579ad9ee7fd3f172e95528823af91aee7346c#npm:8.11.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/better-sqlite3",\
+            "@types/kysely",\
+            "@types/mysql2",\
+            "@types/pg",\
+            "better-sqlite3",\
+            "kysely",\
+            "mysql2",\
+            "pg"\
           ],\
           "linkType": "HARD"\
         }]\

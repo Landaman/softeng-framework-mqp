@@ -10,7 +10,7 @@ x-port-bindings:
 
   # The exposed port for the database. This is done in development to allow manual SQL queries/investigation
   # on what exactly is happening. In prod, this will be DISABLED
-  DATABASE_EXPOSED: &db-exposed 8080:8080
+  DATABASE_EXPOSED: &db-exposed 8080:5432
 
 # Arguments used by both front and back
 x-arguments: &dev-args
@@ -25,10 +25,10 @@ x-db-info: &db-args
   POSTGRES_PASSWORD: dev
   POSTGRES_DB: dev
 
-# Port and URL for the DB
+# Port and container name (URL) for the DB
 x-db-loc: &db-loc
-  POSTGRES_URL: &pg-url http://database
-  POSTGRES_PORT: &pg-port "8080"
+  POSTGRES_CONTAINER: &pg-container database
+  POSTGRES_PORT: &pg-port "5432"
 
 # Running containers
 services:
@@ -74,7 +74,7 @@ services:
       context: .
       # Use the dev-args (defined above), along with the DB info, port, and URL
       args:
-        <<: [*dev-args, *db-loc]
+        <<: [*dev-args, *db-loc, *db-args]
       # This time, build the backend
       target: dev-backend
     # Mount the backend on the host, ignore frontend

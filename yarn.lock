@@ -1154,6 +1154,8 @@ __metadata:
     eslint: ^8.41.0
     express: 5.0.0-beta.1
     http-errors: ~1.6.3
+    kysely: ^0.25.0
+    kysely-codegen: ^0.10.0
     morgan: ~1.9.1
     nodemon: ^2.0.22
     pg: ^8.11.0
@@ -1326,20 +1328,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:5.0.1":
-  version: 5.0.1
-  resolution: "chalk@npm:5.0.1"
-  checksum: 7b45300372b908f0471fbf7389ce2f5de8d85bb949026fd51a1b95b10d0ed32c7ed5aab36dd5e9d2bf3191867909b4404cef75c5f4d2d1daeeacd301dd280b76
-  languageName: node
-  linkType: hard
-
-"chalk@npm:^4.0.0, chalk@npm:^4.1.2":
+"chalk@npm:4.1.2, chalk@npm:^4.0.0, chalk@npm:^4.1.2":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
   dependencies:
     ansi-styles: ^4.1.0
     supports-color: ^7.1.0
   checksum: fe75c9d5c76a7a98d45495b91b2172fa3b7a09e0cc9370e5c8feb1c567b85c4288e2b3fded7cfdd7359ac28d6b3844feb8b82b8686842e93d23c827c417e83fc
+  languageName: node
+  linkType: hard
+
+"chalk@npm:5.0.1":
+  version: 5.0.1
+  resolution: "chalk@npm:5.0.1"
+  checksum: 7b45300372b908f0471fbf7389ce2f5de8d85bb949026fd51a1b95b10d0ed32c7ed5aab36dd5e9d2bf3191867909b4404cef75c5f4d2d1daeeacd301dd280b76
   languageName: node
   linkType: hard
 
@@ -2725,6 +2727,41 @@ __metadata:
   languageName: node
   linkType: hard
 
+"kysely-codegen@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "kysely-codegen@npm:0.10.0"
+  dependencies:
+    chalk: 4.1.2
+    dotenv: ^16.0.3
+    micromatch: ^4.0.5
+    minimist: ^1.2.8
+  peerDependencies:
+    better-sqlite3: ">=7.6.2"
+    kysely: ">=0.19.12"
+    mysql2: ^2.3.3
+    pg: ^8.8.0
+  peerDependenciesMeta:
+    better-sqlite3:
+      optional: true
+    kysely:
+      optional: false
+    mysql2:
+      optional: true
+    pg:
+      optional: true
+  bin:
+    kysely-codegen: dist/bin/index.js
+  checksum: fb8cc854fbe1b493cec9df1156b04c2184230934cca714a8a2df510f658225c19514bb78c83e99d9d68da82fd80b2deff80396a3a8a995e733bfdb7dd536b4d3
+  languageName: node
+  linkType: hard
+
+"kysely@npm:^0.25.0":
+  version: 0.25.0
+  resolution: "kysely@npm:0.25.0"
+  checksum: 78a9a9704d42ddc90dafba2f3f089b8796be725684af3aeefca95ccafa886010f9ba0323acc62d5b8913e52ad8c8f26fe023e927c332d59084bbbf5447942366
+  languageName: node
+  linkType: hard
+
 "levn@npm:^0.4.1":
   version: 0.4.1
   resolution: "levn@npm:0.4.1"
@@ -2844,7 +2881,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"micromatch@npm:^4.0.4":
+"micromatch@npm:^4.0.4, micromatch@npm:^4.0.5":
   version: 4.0.5
   resolution: "micromatch@npm:4.0.5"
   dependencies:
@@ -2911,7 +2948,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimist@npm:^1.2.0":
+"minimist@npm:^1.2.0, minimist@npm:^1.2.8":
   version: 1.2.8
   resolution: "minimist@npm:1.2.8"
   checksum: 75a6d645fb122dad29c06a7597bddea977258957ed88d7a6df59b5cd3fe4a527e253e9bbf2e783e4b73657f9098b96a5fe96ab8a113655d4109108577ecf85b0
