@@ -19,7 +19,8 @@ ARG POSTGRES_PORT
 WORKDIR /$WORKDIR
 COPY . /$WORKDIR
 
-# This *shouldn't* actually do anything (hence frozen-stuff)
+# This *shouldn't* actually do anything (hence frozen-stuff). If it does try to do something, there is a configuration
+# error somewhere, so this will fail the build. If you're getting Yarn failures, STOP BREAKING THE YARN CONFIG.
 RUN yarn install --immutable --immutable-cache
 
 
