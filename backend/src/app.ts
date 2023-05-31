@@ -2,18 +2,17 @@ import createError, {HttpError} from "http-errors";
 import express, {Express, NextFunction, Request, Response} from "express";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
-import debug0 from "debug";
 import usersRouter from "./routes/users.ts";
 import numbersRouter from "./routes/numbers.ts";
 import highScoreRouter from "./routes/highScore.ts";
 
-const debug: debug0.Debugger = debug0("backend:app"); // Create a debug logger
 const app: Express = express(); // Setup the backend
 
 // Setup generic middlewear
 app.use(logger('dev', {
     stream: {
-        write: msg => debug(msg)
+        // This is a "hack" that gets the output to appear in the remote debugger :)
+        write: msg => console.info(msg)
     }
 })); // This records all HTTP requests
 app.use(express.json()); // This processes requests as JSON

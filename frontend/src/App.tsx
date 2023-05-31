@@ -5,10 +5,6 @@ import './App.css';
 import {IEvenRequest, IEvenResponse} from "common/src/INumbers.ts";
 import axios from "axios";
 import {IHighScore} from "common/src/IHighScore.ts";
-import debug0 from 'debug';
-
-// Debug namespace
-const debug = debug0('frontend:app');
 
 /**
  * Simple app that has a counter that is even/odd
@@ -34,25 +30,27 @@ function App() {
         axios.post<IEvenResponse>("/api/numbers/isEven", {number: count} as IEvenRequest).
             then(response => {
                 setIsEven(response.data.isEven);
-                debug(`Got is even response for count ${count}:
+                console.info(`Got is even response for count ${count}:
                 ${response}`);
             }).catch( error =>
                 // Always handle any API errors :P
-                debug(error)
+                console.error(error)
             );
 
         // This posts our attempt at a high score
         axios.post<void>("/api/highScore", {
             score: count,
             time: new Date(Date.now())
-        } as IHighScore).then(() => debug("Successfully posted score")).catch(error => {
-            debug(error);
+        } as IHighScore).then(() => console.info("Successfully posted score")).catch(error => {
+            console.error(error);
         });
 
         // This gets the current high score
         axios.get<IHighScore>("/api/highScore").then(response => {
             setHighScore(response.data.score);
-            debug(`Successfully fetched high score: ${response}`);
+            console.info(`Successfully fetched high score: ${response}`);
+        }).catch(error => {
+            console.error(error);
         });
     }, [count]);
 
