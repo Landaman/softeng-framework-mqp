@@ -3,6 +3,13 @@
   "pipeline": {
     "lint": {},
     "lint:fix": {},
+    "build:dev": {
+    },
+    "dev": {
+      "dependsOn": ["build:dev"],
+      "cache": false,
+      "persistent": true
+    },
     "build": {
       "outputs": ["build/**"]
     }

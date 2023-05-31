@@ -5,6 +5,8 @@ Dockerfile
 **/.git
 docker-compose*.yaml
 
+out
+
 .yarn/*
 !.yarn/cache
 !.yarn/patches

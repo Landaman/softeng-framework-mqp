@@ -3,7 +3,8 @@
   "name": "backend",
   "version": "1.0.0",
   "scripts": {
-    "start": "nodemon",
+    "dev": "nodemon",
+    "deploy": "ts-node --transpile-only ./src/bin/www.ts",
     "lint": "tsc && eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "tsc && eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix"
   },

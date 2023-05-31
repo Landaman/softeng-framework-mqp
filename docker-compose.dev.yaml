@@ -53,10 +53,6 @@ services:
     volumes:
       - "./:/app"
       - "/app/backend/"
-    # This tells create-react-app to use polling (only thing that works in mounts in containers) to look
-    # for file changes
-    environment:
-      - WATCHPACK_POLLING=true
 
   # Backend (API)
   backend:

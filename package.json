@@ -16,11 +16,10 @@
   "scripts": {
     "dev": "docker-compose -f docker-compose.dev.yaml up --build --renew-anon-volumes -d",
     "dev:stop": "docker-compose -f docker-compose.dev.yaml down --volumes --rmi local",
-    "prod": "docker-compose -f docker-compose.prod.yaml up --build -d",
-    "prod:stop": "docker-compose -f docker-compose.prod.yaml down",
+    "deploy": "docker-compose -f docker-compose.prod.yaml up --build -d",
+    "deploy:stop": "docker-compose -f docker-compose.prod.yaml down",
     "lint": "turbo run lint",
-    "lint:fix": "turbo run lint:fix",
-    "build": "turbo run build"
+    "lint:fix": "turbo run lint:fix"
   },
   "packageManager": "yarn@3.5.1",
   "devDependencies": {
