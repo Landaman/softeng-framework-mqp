@@ -18,8 +18,9 @@
     "dev:stop": "docker-compose -f docker-compose.dev.yaml down --volumes --rmi local",
     "prod": "docker-compose -f docker-compose.prod.yaml up --build -d",
     "prod:stop": "docker-compose -f docker-compose.prod.yaml down",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max warnings 0",
-    "lint:fix": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix"
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "build": "turbo run build"
   },
   "packageManager": "yarn@3.5.1",
   "devDependencies": {
@@ -28,5 +29,8 @@
     "@typescript-eslint/parser": "^5.59.7",
     "eslint": "^8.41.0",
     "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "turbo": "^1.10.0"
   }
 }

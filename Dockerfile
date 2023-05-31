@@ -31,6 +31,9 @@ WORKDIR /$WORKDIR
 # Run the Yarn linter (prod code should pass this without issue)
 RUN ["yarn", "run", "lint"]
 
+# Now build
+RUN ["yarn", "run", "build"]
+
 # We need the production port
 ARG PRODUCTION_PORT=80
 
@@ -48,9 +51,6 @@ EXPOSE $PORT
 # Stage to run production frontend
 FROM prod-base AS prod-frontend
 WORKDIR /$WORKDIR
-
-# Build the frontend (we still need dev dependencies here)
-RUN yarn workspace frontend run build
 
 # Trim to frontend only (even though we don't actually need frontend, we need its build information)
 RUN yarn workspaces focus frontend --production
