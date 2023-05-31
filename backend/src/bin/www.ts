@@ -17,7 +17,20 @@ const signals: string[] = [
     'SIGTERM'
 ];
 
+// Create the database connection
+debug("Opening database connection...");
+try {
+    require("../database/connection.ts"); // This implicitly causes the connection to open
+    debug("Database connection opened successfully");
+} catch (error) {
+    // Print any errors
+    debug(`Failed to open database connection:
+  ${error}`);
+    process.exit(1); // Exit with failure
+}
+
 // Create the server, enable the application
+debug("Starting server...");
 const server: http.Server = http.createServer(app);
 
 // Listen on the provided port, on all interfaces
@@ -34,7 +47,7 @@ Object.keys(signals).forEach((signal: string): void => {
 });
 
 /**
- * Event listener for HTTP server "error" event, to provide user friendly error output
+ * Event listener for HTTP server "error" event, to provide user friendly error output and then exit
  */
 function onError(error: NodeJS.ErrnoException): void {
     // If we're doing something other than try to listen, we can't help
@@ -51,16 +64,19 @@ function onError(error: NodeJS.ErrnoException): void {
     switch (error.code) {
     // Server can't get start permission
     case 'EACCES':
-        console.error(bind + ' requires elevated privileges');
+        debug(`Error: ${bind} requires elevated permissions!`);
         process.exit(1);
         break;
     // Server can't get address
     case 'EADDRINUSE':
-        console.error(bind + ' is already in use');
-        process.exit(1);
+        debug(`Error: ${bind} + ' is already in use`);
+        process.exit(1); // Exit with failure
         break;
     default:
-        throw error; // Otherwise, we don't know what it is
+    // Print the default error otherwise, and exit
+        debug(`Unknown binding error:
+    ${error}`);
+        process.exit(1);
     }
 }
 

@@ -8,6 +8,10 @@ x-port-bindings:
   # This forwarding is used to leave 9229 open in case anything weird happens
   BACKEND_DEBUGGER: &back-debug 9001:9229
 
+  # The exposed port for the database. This is done in development to allow manual SQL queries/investigation
+  # on what exactly is happening. In prod, this will be DISABLED
+  DATABASE_EXPOSED: &db-exposed 8080:8080
+
 # Arguments used by both front and back
 x-arguments: &dev-args
   BACKEND_PORT: &back-port 3001 # Port for the backend
@@ -84,6 +88,9 @@ services:
   # Backend PSQL database
   database:
     image: postgres
+    # Expose the database for development purposes
+    ports:
+      - *db-exposed
     # Expose the PG port
     expose:
       - *pg-port

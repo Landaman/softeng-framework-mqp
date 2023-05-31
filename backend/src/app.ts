@@ -5,6 +5,7 @@ import logger from "morgan";
 import debug0 from "debug";
 import usersRouter from "./routes/users.ts";
 import numbersRouter from "./routes/numbers.ts";
+import highScoreRouter from "./routes/highScore.ts";
 
 const debug: debug0.Debugger = debug0("backend:app"); // Create a debug logger
 const app: Express = express(); // Setup the backend
@@ -24,6 +25,16 @@ app.use(cookieParser()); // Cookie parser
 app.use('/api/users', usersRouter);
 
 app.use("/api/numbers", numbersRouter);
+
+app.use("/api/highScore", highScoreRouter);
+
+// This is a generic path for the healthcheck. This is not publicly available anywhere
+// (e.g., Docker and the dev proxy DO NOT expose this). It exists exclusively so that can check the server
+// is alive/responsive. If this returns anything other than 200, Docker will automatically kill your backend
+// (under the assumption that something has gone horribly wrong)
+app.use("/healthcheck", function(req: Request, res: Response): void {
+    res.sendStatus(200);
+});
 
 /**
  * Catch all 404 errors, and forward them to the error handler

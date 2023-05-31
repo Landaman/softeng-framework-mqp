@@ -5,5 +5,5 @@ module.exports = {
   extends: [
     '../.eslintrc.cjs'
   ],
-  parserOptions: { ecmaVersion: 'ESNext', sourceType: 'module' },
+  parserOptions: { ecmaVersion: 'ESNext'},
 }

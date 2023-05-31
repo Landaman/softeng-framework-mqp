@@ -28,6 +28,9 @@ RUN yarn install --immutable --immutable-cache
 FROM base AS prod-base
 WORKDIR /$WORKDIR
 
+# Run the Yarn linter (prod code should pass this without issue)
+RUN ["yarn", "run", "lint"]
+
 # We need the production port
 ARG PRODUCTION_PORT=80
 
@@ -57,7 +60,9 @@ RUN yarn workspaces focus frontend --production
 ENTRYPOINT yarn workspace frontend serve /$WORKDIR/frontend/build -s -p $PORT
 
 # Healthceck to determine if we're actually still serving stuff, just attempt to get the URL
-HEALTHCHECK CMD wget --spider localhost:$PORT
+# If that fails, try exiting gracefully (SIGTERM), and if that fails force the container to die with SIGKILL.
+# This will invoke the restart policy, allowing compose to automatically rebuild the container
+HEALTHCHECK CMD wget --spider localhost:$PORT || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
 
 
 
@@ -79,9 +84,10 @@ ENV POSTGRES_PORT=$POSTGRES_PORT
 # Simply have ts-node run the express start-point. Transpile-only (NO TYPE CHECKING) since prod SHOULDN'T need it
 ENTRYPOINT ["yarn", "workspace", "backend", "ts-node", "--transpile-only", "./src/bin/www.ts"]
 
-# Healthceck to determine if we're actually still serving stuff, just attempt to get the root. This will be 404,
-# but that is OK
-HEALTHCHECK CMD wget --spider localhost:$PORT/api/users
+# Healthceck to determine if we're actually still serving stuff, just attempt to get the healthcheck.
+# If that fails, try exiting gracefully (SIGTERM), and if that fails force the container to die with SIGKILL.
+# This will invoke the restart policy, allowing compose to automatically rebuild the container
+HEALTHCHECK CMD wget --spider localhost:$PORT/healthcheck || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
 
 
 
