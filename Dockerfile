@@ -16,6 +16,9 @@ ARG POSTGRES_PORT
 # Setup basic node structure
 WORKDIR /$WORKDIR
 
+# Copy the basic stuff everything should have
+COPY [".pnp.cjs", ".pnp.loader.mjs", ".yarnrc.yml", "./"]
+COPY .yarn .yarn
 
 
 # Base level installer for packages and files
@@ -68,11 +71,14 @@ RUN yarn turbo prune --scope=backend --docker
 FROM base AS prod-frontend
 WORKDIR /$WORKDIR
 
-# Copy the out from production to our working directory
-COPY --from=prod-frontend-builder /$WORKDIR/out .
+# Copy the packages from production to our working directory
+COPY --from=prod-frontend-builder ["/$WORKDIR/out/json", "/$WORKDIR/out/yarn.lock", "/$WORKDIR/out/full", "./"]
 
-# Perform the buildstep, this validates and builds
-RUN yarn turbo lint build
+# Validate the install
+RUN yarn install --immutable --immutable-cache
+
+# Run the turbo lint and build tasks
+RUN yarn turbo run lint build
 
 # This trims out all non-production items
 RUN yarn workspaces --all --production
@@ -89,7 +95,7 @@ HEALTHCHECK CMD wget --spider localhost:$PORT || bash -c 'kill -s 15 -1 && (slee
 
 
 # Stage to run prod backend
-FROM prod-base AS prod-backend
+FROM base AS prod-backend
 WORKDIR /$WORKDIR
 
 # PG User Info
@@ -99,11 +105,14 @@ ENV POSTGRES_DB=$POSTGRES_DB
 ENV POSTGRES_CONTAINER=$POSTGRES_CONTAINER
 ENV POSTGRES_PORT=$POSTGRES_PORT
 
-# Copy the out from production to our working directory
-COPY --from=prod-backend-builder /$WORKDIR/out .
+# Copy the packages from production to our working directory
+COPY --from=prod-backend-builder ["/$WORKDIR/out/json", "/$WORKDIR/out/yarn.lock", "/$WORKDIR/out/full", "./"]
 
-# Perform the buildstep, this validates and builds
-RUN yarn turbo lint build
+# Validate the install
+RUN yarn install --immutable
+
+# Run the turbo lint and build tasks
+RUN yarn turbo run lint build
 
 # This trims out all non-production items
 RUN yarn workspaces --all --production
