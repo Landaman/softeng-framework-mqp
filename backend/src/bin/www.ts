@@ -13,16 +13,16 @@ const signals: string[] = [
     'SIGTERM'
 ];
 
-console.log("Connecting to the database...");
-try {
-    // Requiring this intrinsically executes the scripts
-    require("../database/connection.ts");
-    console.info("Successfully connected to the database");
-} catch (error) {
-    console.error(`Failed to connect to the database:
-    ${error}`);
-    process.exit(1);
-}
+// console.log("Connecting to the database...");
+// try {
+//     // Requiring this intrinsically executes the scripts
+//     require("../database/connection.ts");
+//     console.info("Successfully connected to the database");
+// } catch (error) {
+//     console.error(`Failed to connect to the database:
+//     ${error}`);
+//     process.exit(1);
+// }
 
 // Create the server, enable the application
 console.log("Starting server...");

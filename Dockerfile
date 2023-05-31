@@ -123,7 +123,6 @@ HEALTHCHECK CMD wget --spider localhost:$PORT || bash -c 'kill -s 15 -1 && (slee
 FROM installer as dev-backend
 WORKDIR /$WORKDIR
 
-# Delete everything having to do with the frontend
 RUN rm -r frontend
 
 ENV PORT=$BACKEND_PORT
@@ -150,7 +149,6 @@ CMD ["yarn", "turbo", "run", "dev", "--filter=backend"]
 FROM installer as dev-frontend
 WORKDIR /$WORKDIR
 
-# Delete everything having to do with the backend. Rest should stay (as we need it)
 RUN rm -r backend
 
 ARG FRONTEND_PORT
