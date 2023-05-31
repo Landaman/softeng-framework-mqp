@@ -13,6 +13,17 @@ const signals: string[] = [
     'SIGTERM'
 ];
 
+console.log("Connecting to the database...");
+try {
+    // Requiring this intrinsically executes the scripts
+    require("../database/connection.ts");
+    console.info("Successfully connected to the database");
+} catch (error) {
+    console.error(`Failed to connect to the database:
+    ${error}`);
+    process.exit(1);
+}
+
 // Create the server, enable the application
 console.log("Starting server...");
 const server: http.Server = http.createServer(app);
@@ -75,7 +86,8 @@ function onListening(): void {
     const bind: string = typeof addr === 'string'
         ? 'pipe ' + addr
         : 'port ' + addr?.port; // Otherwise get the port
-    console.log('Listening on ' + bind); // Debug output that we're listening
+    console.info('Server Listening on ' + bind); // Debug output that we're listening
+    console.log("Startup complete");
 }
 
 /**
