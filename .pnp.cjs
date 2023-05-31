@@ -1649,7 +1649,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/parser", "virtual:66682a004190b02ca1ad7e2a5dfb090713a77006ef1c1c3b9d5d14d59e634ba0f30bb20b8ffc52bcb1fb04b39211d88b4b0c102c13ced811e0bb6d38d9071a63#npm:5.59.7"],\
             ["common", "workspace:common"],\
             ["cookie-parser", "npm:1.4.6"],\
-            ["debug", "virtual:d8bf9050414812c416c07fc0899a3ff9df7e2f58885fc5a6fe0a26529d22fde0fe54646d8015b5d39f2cefaf29af913d56ede8576e99491b58a68ff70a05481e#npm:2.6.9"],\
+            ["debug", "virtual:531b6e79f7bcef9fa432316ab3ce4b1417df151c8e8350181023a666d55724fcedfdfe50cba6ee7c25a5adbd4f024013f036b79fb10bed8621708e2f7d85e6c6#npm:4.3.4"],\
             ["dotenv", "npm:16.0.3"],\
             ["eslint", "npm:8.41.0"],\
             ["express", "npm:5.0.0-beta.1"],\
@@ -2938,6 +2938,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["frontend", "workspace:frontend"],\
             ["@popperjs/core", "npm:2.11.8"],\
             ["@rushstack/eslint-patch", "npm:1.3.0"],\
+            ["@types/debug", "npm:4.1.8"],\
             ["@types/node", "npm:20.2.5"],\
             ["@types/react", "npm:18.2.7"],\
             ["@types/react-dom", "npm:18.2.4"],\
@@ -2947,6 +2948,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["axios", "npm:1.4.0"],\
             ["bootstrap", "virtual:129c180801e06ed395e4da371c76ab19371e66a3c2230c25e2f8aa53715d8f66998096a34403ac325c10f7034d54eaa1a82bf612b0d4bf56a1d1943388d98f11#npm:5.2.3"],\
             ["common", "workspace:common"],\
+            ["debug", "virtual:531b6e79f7bcef9fa432316ab3ce4b1417df151c8e8350181023a666d55724fcedfdfe50cba6ee7c25a5adbd4f024013f036b79fb10bed8621708e2f7d85e6c6#npm:4.3.4"],\
             ["eslint", "npm:8.41.0"],\
             ["eslint-plugin-react-hooks", "virtual:129c180801e06ed395e4da371c76ab19371e66a3c2230c25e2f8aa53715d8f66998096a34403ac325c10f7034d54eaa1a82bf612b0d4bf56a1d1943388d98f11#npm:4.6.0"],\
             ["eslint-plugin-react-refresh", "virtual:129c180801e06ed395e4da371c76ab19371e66a3c2230c25e2f8aa53715d8f66998096a34403ac325c10f7034d54eaa1a82bf612b0d4bf56a1d1943388d98f11#npm:0.3.5"],\

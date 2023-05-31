@@ -3,7 +3,7 @@ FROM node:16.20.0-alpine AS base
 # Root folder that we will actually use
 ENV WORKDIR=app
 # Debug output
-ENV DEBUG="backend:*"
+ENV DEBUG="backend:*,frontend:*"
 
 # Default backend port (necessary for both frontend and backend)
 ARG BACKEND_PORT

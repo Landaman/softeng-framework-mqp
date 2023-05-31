@@ -5,6 +5,10 @@ import './App.css';
 import {IEvenRequest, IEvenResponse} from "common/src/INumbers.ts";
 import axios from "axios";
 import {IHighScore} from "common/src/IHighScore.ts";
+import debug0 from 'debug';
+
+// Debug namespace
+const debug = debug0('frontend:app');
 
 /**
  * Simple app that has a counter that is even/odd
@@ -16,7 +20,7 @@ function App() {
 
     // Result of the API determining if the number is even
     const [isEven, setIsEven] = useState(true);
-  
+
     // High score from the API
     const [highScore, setHighScore] = useState(0);
 
@@ -28,23 +32,28 @@ function App() {
     // so we run it and then set the API even variable to the response. The angular brackets determine the return
     // type
         axios.post<IEvenResponse>("/api/numbers/isEven", {number: count} as IEvenRequest).
-            then(response =>
-                setIsEven(response.data.isEven)).catch(
+            then(response => {
+                setIsEven(response.data.isEven);
+                debug(`Got is even response for count ${count}:
+                ${response}`);
+            }).catch( error =>
                 // Always handle any API errors :P
-                err => console.error(err)
+                debug(error)
             );
 
         // This posts our attempt at a high score
         axios.post<void>("/api/highScore", {
             score: count,
             time: new Date(Date.now())
-        } as IHighScore).catch(error => {
-            console.error(error);
+        } as IHighScore).then(() => debug("Successfully posted score")).catch(error => {
+            debug(error);
         });
 
         // This gets the current high score
-        axios.get<IHighScore>("/api/highScore").then(response =>
-            setHighScore(response.data.score));
+        axios.get<IHighScore>("/api/highScore").then(response => {
+            setHighScore(response.data.score);
+            debug(`Successfully fetched high score: ${response}`);
+        });
     }, [count]);
 
     // React code
