@@ -4,10 +4,10 @@
   "version": "1.0.0",
   "devDependencies": {
     "eslint-config-custom": "workspace:*",
-    "typescript": "^5.0.4"
+    "tsconfig-custom": "workspace:*"
   },
   "scripts": {
-    "lint": "yarn shared:eslint",
-    "lint:fix": "yarn shared:eslint:fix"
+    "lint": "yarn shared:tslint && yarn shared:eslint",
+    "lint:fix": "yarn shared:tslint && yarn shared:eslint:fix"
   }
 }

@@ -1167,6 +1167,7 @@ __metadata:
     nodemon: latest
     pg: ^8.11.0
     ts-node: ^10.9.1
+    tsconfig-custom: "workspace:*"
     typescript: ^5.0.4
   languageName: unknown
   linkType: soft
@@ -1456,7 +1457,7 @@ __metadata:
   resolution: "common@workspace:common"
   dependencies:
     eslint-config-custom: "workspace:*"
-    typescript: ^5.0.4
+    tsconfig-custom: "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -1866,6 +1867,7 @@ __metadata:
     eslint: latest
     eslint-config-prettier: latest
     eslint-config-turbo: latest
+    typescript: ^5.0.4
   languageName: unknown
   linkType: soft
 
@@ -2282,6 +2284,7 @@ __metadata:
     react-bootstrap: ^2.7.4
     react-dom: ^18.2.0
     serve: ^14.2.0
+    tsconfig-custom: "workspace:*"
     typescript: ^5.0.2
     vite: ^4.3.9
     vite-plugin-eslint: ^1.8.1
@@ -4137,7 +4140,6 @@ __metadata:
   resolution: "softeng-framework-mqp@workspace:."
   dependencies:
     turbo: latest
-    typescript: ^5.0.4
   languageName: unknown
   linkType: soft
 
@@ -4344,6 +4346,14 @@ __metadata:
   checksum: 090adff1302ab20bd3486e6b4799e90f97726ed39e02b39e566f8ab674fd5bd5f727f43615debbfc580d33c6d9d1c6b1b3ce7d8e3cca3e20530a145ffa232c35
   languageName: node
   linkType: hard
+
+"tsconfig-custom@workspace:*, tsconfig-custom@workspace:tsconfig-custom":
+  version: 0.0.0-use.local
+  resolution: "tsconfig-custom@workspace:tsconfig-custom"
+  dependencies:
+    typescript: ^5.0.4
+  languageName: unknown
+  linkType: soft
 
 "tslib@npm:^1.8.1":
   version: 1.14.1

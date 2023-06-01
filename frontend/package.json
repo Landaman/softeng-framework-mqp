@@ -8,8 +8,8 @@
     "deploy": "serve ./build -s -p $PORT",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "yarn shared:eslint",
-    "lint:fix": "yarn shared:eslint:fix"
+    "lint": "yarn shared:tslint && yarn shared:eslint",
+    "lint:fix": "yarn shared:tslint && yarn shared:eslint:fix"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
@@ -30,6 +30,7 @@
     "eslint-config-custom": "workspace:*",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.1",
+    "tsconfig-custom": "workspace:*",
     "typescript": "^5.0.2",
     "vite": "^4.3.9",
     "vite-plugin-eslint": "^1.8.1"

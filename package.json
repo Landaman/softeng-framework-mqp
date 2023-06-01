@@ -8,7 +8,8 @@
     "frontend",
     "backend",
     "common",
-    "eslint-config-custom"
+    "eslint-config-custom",
+    "tsconfig-custom"
   ],
   "repository": {
     "type": "git",
@@ -24,7 +25,6 @@
   },
   "packageManager": "yarn@3.5.1",
   "devDependencies": {
-    "turbo": "latest",
-    "typescript": "^5.0.4"
+    "turbo": "latest"
   }
 }
