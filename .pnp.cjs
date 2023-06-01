@@ -32,6 +32,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:frontend"\
       },\
       {\
+        "name": "prettier-config-custom",\
+        "reference": "workspace:prettier-config-custom"\
+      },\
+      {\
         "name": "tsconfig-custom",\
         "reference": "workspace:tsconfig-custom"\
       }\
@@ -43,6 +47,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ["common", ["workspace:common"]],\
       ["eslint-config-custom", ["workspace:eslint-config-custom"]],\
       ["frontend", ["workspace:frontend"]],\
+      ["prettier-config-custom", ["workspace:prettier-config-custom"]],\
       ["softeng-framework-mqp", ["workspace:."]],\
       ["tsconfig-custom", ["workspace:tsconfig-custom"]]\
     ],\
@@ -1566,6 +1571,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["morgan", "npm:1.9.1"],\
             ["nodemon", "npm:2.0.22"],\
             ["pg", "virtual:93b36166c6e57acd847623d7ee49370f62c07d93945b963c9ec902d1cdae2bfe60ed6f719a108d6b0465851e99d579ad9ee7fd3f172e95528823af91aee7346c#npm:8.11.0"],\
+            ["prettier-config-custom", "workspace:prettier-config-custom"],\
             ["ts-node", "virtual:93b36166c6e57acd847623d7ee49370f62c07d93945b963c9ec902d1cdae2bfe60ed6f719a108d6b0465851e99d579ad9ee7fd3f172e95528823af91aee7346c#npm:10.9.1"],\
             ["tsconfig-custom", "workspace:tsconfig-custom"],\
             ["typescript", "patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=b5f058"]\
@@ -1902,6 +1908,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["common", "workspace:common"],\
             ["eslint-config-custom", "workspace:eslint-config-custom"],\
+            ["prettier-config-custom", "workspace:prettier-config-custom"],\
             ["tsconfig-custom", "workspace:tsconfig-custom"]\
           ],\
           "linkType": "SOFT"\
@@ -2896,6 +2903,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-config-custom", "workspace:eslint-config-custom"],\
             ["eslint-plugin-react-hooks", "virtual:129c180801e06ed395e4da371c76ab19371e66a3c2230c25e2f8aa53715d8f66998096a34403ac325c10f7034d54eaa1a82bf612b0d4bf56a1d1943388d98f11#npm:4.6.0"],\
             ["eslint-plugin-react-refresh", "virtual:129c180801e06ed395e4da371c76ab19371e66a3c2230c25e2f8aa53715d8f66998096a34403ac325c10f7034d54eaa1a82bf612b0d4bf56a1d1943388d98f11#npm:0.4.1"],\
+            ["prettier-config-custom", "workspace:prettier-config-custom"],\
             ["react", "npm:18.2.0"],\
             ["react-bootstrap", "virtual:129c180801e06ed395e4da371c76ab19371e66a3c2230c25e2f8aa53715d8f66998096a34403ac325c10f7034d54eaa1a82bf612b0d4bf56a1d1943388d98f11#npm:2.7.4"],\
             ["react-dom", "virtual:129c180801e06ed395e4da371c76ab19371e66a3c2230c25e2f8aa53715d8f66998096a34403ac325c10f7034d54eaa1a82bf612b0d4bf56a1d1943388d98f11#npm:18.2.0"],\
@@ -4360,6 +4368,25 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["prelude-ls", "npm:1.2.1"]\
           ],\
           "linkType": "HARD"\
+        }]\
+      ]],\
+      ["prettier", [\
+        ["npm:2.8.8", {\
+          "packageLocation": "./.yarn/cache/prettier-npm-2.8.8-430828a36c-b49e409431.zip/node_modules/prettier/",\
+          "packageDependencies": [\
+            ["prettier", "npm:2.8.8"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["prettier-config-custom", [\
+        ["workspace:prettier-config-custom", {\
+          "packageLocation": "./prettier-config-custom/",\
+          "packageDependencies": [\
+            ["prettier-config-custom", "workspace:prettier-config-custom"],\
+            ["prettier", "npm:2.8.8"]\
+          ],\
+          "linkType": "SOFT"\
         }]\
       ]],\
       ["promise-inflight", [\

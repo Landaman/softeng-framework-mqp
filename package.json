@@ -9,7 +9,8 @@
     "backend",
     "common",
     "eslint-config-custom",
-    "tsconfig-custom"
+    "tsconfig-custom",
+    "prettier-config-custom"
   ],
   "repository": {
     "type": "git",

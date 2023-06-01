@@ -4,10 +4,11 @@
   "version": "1.0.0",
   "devDependencies": {
     "eslint-config-custom": "workspace:*",
+    "prettier-config-custom": "workspace:*",
     "tsconfig-custom": "workspace:*"
   },
   "scripts": {
-    "lint": "yarn shared:tslint && yarn shared:eslint",
-    "lint:fix": "yarn shared:tslint && yarn shared:eslint:fix"
+    "lint": "yarn shared:prettierlint:fix && && yarn shared:eslint && yarn shared:tslint",
+    "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint"
   }
 }

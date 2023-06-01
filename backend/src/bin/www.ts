@@ -1,23 +1,19 @@
 import app from "../app.ts";
 import http from "http";
-import {AddressInfo} from "net";
+import { AddressInfo } from "net";
 
 // Get port from environment and store in Express
 const port: string | undefined = process.env.PORT;
 
 if (port === undefined) {
-    console.error("Failed to start: Missing PORT environment variable");
-    process.exit(1);
+  console.error("Failed to start: Missing PORT environment variable");
+  process.exit(1);
 }
 
-app.set('port', port);
+app.set("port", port);
 
 // Signals we want to handle for shutdown. We can't handle SIGKILL (this cannot be intercepted)
-const signals: string[] = [
-    'SIGHUP',
-    'SIGINT',
-    'SIGTERM'
-];
+const signals: string[] = ["SIGHUP", "SIGINT", "SIGTERM"];
 
 // Create the server, enable the application
 console.log("Starting server...");
@@ -25,64 +21,62 @@ const server: http.Server = http.createServer(app);
 
 // Listen on the provided port, on all interfaces
 server.listen(port);
-server.on('error', onError); // Error handler
-server.on('listening', onListening); // Notify that we started
+server.on("error", onError); // Error handler
+server.on("listening", onListening); // Notify that we started
 
 // Create a listener for each of the signals that we want to handle
 Object.keys(signals).forEach((signal: string): void => {
-    // On each one, call the shutdown handler
-    process.on(signal, (): void => {
-        onShutdown(signal);
-    });
+  // On each one, call the shutdown handler
+  process.on(signal, (): void => {
+    onShutdown(signal);
+  });
 });
 
 /**
  * Event listener for HTTP server "error" event, to provide user friendly error output and then exit
  */
 function onError(error: NodeJS.ErrnoException): void {
-    // If we're doing something other than try to listen, we can't help
-    if (error.syscall !== 'listen') {
-        throw error; // Re-throw
-    }
+  // If we're doing something other than try to listen, we can't help
+  if (error.syscall !== "listen") {
+    throw error; // Re-throw
+  }
 
-    // Get the pipe/port we're listening on
-    const bind: string = typeof port === 'string'
-        ? 'Pipe ' + port
-        : 'Port ' + port;
+  // Get the pipe/port we're listening on
+  const bind: string =
+    typeof port === "string" ? "Pipe " + port : "Port " + port;
 
-    // Handle specific listen errors with friendly messages
-    switch (error.code) {
+  // Handle specific listen errors with friendly messages
+  switch (error.code) {
     // Server can't get start permission
-    case 'EACCES':
-        console.error(`Failed to start: ${bind} requires elevated permissions!`);
-        process.exit(1);
-        break;
+    case "EACCES":
+      console.error(`Failed to start: ${bind} requires elevated permissions!`);
+      process.exit(1);
+      break;
     // Server can't get address
-    case 'EADDRINUSE':
-        console.error(`Failed to start: ${bind} + ' is already in use`);
-        process.exit(1); // Exit with failure
-        break;
+    case "EADDRINUSE":
+      console.error(`Failed to start: ${bind} + ' is already in use`);
+      process.exit(1); // Exit with failure
+      break;
     default:
-    // Print the default error otherwise, and exit
-        console.error(`Failed to start: Unknown binding error:
+      // Print the default error otherwise, and exit
+      console.error(`Failed to start: Unknown binding error:
     ${error}`);
-        process.exit(1);
-    }
+      process.exit(1);
+  }
 }
 
 /**
  * Event listener for HTTP server "listening" event.
  */
 function onListening(): void {
-    // Get the address we're listening on
-    const addr: string | AddressInfo | null = server.address();
+  // Get the address we're listening on
+  const addr: string | AddressInfo | null = server.address();
 
-    // If it's a string, simply get it (its a pipe)
-    const bind: string = typeof addr === 'string'
-        ? 'pipe ' + addr
-        : 'port ' + addr?.port; // Otherwise get the port
-    console.info('Server Listening on ' + bind); // Debug output that we're listening
-    console.log("Startup complete");
+  // If it's a string, simply get it (its a pipe)
+  const bind: string =
+    typeof addr === "string" ? "pipe " + addr : "port " + addr?.port; // Otherwise get the port
+  console.info("Server Listening on " + bind); // Debug output that we're listening
+  console.log("Startup complete");
 }
 
 /**
@@ -90,12 +84,14 @@ function onListening(): void {
  * @param signal the captured signal in string form
  */
 function onShutdown(signal: string): void {
-    console.log(`Server received signal ${signal}. Shutting down...`);
-    console.info("Beginning shutdown. Waiting for any pending requests to complete...");
+  console.log(`Server received signal ${signal}. Shutting down...`);
+  console.info(
+    "Beginning shutdown. Waiting for any pending requests to complete..."
+  );
 
-    // Wait for any pending requests to resolve
-    server.close(() => {
-        console.info(`Pending requests resolved. Shutting down...`);
-        process.exit(0);
-    });
+  // Wait for any pending requests to resolve
+  server.close(() => {
+    console.info(`Pending requests resolved. Shutting down...`);
+    process.exit(0);
+  });
 }

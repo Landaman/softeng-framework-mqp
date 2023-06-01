@@ -1,0 +1,12 @@
+{
+  "name": "prettier-config-custom",
+  "private": true,
+  "version": "1.0.0",
+  "dependencies": {
+    "prettier": "latest"
+  },
+  "scripts": {
+    "shared:prettierlint": "cd $INIT_CWD && prettier --check .",
+    "shared:prettierlint:fix": "cd $INIT_CWD && prettier --write ."
+  }
+}

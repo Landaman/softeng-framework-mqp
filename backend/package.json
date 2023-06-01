@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "nodemon",
     "deploy": "ts-node --transpile-only ./src/bin/www.ts",
-    "lint": "yarn shared:tslint && yarn shared:eslint",
-    "lint:fix": "yarn shared:tslint && yarn shared:eslint:fix"
+    "lint": "yarn shared:prettierlint:fix && && yarn shared:eslint && yarn shared:tslint",
+    "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint"
   },
   "dependencies": {
     "@swc/core": "^1.3.60",
@@ -30,6 +30,7 @@
     "@types/node": "^20.2.3",
     "@types/pg": "^8.10.1",
     "eslint-config-custom": "workspace:*",
-    "nodemon": "latest"
+    "nodemon": "latest",
+    "prettier-config-custom": "workspace:*"
   }
 }
