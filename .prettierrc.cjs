@@ -1,1 +1,1 @@
-module.exports = require('prettier-config-custom/.prettierrc.cjs')
+module.exports = "prettier-config-custom/.prettierrc.cjs"
