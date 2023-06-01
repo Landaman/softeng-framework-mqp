@@ -2,9 +2,10 @@
     "extends": "../tsconfig.json",
     "compilerOptions": {
         "module": "commonjs",
-        "skipLibCheck": true,
         "moduleResolution": "node",
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "resolveJsonModule": true
     },
     "include": ["src"]
 }

@@ -2,10 +2,7 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "module": "ESNext",
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-
-    /* Bundler mode */
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
   },

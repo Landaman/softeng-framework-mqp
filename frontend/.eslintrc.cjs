@@ -1,11 +1,10 @@
-require("@rushstack/eslint-patch/modern-module-resolution");
-
 module.exports = {
   env: { browser: true, es2020: true },
   extends: [
-    '../.eslintrc.cjs',
+    'custom',
     'plugin:react-hooks/recommended',
   ],
+  root: true,
   parserOptions: { ecmaVersion: 'ESNext', sourceType: 'module' },
   plugins: ['react-refresh'],
   rules: {

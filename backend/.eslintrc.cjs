@@ -1,9 +1,8 @@
-require("@rushstack/eslint-patch/modern-module-resolution");
-
 module.exports = {
-  env: { es2020: true },
+  env: { node: true },
   extends: [
-    '../.eslintrc.cjs'
+    'custom'
   ],
-  parserOptions: { ecmaVersion: 'ESNext' },
+  root: true,
+  parserOptions: { ecmaVersion: 'ESNext', sourceType: "script" },
 }

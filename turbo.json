@@ -1,10 +1,11 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
-    "lint": {},
-    "lint:fix": {},
-    "build:dev": {
+    "lint": {
     },
+    "lint:fix": {
+    },
+    "build:dev": {},
     "dev": {
       "dependsOn": ["build:dev"],
       "cache": false,
