@@ -4,6 +4,12 @@ import {AddressInfo} from "net";
 
 // Get port from environment and store in Express
 const port: string | undefined = process.env.PORT;
+
+if (port === undefined) {
+    console.error("Failed to start: Missing PORT environment variable");
+    process.exit(1);
+}
+
 app.set('port', port);
 
 // Signals we want to handle for shutdown. We can't handle SIGKILL (this cannot be intercepted)
@@ -12,17 +18,6 @@ const signals: string[] = [
     'SIGINT',
     'SIGTERM'
 ];
-
-// console.log("Connecting to the database...");
-// try {
-//     // Requiring this intrinsically executes the scripts
-//     require("../database/connection.ts");
-//     console.info("Successfully connected to the database");
-// } catch (error) {
-//     console.error(`Failed to connect to the database:
-//     ${error}`);
-//     process.exit(1);
-// }
 
 // Create the server, enable the application
 console.log("Starting server...");
@@ -59,17 +54,17 @@ function onError(error: NodeJS.ErrnoException): void {
     switch (error.code) {
     // Server can't get start permission
     case 'EACCES':
-        console.error(`Error: ${bind} requires elevated permissions!`);
+        console.error(`Failed to start: ${bind} requires elevated permissions!`);
         process.exit(1);
         break;
     // Server can't get address
     case 'EADDRINUSE':
-        console.error(`Error: ${bind} + ' is already in use`);
+        console.error(`Failed to start: ${bind} + ' is already in use`);
         process.exit(1); // Exit with failure
         break;
     default:
     // Print the default error otherwise, and exit
-        console.error(`Unknown binding error:
+        console.error(`Failed to start: Unknown binding error:
     ${error}`);
         process.exit(1);
     }

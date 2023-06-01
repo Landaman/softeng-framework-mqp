@@ -1,13 +1,15 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
-    "lint": {
-    },
-    "lint:fix": {
-    },
+    "lint": {},
+    "lint:fix": {},
     "build:dev": {},
     "dev": {
       "dependsOn": ["build:dev"],
+      "cache": false,
+      "persistent": true
+    },
+    "deploy": {
       "cache": false,
       "persistent": true
     },
