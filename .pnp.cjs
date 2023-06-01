@@ -58,7 +58,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {\
           "packageLocation": "./",\
           "packageDependencies": [\
-            ["turbo", "npm:1.10.1"]\
+            ["eslint", "npm:8.41.0"],\
+            ["eslint-config-custom", "workspace:eslint-config-custom"],\
+            ["prettier", "npm:2.8.8"],\
+            ["prettier-config-custom", "workspace:prettier-config-custom"],\
+            ["tsconfig-custom", "workspace:tsconfig-custom"],\
+            ["turbo", "npm:1.10.1"],\
+            ["typescript", "patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=b5f058"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -5063,7 +5069,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["softeng-framework-mqp", "workspace:."],\
-            ["turbo", "npm:1.10.1"]\
+            ["eslint", "npm:8.41.0"],\
+            ["eslint-config-custom", "workspace:eslint-config-custom"],\
+            ["prettier", "npm:2.8.8"],\
+            ["prettier-config-custom", "workspace:prettier-config-custom"],\
+            ["tsconfig-custom", "workspace:tsconfig-custom"],\
+            ["turbo", "npm:1.10.1"],\
+            ["typescript", "patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=b5f058"]\
           ],\
           "linkType": "SOFT"\
         }]\

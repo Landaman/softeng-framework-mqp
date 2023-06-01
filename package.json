@@ -26,6 +26,12 @@
   },
   "packageManager": "yarn@3.5.1",
   "devDependencies": {
-    "turbo": "latest"
+    "eslint": "latest",
+    "eslint-config-custom": "workspace:*",
+    "prettier": "latest",
+    "prettier-config-custom": "workspace:*",
+    "tsconfig-custom": "workspace:*",
+    "turbo": "latest",
+    "typescript": "^5.0.4"
   }
 }

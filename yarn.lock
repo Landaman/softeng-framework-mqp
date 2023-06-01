@@ -4159,7 +4159,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "softeng-framework-mqp@workspace:."
   dependencies:
+    eslint: latest
+    eslint-config-custom: "workspace:*"
+    prettier: latest
+    prettier-config-custom: "workspace:*"
+    tsconfig-custom: "workspace:*"
     turbo: latest
+    typescript: ^5.0.4
   languageName: unknown
   linkType: soft
 

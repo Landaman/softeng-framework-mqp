@@ -1,2 +1,4 @@
-build
-coverage
+**/build
+**/coverage
+**/node_modules
+**/.turbo
