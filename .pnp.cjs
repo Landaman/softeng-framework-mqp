@@ -48,7 +48,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {\
           "packageLocation": "./",\
           "packageDependencies": [\
-            ["turbo", "npm:1.10.0"],\
+            ["turbo", "npm:1.10.1"],\
             ["typescript", "patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=b5f058"]\
           ],\
           "linkType": "SOFT"\
@@ -2468,6 +2468,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["eslint-plugin-react-refresh", [\
+        ["npm:0.4.1", {\
+          "packageLocation": "./.yarn/cache/eslint-plugin-react-refresh-npm-0.4.1-735545a370-932f982797.zip/node_modules/eslint-plugin-react-refresh/",\
+          "packageDependencies": [\
+            ["eslint-plugin-react-refresh", "npm:0.4.1"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:129c180801e06ed395e4da371c76ab19371e66a3c2230c25e2f8aa53715d8f66998096a34403ac325c10f7034d54eaa1a82bf612b0d4bf56a1d1943388d98f11#npm:0.4.1", {\
+          "packageLocation": "./.yarn/__virtual__/eslint-plugin-react-refresh-virtual-b38535cdb4/0/cache/eslint-plugin-react-refresh-npm-0.4.1-735545a370-932f982797.zip/node_modules/eslint-plugin-react-refresh/",\
+          "packageDependencies": [\
+            ["eslint-plugin-react-refresh", "virtual:129c180801e06ed395e4da371c76ab19371e66a3c2230c25e2f8aa53715d8f66998096a34403ac325c10f7034d54eaa1a82bf612b0d4bf56a1d1943388d98f11#npm:0.4.1"],\
+            ["@types/eslint", null],\
+            ["eslint", "npm:8.41.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/eslint",\
+            "eslint"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["eslint-plugin-turbo", [\
         ["npm:1.10.0", {\
           "packageLocation": "./.yarn/cache/eslint-plugin-turbo-npm-1.10.0-a595146c15-dac2ff54e0.zip/node_modules/eslint-plugin-turbo/",\
@@ -2849,6 +2871,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint", "npm:8.41.0"],\
             ["eslint-config-custom", "workspace:eslint-config-custom"],\
             ["eslint-plugin-react-hooks", "virtual:129c180801e06ed395e4da371c76ab19371e66a3c2230c25e2f8aa53715d8f66998096a34403ac325c10f7034d54eaa1a82bf612b0d4bf56a1d1943388d98f11#npm:4.6.0"],\
+            ["eslint-plugin-react-refresh", "virtual:129c180801e06ed395e4da371c76ab19371e66a3c2230c25e2f8aa53715d8f66998096a34403ac325c10f7034d54eaa1a82bf612b0d4bf56a1d1943388d98f11#npm:0.4.1"],\
             ["react", "npm:18.2.0"],\
             ["react-bootstrap", "virtual:129c180801e06ed395e4da371c76ab19371e66a3c2230c25e2f8aa53715d8f66998096a34403ac325c10f7034d54eaa1a82bf612b0d4bf56a1d1943388d98f11#npm:2.7.4"],\
             ["react-dom", "virtual:129c180801e06ed395e4da371c76ab19371e66a3c2230c25e2f8aa53715d8f66998096a34403ac325c10f7034d54eaa1a82bf612b0d4bf56a1d1943388d98f11#npm:18.2.0"],\
@@ -4989,7 +5012,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["softeng-framework-mqp", "workspace:."],\
-            ["turbo", "npm:1.10.0"],\
+            ["turbo", "npm:1.10.1"],\
             ["typescript", "patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=b5f058"]\
           ],\
           "linkType": "SOFT"\
@@ -5275,6 +5298,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["turbo-windows-arm64", "npm:1.10.0"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:1.10.1", {\
+          "packageLocation": "./.yarn/unplugged/turbo-npm-1.10.1-45ad5a813a/node_modules/turbo/",\
+          "packageDependencies": [\
+            ["turbo", "npm:1.10.1"],\
+            ["turbo-darwin-64", "npm:1.10.1"],\
+            ["turbo-darwin-arm64", "npm:1.10.1"],\
+            ["turbo-linux-64", "npm:1.10.1"],\
+            ["turbo-linux-arm64", "npm:1.10.1"],\
+            ["turbo-windows-64", "npm:1.10.1"],\
+            ["turbo-windows-arm64", "npm:1.10.1"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["turbo-darwin-64", [\
@@ -5282,6 +5318,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/unplugged/turbo-darwin-64-npm-1.10.0-5142668de0/node_modules/turbo-darwin-64/",\
           "packageDependencies": [\
             ["turbo-darwin-64", "npm:1.10.0"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:1.10.1", {\
+          "packageLocation": "./.yarn/unplugged/turbo-darwin-64-npm-1.10.1-28704e19c1/node_modules/turbo-darwin-64/",\
+          "packageDependencies": [\
+            ["turbo-darwin-64", "npm:1.10.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -5293,6 +5336,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["turbo-darwin-arm64", "npm:1.10.0"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:1.10.1", {\
+          "packageLocation": "./.yarn/unplugged/turbo-darwin-arm64-npm-1.10.1-a7abe5d550/node_modules/turbo-darwin-arm64/",\
+          "packageDependencies": [\
+            ["turbo-darwin-arm64", "npm:1.10.1"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["turbo-linux-64", [\
@@ -5300,6 +5350,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/unplugged/turbo-linux-64-npm-1.10.0-11912f4473/node_modules/turbo-linux-64/",\
           "packageDependencies": [\
             ["turbo-linux-64", "npm:1.10.0"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:1.10.1", {\
+          "packageLocation": "./.yarn/unplugged/turbo-linux-64-npm-1.10.1-9884c7550d/node_modules/turbo-linux-64/",\
+          "packageDependencies": [\
+            ["turbo-linux-64", "npm:1.10.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -5311,6 +5368,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["turbo-linux-arm64", "npm:1.10.0"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:1.10.1", {\
+          "packageLocation": "./.yarn/unplugged/turbo-linux-arm64-npm-1.10.1-febf270dcd/node_modules/turbo-linux-arm64/",\
+          "packageDependencies": [\
+            ["turbo-linux-arm64", "npm:1.10.1"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["turbo-windows-64", [\
@@ -5320,6 +5384,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["turbo-windows-64", "npm:1.10.0"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:1.10.1", {\
+          "packageLocation": "./.yarn/unplugged/turbo-windows-64-npm-1.10.1-3c4aab11df/node_modules/turbo-windows-64/",\
+          "packageDependencies": [\
+            ["turbo-windows-64", "npm:1.10.1"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["turbo-windows-arm64", [\
@@ -5327,6 +5398,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/unplugged/turbo-windows-arm64-npm-1.10.0-0d1e733320/node_modules/turbo-windows-arm64/",\
           "packageDependencies": [\
             ["turbo-windows-arm64", "npm:1.10.0"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:1.10.1", {\
+          "packageLocation": "./.yarn/unplugged/turbo-windows-arm64-npm-1.10.1-15bbf5106b/node_modules/turbo-windows-arm64/",\
+          "packageDependencies": [\
+            ["turbo-windows-arm64", "npm:1.10.1"]\
           ],\
           "linkType": "HARD"\
         }]\
