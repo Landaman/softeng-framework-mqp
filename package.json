@@ -24,7 +24,7 @@
   },
   "packageManager": "yarn@3.5.1",
   "devDependencies": {
-    "turbo": "^1.10.1",
+    "turbo": "^1.10.0",
     "typescript": "^5.0.4"
   }
 }
