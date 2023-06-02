@@ -33,11 +33,11 @@ RUN yarn install --immutable --immutable-cache
 
 
 # Production basics (ports, env, etc)
-FROM installer AS prod-installer
+FROM base AS prod-base
 WORKDIR /$WORKDIR
 
 # We need the production port
-ARG PRODUCTION_PORT=80
+ARG PRODUCTION_PORT
 
 # Set the environment variable port
 ENV PORT=$PRODUCTION_PORT
@@ -51,7 +51,7 @@ EXPOSE $PORT
 
 
 # Production front builder. Creates a maximally trimmed out image
-FROM prod-installer AS prod-frontend-builder
+FROM installer AS prod-frontend-builder
 WORKDIR /$WORKDIR
 
 # This creates a trimmed image that is frontend and its dependencies only
@@ -59,7 +59,7 @@ RUN yarn turbo prune --scope=frontend --docker
 
 
 # Production front builder. Creates a maximally trimmed out image
-FROM prod-installer AS prod-backend-builder
+FROM installer AS prod-backend-builder
 WORKDIR /$WORKDIR
 
 # This creates a trimmed image that is frontend and its dependencies only
@@ -68,7 +68,7 @@ RUN yarn turbo prune --scope=backend --docker
 
 
 # Stage to run production frontend
-FROM base AS prod-frontend
+FROM prod-base AS prod-frontend
 WORKDIR /$WORKDIR
 
 # Copy the packages from production to our working directory
@@ -81,7 +81,7 @@ RUN yarn install --immutable
 RUN yarn turbo run lint build
 
 # This trims out all non-production items
-RUN yarn workspaces --all --production
+RUN yarn workspaces focus --all --production
 
 # Use entrypoint (since this contianer should be run as-is)
 # Simply serve the frontend single (so that everything goes to index.html) and the prod port
@@ -95,7 +95,7 @@ HEALTHCHECK CMD wget --spider localhost:$PORT || bash -c 'kill -s 15 -1 && (slee
 
 
 # Stage to run prod backend
-FROM base AS prod-backend
+FROM prod-base AS prod-backend
 WORKDIR /$WORKDIR
 
 # PG User Info
@@ -115,7 +115,7 @@ RUN yarn install --immutable
 RUN yarn turbo run lint build
 
 # This trims out all non-production items
-RUN yarn workspaces --all --production
+RUN yarn workspaces focus --all --production
 
 # Use entrypoint (since this contianer should be run as-is)
 # Simply serve the frontend single (so that everything goes to index.html) and the prod port
@@ -124,7 +124,7 @@ ENTRYPOINT yarn workspace backend run deploy
 # Healthceck to determine if we're actually still serving stuff, just attempt to get the URL
 # If that fails, try exiting gracefully (SIGTERM), and if that fails force the container to die with SIGKILL.
 # This will invoke the restart policy, allowing compose to automatically rebuild the container
-HEALTHCHECK CMD wget --spider localhost:$PORT || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
+HEALTHCHECK CMD wget --spider localhost:$PORT/healthcheck || bash -c 'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'
 
 
 

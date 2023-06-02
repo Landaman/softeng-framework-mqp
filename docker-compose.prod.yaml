@@ -6,8 +6,8 @@ x-prod-args: &prod-args
 # This may seem insecure, but the DB container isn't exposed outside of docker, so it doesn't
 # matter since NOBODY except for other containers has access ot it
 x-db-info: &db-args
-  POSTGRES_USER: mqp
   POSTGRES_PASSWORD: mqp
+  POSTGRES_USER: &pg-user mqp
   POSTGRES_DB: &pg-db mqp
 
 # Port and URL for the DB
@@ -117,6 +117,8 @@ services:
   #PSQL database image
   database:
     # Expose the database to other containers
+    ports:
+      - 5432:5432
     expose:
       - *pg-port
     image: postgres
@@ -130,7 +132,7 @@ services:
     healthcheck:
       # PG healthcheck. Check if the database is ready, if it isn't, try gracefully killing it. If that fails,
       # force the container to die, so the restart policy is invoked
-      test: ["CMD-SHELL", "pg_isready", "-d", *pg-db, "||", "bash", "-c", "'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'"]
+      test: ["CMD-SHELL", "pg_isready -q -d $${POSTGRES_DB} -U $${POSTGRES_USER}", "||", "bash", "-c", "'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'"]
       <<: *health-check
 
 volumes:
