@@ -5,12 +5,9 @@
   "description": "",
   "license": "UNLICENSED",
   "workspaces": [
-    "frontend",
-    "backend",
-    "common",
-    "eslint-config-custom",
-    "tsconfig-custom",
-    "prettier-config-custom"
+    "apps/*",
+    "configs/*",
+    "packages/*"
   ],
   "repository": {
     "type": "git",

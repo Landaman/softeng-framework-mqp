@@ -1145,9 +1145,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"backend@workspace:backend":
+"backend@workspace:apps/backend":
   version: 0.0.0-use.local
-  resolution: "backend@workspace:backend"
+  resolution: "backend@workspace:apps/backend"
   dependencies:
     "@swc/core": ^1.3.60
     "@swc/helpers": ^0.5.1
@@ -1453,9 +1453,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"common@workspace:*, common@workspace:common":
+"common@workspace:*, common@workspace:packages/common":
   version: 0.0.0-use.local
-  resolution: "common@workspace:common"
+  resolution: "common@workspace:packages/common"
   dependencies:
     eslint-config-custom: "workspace:*"
     prettier-config-custom: "workspace:*"
@@ -1859,9 +1859,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-custom@workspace:*, eslint-config-custom@workspace:eslint-config-custom":
+"eslint-config-custom@workspace:*, eslint-config-custom@workspace:configs/eslint-config-custom":
   version: 0.0.0-use.local
-  resolution: "eslint-config-custom@workspace:eslint-config-custom"
+  resolution: "eslint-config-custom@workspace:configs/eslint-config-custom"
   dependencies:
     "@rushstack/eslint-patch": latest
     "@typescript-eslint/eslint-plugin": latest
@@ -2266,9 +2266,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"frontend@workspace:frontend":
+"frontend@workspace:apps/frontend":
   version: 0.0.0-use.local
-  resolution: "frontend@workspace:frontend"
+  resolution: "frontend@workspace:apps/frontend"
   dependencies:
     "@popperjs/core": ^2.11.8
     "@types/node": ^20.2.5
@@ -3577,9 +3577,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-config-custom@workspace:*, prettier-config-custom@workspace:prettier-config-custom":
+"prettier-config-custom@workspace:*, prettier-config-custom@workspace:configs/prettier-config-custom":
   version: 0.0.0-use.local
-  resolution: "prettier-config-custom@workspace:prettier-config-custom"
+  resolution: "prettier-config-custom@workspace:configs/prettier-config-custom"
   dependencies:
     prettier: latest
   languageName: unknown
@@ -4373,9 +4373,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsconfig-custom@workspace:*, tsconfig-custom@workspace:tsconfig-custom":
+"tsconfig-custom@workspace:*, tsconfig-custom@workspace:configs/tsconfig-custom":
   version: 0.0.0-use.local
-  resolution: "tsconfig-custom@workspace:tsconfig-custom"
+  resolution: "tsconfig-custom@workspace:configs/tsconfig-custom"
   dependencies:
     typescript: ^5.0.4
   languageName: unknown

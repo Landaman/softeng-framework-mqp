@@ -52,12 +52,12 @@ services:
     # Mount the frontend dev environment, ignore backend and node_modules (turbo cache)
     volumes:
       - ./:/app
-      - /app/frontend/node_modules/
-      - /app/frontend/.turbo/
-      - /app/backend/
+      - /app/apps/frontend/node_modules/
+      - /app/apps/frontend/.turbo/
+      - /app/apps/backend/
       - /app/node_modules/
-      - /app/common/.turbo/
-      - /app/common/node_modules/
+      - /app/packages/common/.turbo/
+      - /app/packages/common/node_modules/
   # Backend (API)
   backend:
     # The frontend container must be able to access this, so expose it internally.
@@ -80,12 +80,12 @@ services:
     # Mount the backend on the host, ignore frontend and node_modules (the turbo cache)
     volumes:
       - ./:/app
-      - /app/backend/node_modules/
-      - /app/backend/.turbo/
-      - /app/frontend/
+      - /app/apps/backend/node_modules/
+      - /app/apps/backend/.turbo/
+      - /app/apps/frontend/
       - /app/node_modules/
-      - /app/common/.turbo/
-      - /app/common/node_modules/
+      - /app/packages/common/.turbo/
+      - /app/packages/common/node_modules/
     # The backend depends on the database being functional
     depends_on:
       - database
