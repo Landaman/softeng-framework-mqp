@@ -75,7 +75,7 @@ WORKDIR /$WORKDIR
 COPY --from=prod-frontend-builder ["/$WORKDIR/out/json", "/$WORKDIR/out/yarn.lock", "/$WORKDIR/out/full", "./"]
 
 # Validate the install
-RUN yarn install --immutable --immutable-cache
+RUN yarn install --immutable
 
 # Run the turbo lint and build tasks
 RUN yarn turbo run lint build
@@ -132,8 +132,6 @@ HEALTHCHECK CMD wget --spider localhost:$PORT || bash -c 'kill -s 15 -1 && (slee
 FROM installer as dev-backend
 WORKDIR /$WORKDIR
 
-RUN rm -r frontend
-
 ENV PORT=$BACKEND_PORT
 
 # Expose the port
@@ -157,8 +155,6 @@ CMD ["yarn", "turbo", "run", "dev", "--filter=backend"]
 # Development of the frontend portion
 FROM installer as dev-frontend
 WORKDIR /$WORKDIR
-
-RUN rm -r backend
 
 ARG FRONTEND_PORT
 
