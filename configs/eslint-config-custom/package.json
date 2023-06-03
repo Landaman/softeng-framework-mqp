@@ -1,0 +1,19 @@
+{
+  "name": "eslint-config-custom",
+  "private": true,
+  "main": ".eslintrc.cjs",
+  "version": "1.0.0",
+  "dependencies": {
+    "@rushstack/eslint-patch": "latest",
+    "@typescript-eslint/eslint-plugin": "latest",
+    "@typescript-eslint/parser": "latest",
+    "eslint": "latest",
+    "eslint-config-prettier": "latest",
+    "eslint-config-turbo": "latest",
+    "typescript": "^5.0.4"
+  },
+  "scripts": {
+    "shared:eslint": "cd $INIT_CWD && eslint  --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "shared:eslint:fix": "cd $INIT_CWD && eslint  --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix"
+  }
+}

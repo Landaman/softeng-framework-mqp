@@ -2,6 +2,10 @@
 
 .idea
 
+**/.turbo
+
+out
+
 # dependencies
 **/node_modules
 

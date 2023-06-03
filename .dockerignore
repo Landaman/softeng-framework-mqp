@@ -5,6 +5,11 @@ Dockerfile
 **/.git
 docker-compose*.yaml
 
+**/node_modules
+**/.turbo
+
+out
+
 .yarn/*
 !.yarn/cache
 !.yarn/patches

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "pipeline": {
+    "dev": {
+      "env": ["PORT", "BACKEND_PORT", "BACKEND_SOURCE"]
+    },
+    "deploy": {
+      "env": ["PORT"]
+    }
+  }
+}
