@@ -60,6 +60,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["eslint", "npm:8.41.0"],\
             ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
+            ["husky", "npm:8.0.3"],\
             ["prettier", "npm:2.8.8"],\
             ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
             ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
@@ -3175,6 +3176,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["husky", [\
+        ["npm:8.0.3", {\
+          "packageLocation": "./.yarn/cache/husky-npm-8.0.3-b0b59c5127-837bc7e441.zip/node_modules/husky/",\
+          "packageDependencies": [\
+            ["husky", "npm:8.0.3"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["iconv-lite", [\
         ["npm:0.4.24", {\
           "packageLocation": "./.yarn/cache/iconv-lite-npm-0.4.24-c5c4ac6695-bd9f120f5a.zip/node_modules/iconv-lite/",\
@@ -5071,6 +5081,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["softeng-framework-mqp", "workspace:."],\
             ["eslint", "npm:8.41.0"],\
             ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
+            ["husky", "npm:8.0.3"],\
             ["prettier", "npm:2.8.8"],\
             ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
             ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
