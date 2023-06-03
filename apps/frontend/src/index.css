@@ -36,6 +36,21 @@ h1 {
   line-height: 1.1;
 }
 
+label {
+
+}
+
+input {
+  width: 100px;
+}
+
+.label-container {
+  display: flex;
+  justify-content: space-between;
+  width: 200px;
+  margin: 0 auto;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
