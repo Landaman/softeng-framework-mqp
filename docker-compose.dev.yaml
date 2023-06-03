@@ -95,9 +95,6 @@ services:
   # Backend PSQL database
   database:
     image: postgres
-    # Expose the database for development purposes
-    ports:
-      - *db-exposed
     # Expose the PG port
     expose:
       - *pg-port
