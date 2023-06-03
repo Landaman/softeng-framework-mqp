@@ -11,8 +11,8 @@ export default defineConfig({
       "/api": process.env.BACKEND_SOURCE + ":" + process.env.BACKEND_PORT,
     },
     watch: {
-      usePolling: true
-    }
+      usePolling: true,
+    },
   },
   build: {
     outDir: "build",
