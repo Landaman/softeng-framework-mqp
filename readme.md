@@ -120,7 +120,7 @@ without affecting the backend.
 
 ## Package Overview
 What follows is a basic overview of the packages in the repo,
-and what files they are used by.
+and what files they use.
 
 ### TypeScript
 JavaScript is a dynamically-typed language, meaning it does not need types
