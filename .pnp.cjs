@@ -1571,7 +1571,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/pg", "npm:8.10.1"],\
             ["common", "workspace:packages/common"],\
             ["cookie-parser", "npm:1.4.6"],\
-            ["dotenv", "npm:16.0.3"],\
             ["eslint", "npm:8.41.0"],\
             ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
             ["express", "npm:5.0.0-beta.1"],\
@@ -2247,15 +2246,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["dom-helpers", "npm:5.2.1"],\
             ["@babel/runtime", "npm:7.22.3"],\
             ["csstype", "npm:3.1.2"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["dotenv", [\
-        ["npm:16.0.3", {\
-          "packageLocation": "./.yarn/cache/dotenv-npm-16.0.3-4cc29121dc-afcf03f373.zip/node_modules/dotenv/",\
-          "packageDependencies": [\
-            ["dotenv", "npm:16.0.3"]\
           ],\
           "linkType": "HARD"\
         }]\
