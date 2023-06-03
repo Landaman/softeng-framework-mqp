@@ -26,11 +26,6 @@ FROM base AS installer
 WORKDIR /$WORKDIR
 COPY . /$WORKDIR
 
-# This *shouldn't* actually do anything (hence frozen-stuff). If it does try to do something, there is a configuration
-# error somewhere, so this will fail the build. If you're getting Yarn failures, STOP BREAKING THE YARN CONFIG.
-RUN yarn install --immutable --immutable-cache
-
-
 
 # Production basics (ports, env, etc)
 FROM base AS prod-base
