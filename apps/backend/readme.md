@@ -17,7 +17,7 @@ This package should be run from the root, see the root readme.md for details.
 
 As discussed in the top-level repo, this project runs completely independently
 (in fact, on a different Docker container) of the frontend package.
-This application contains NO UI components.
+**This application contains **NO UI components**.
 
 ## RESTful API Basics
 RESTful APIs are based on the `HTTP` specification, and are
