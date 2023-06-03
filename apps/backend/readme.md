@@ -16,8 +16,8 @@ represents. It also includes the packages used.
 This package should be run from the root, see the root readme.md for details.
 
 As discussed in the top-level repo, this project runs completely independently
-(in-fact, on a different Docker container) of the frontend package. This application
-contains NO UI components.
+(in fact, on a different Docker container) of the frontend package.
+This application contains NO UI components.
 
 ## RESTful API Basics
 RESTful APIs are based on the `HTTP` specification, and are
@@ -31,7 +31,7 @@ however, they should be generally close.
 
 Keep in mind that RESTful APIs are stateless—they do not remember
 any details of the client that connects to them. They simply perform the
-operation, and return.
+operation and return.
 
 See the following resources for details on how to design the REST API:
 - https://wiki.onap.org/display/DW/RESTful+API+Design+Specification
@@ -78,13 +78,13 @@ to alter this configuration.
 See https://typestrong.org/ts-node/ for details on ts-node
 
 ### Nodemon
-Nodemon is a package that scans the filesystem for changes,
+Nodemon is a package that scans the filesystem for changes
 and automatically kills and then restarts a given program when one is
 detected.
 
 This has the benefit of allowing you to change your program, and se
 the results in real-time, without having to manually restart. It depends
-on ts-node to actual run the TypeScript, but it instructs ts-node
+on ts-node to actually run the TypeScript, but it instructs ts-node
 to start/stop.
 
 The default run configuration first runs `build:dev`, then runs the program,
