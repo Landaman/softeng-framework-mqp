@@ -10,6 +10,9 @@ export default defineConfig({
     proxy: {
       "/api": process.env.BACKEND_SOURCE + ":" + process.env.BACKEND_PORT,
     },
+    watch: {
+      usePolling: true
+    }
   },
   build: {
     outDir: "build",
