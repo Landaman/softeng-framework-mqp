@@ -25,6 +25,8 @@ and the reasoning for the tooling it has.
     * [Prettier](#prettier)
     * [Husky](#husky)
     * [Docker](#docker)
+    * [PostgreSQL](#postgresql)
+    * [Traefik](#traefik)
   * [Miscellaneous](#miscellaneous)
     * [.run](#run)
     * [.turbo](#turbo)
@@ -303,6 +305,32 @@ You should not modify or move any of the Docker files unless you are absolutely 
 you know what you are doing. 
 
 See https://docs.docker.com for Docker documentation
+
+### PostgreSQL
+PostgreSQL is a modern, highly performant SQL database. It is completely
+open-source, and the most widely used SQL database.
+
+In the development environment, the database is accessible via any standard
+query console, using the credentials username: "dev", password: "dev", and database: dev on localhost:5432.
+
+In the production environment, the database is **not accessible** outside the Docker
+container network. This means that nothing except for your backend code can access the database. This
+is how most production databases are configured.
+
+PostgreSQL is configured through `docker-compose....yaml` for both production and development.
+
+See https://www.postgresql.org/docs/ for details on PostgreSQL specific commands
+
+### Traefik
+Traefik is a "reverse-proxy"—that means it receives traffic and routes
+it to the appropriate place. This is used in production to appropriately route
+requests to the frontend or the backend. It also provides automatic TSL (https) configuration
+in production, greatly enhancing security.
+
+Traefik can be configured in `docker-compose.prod.yaml`. You probably
+shouldn't need to change its configuration.
+
+Details on Traefik can be found here: https://doc.traefik.io/traefik/
 
 ## Miscellaneous
 The following details the remaining files that can be found in the top-level of the repo
