@@ -89,9 +89,9 @@ function TestPage() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-        <a href={`/`}>
-            <button className={"button"}>Return Home</button>
-        </a>
+      <a href={`/`}>
+        <button className={"button"}>Return Home</button>
+      </a>
     </>
   );
 }
