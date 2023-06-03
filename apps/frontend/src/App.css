@@ -40,3 +40,34 @@
 .read-the-docs {
   color: #888;
 }
+
+
+
+/* NavBar Styling */
+
+.navBar {
+  background-color: #012D5A;
+  text-align: center;
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 30px 10px 30px;
+  justify-content: space-between;
+  align-self: start;
+  justify-self: start;
+  text-align: start;
+  min-width: 90vw;
+}
+
+.navBarText {
+  color: white;
+  margin: 0px 30px 0px 30px;
+}
+
+.navBarLink {
+  color: white;
+  margin: 0px 7px 0px 7px;
+}
+
