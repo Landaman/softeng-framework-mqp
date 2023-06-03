@@ -61,7 +61,7 @@ function onListening(): void {
   // Get the address we're listening on
   const addr: string | AddressInfo | null = server.address();
 
-  // If it's a string, simply get it (its a pipe)
+  // If it's a string, simply get it (it's a pipe)
   const bind: string =
     typeof addr === "string" ? "pipe " + addr : "port " + addr?.port; // Otherwise get the port
   console.info("Server Listening on " + bind); // Debug output that we're listening
