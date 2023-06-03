@@ -106,7 +106,8 @@ documents the recommended structure for using this.
 
 - bin/www.ts is the entrypoint for the program. It creates an HTTP
 server on the correct port, provides clean output if that fails, and provides
-last-ditch exception handling and startup output
+last-ditch exception handling and startup output. You probably don't need
+to edit this.
 - app.ts is the Express.js entrypoint. It defines the Express routers 
 (see Express docs for info), logging, and basic error trapping.
 routes/* define the routers Express uses. This is where the bulk
