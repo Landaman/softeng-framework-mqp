@@ -1160,12 +1160,14 @@ __metadata:
     common: "workspace:*"
     cookie-parser: ~1.4.4
     dotenv: ^16.0.3
+    eslint: latest
     eslint-config-custom: "workspace:*"
     express: 5.0.0-beta.1
     http-errors: ~1.6.3
     morgan: ~1.9.1
     nodemon: latest
     pg: ^8.11.0
+    prettier: latest
     prettier-config-custom: "workspace:*"
     ts-node: ^10.9.1
     tsconfig-custom: "workspace:*"
@@ -1457,9 +1459,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "common@workspace:packages/common"
   dependencies:
+    eslint: latest
     eslint-config-custom: "workspace:*"
+    prettier: latest
     prettier-config-custom: "workspace:*"
     tsconfig-custom: "workspace:*"
+    typescript: ^5.0.4
   languageName: unknown
   linkType: soft
 
@@ -2282,6 +2287,7 @@ __metadata:
     eslint-config-custom: "workspace:*"
     eslint-plugin-react-hooks: ^4.6.0
     eslint-plugin-react-refresh: ^0.4.1
+    prettier: latest
     prettier-config-custom: "workspace:*"
     react: ^18.2.0
     react-bootstrap: ^2.7.4
