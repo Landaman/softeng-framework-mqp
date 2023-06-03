@@ -1,20 +1,4 @@
 {
-  "compilerOptions": {
-    "useDefineForClassFields": true,
-    "target": "ESNext",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "allowImportingTsExtensions": true,
-    "skipLibCheck": false,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "noImplicitAny": true
-  },
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "tsconfig-custom/tsconfig.base.json"
 }

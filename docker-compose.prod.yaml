@@ -6,14 +6,14 @@ x-prod-args: &prod-args
 # This may seem insecure, but the DB container isn't exposed outside of docker, so it doesn't
 # matter since NOBODY except for other containers has access ot it
 x-db-info: &db-args
-  POSTGRES_USER: mqp
   POSTGRES_PASSWORD: mqp
-  POSTGRES_DB: &pg-db mqp
+  POSTGRES_USER: mqp
+  POSTGRES_DB: mqp
 
 # Port and URL for the DB
 x-db-loc: &db-loc
-  POSTGRES_URL: &pg-url http://database
-  POSTGRES_PORT: &pg-port "8080"
+  POSTGRES_CONTAINER: database
+  POSTGRES_PORT: &pg-port "5432"
 
 # Health check for all processes
 x-health-check: &health-check
@@ -61,7 +61,7 @@ services:
     # Use the standard Dockerfile
     build:
       # Taken from our github repo
-      context: "https://github.com/Landaman/softeng-framework-mqp.git#main"
+      context: .
       args:
         <<: *prod-args
       # Use the prod-frontend stage
@@ -89,7 +89,7 @@ services:
     # Use the standard Dockerfile
     build:
       # Taken from our github repo
-      context: "https://github.com/Landaman/softeng-framework-mqp.git#main"
+      context: .
       args:
         # Ignore the warnings, this just merges those three
         <<: [*prod-args, *db-args, *db-loc]
@@ -130,7 +130,7 @@ services:
     healthcheck:
       # PG healthcheck. Check if the database is ready, if it isn't, try gracefully killing it. If that fails,
       # force the container to die, so the restart policy is invoked
-      test: ["CMD-SHELL", "pg_isready", "-d", *pg-db, "||", "bash", "-c", "'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'"]
+      test: ["CMD-SHELL", "pg_isready -q -d $${POSTGRES_DB} -U $${POSTGRES_USER}", "||", "bash", "-c", "'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'"]
       <<: *health-check
 
 volumes:
