@@ -46,7 +46,7 @@ app.use(function (req: Request, res: Response, next: NextFunction): void {
 });
 
 /**
- * Generic error handler,
+ * Generic error handler
  */
 app.use((err: HttpError, req: Request, res: Response): void => {
   res.statusMessage = err.message; // Provide the error message
