@@ -21,8 +21,8 @@
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "postinstall": "husky install",
-    "migrate:dev":  "turbo run migrate:dev",
-    "migrate:deploy": "turbo run migrate:deploy"
+    "migrate:dev":  "yarn workspace database run migrate:dev",
+    "migrate:deploy": "yarn workspace database run migrate:deploy"
   },
   "packageManager": "yarn@3.5.1",
   "devDependencies": {

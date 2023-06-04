@@ -27,12 +27,6 @@
     "build": {
       "dependsOn": ["^dependencies"],
       "outputs": ["build/**"]
-    },
-    "migrate:dev": {
-      "cache": false
-    },
-    "migrate:deploy": {
-      "cache": false
     }
   }
 }
