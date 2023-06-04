@@ -1,0 +1,37 @@
+.navBar {
+    background-color: #012D5A;
+    text-align: center;
+    padding: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.navBarText {
+    flex-grow: 1;
+    color: white;
+    margin: 0px 30px 0px 30px;
+    text-align: start;
+}
+
+.navBarLogin {
+    flex-grow: 1;
+    color: white;
+    margin: 0px 30px 0px 30px;
+    text-align: end;
+}
+
+.navBarLink {
+    color: white;
+    margin: 0px 7px 0px 7px;
+}
+.linkdiv {
+    background-color: #012D5A;
+    text-align: center;
+    padding: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}

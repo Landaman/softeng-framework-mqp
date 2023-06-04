@@ -23,10 +23,10 @@ function App() {
   ]);
 
   return (
-    <>
+    <div className={"main"}>
       <NavBar />
       <RouterProvider router={router} />
-    </>
+    </div>
   );
 }
 

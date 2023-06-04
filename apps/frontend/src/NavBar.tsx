@@ -1,8 +1,9 @@
+import "./NavBar.css";
 function NavBar() {
   return (
     <div className={"navBar"}>
       <p className={"navBarText"}>Hospital Logo</p>
-      <div className={"navBar"}>
+      <div className={"linkdiv"}>
         <a className={"navBarLink"} href={`/`}>
           <p>Home</p>
         </a>
@@ -13,7 +14,7 @@ function NavBar() {
           <p>Test Page</p>
         </a>
       </div>
-      <p className={"navBarText"}>Login Stuff</p>
+      <p className={"navBarLogin"}>Login Stuff</p>
     </div>
   );
 }
