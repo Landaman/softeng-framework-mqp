@@ -6,7 +6,7 @@
     "prettier": "latest"
   },
   "scripts": {
-    "shared:prettierlint": "cd $INIT_CWD && prettier --check {**/*,*}.{js,ts,jsx,tsx,vue,astro}",
-    "shared:prettierlint:fix": "cd $INIT_CWD && prettier --write {**/*,*}.{js,ts,jsx,tsx,vue,astro}"
+    "shared:prettierlint": "cd $INIT_CWD && prettier --check {**/*,*}.{cjs,mjs,js,cts,mts,ts,jsx,tsx,vue,astro,json,md,markdown}",
+    "shared:prettierlint:fix": "cd $INIT_CWD && prettier --write {**/*,*}.{cjs,mjs,js,cts,mts,ts,jsx,tsx,vue,astro,json,md,markdown}"
   }
 }
