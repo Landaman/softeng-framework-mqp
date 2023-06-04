@@ -13,7 +13,6 @@
     "@swc/helpers": "^0.5.1",
     "common": "workspace:*",
     "cookie-parser": "~1.4.4",
-    "dotenv": "^16.0.3",
     "express": "5.0.0-beta.1",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
@@ -29,8 +28,10 @@
     "@types/morgan": "^1.9.4",
     "@types/node": "^20.2.3",
     "@types/pg": "^8.10.1",
+    "eslint": "latest",
     "eslint-config-custom": "workspace:*",
     "nodemon": "latest",
+    "prettier": "latest",
     "prettier-config-custom": "workspace:*"
   }
 }

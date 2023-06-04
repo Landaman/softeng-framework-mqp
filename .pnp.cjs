@@ -1571,13 +1571,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/pg", "npm:8.10.1"],\
             ["common", "workspace:packages/common"],\
             ["cookie-parser", "npm:1.4.6"],\
-            ["dotenv", "npm:16.0.3"],\
+            ["eslint", "npm:8.41.0"],\
             ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
             ["express", "npm:5.0.0-beta.1"],\
             ["http-errors", "npm:1.6.3"],\
             ["morgan", "npm:1.9.1"],\
             ["nodemon", "npm:2.0.22"],\
             ["pg", "virtual:9a28949798a912c67218bf8cea1001b3cae21be82aaad0589210650a91ed87ad2b921ce3379d36f5723672b5e5a668da59a3e262568425b08570aa654e7b0112#npm:8.11.0"],\
+            ["prettier", "npm:2.8.8"],\
             ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
             ["ts-node", "virtual:9a28949798a912c67218bf8cea1001b3cae21be82aaad0589210650a91ed87ad2b921ce3379d36f5723672b5e5a668da59a3e262568425b08570aa654e7b0112#npm:10.9.1"],\
             ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
@@ -1914,9 +1915,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./packages/common/",\
           "packageDependencies": [\
             ["common", "workspace:packages/common"],\
+            ["eslint", "npm:8.41.0"],\
             ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
+            ["prettier", "npm:2.8.8"],\
             ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
-            ["tsconfig-custom", "workspace:configs/tsconfig-custom"]\
+            ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
+            ["typescript", "patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=b5f058"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -2242,15 +2246,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["dom-helpers", "npm:5.2.1"],\
             ["@babel/runtime", "npm:7.22.3"],\
             ["csstype", "npm:3.1.2"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["dotenv", [\
-        ["npm:16.0.3", {\
-          "packageLocation": "./.yarn/cache/dotenv-npm-16.0.3-4cc29121dc-afcf03f373.zip/node_modules/dotenv/",\
-          "packageDependencies": [\
-            ["dotenv", "npm:16.0.3"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -2910,6 +2905,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
             ["eslint-plugin-react-hooks", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:4.6.0"],\
             ["eslint-plugin-react-refresh", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.4.1"],\
+            ["prettier", "npm:2.8.8"],\
             ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
             ["react", "npm:18.2.0"],\
             ["react-bootstrap", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:2.7.4"],\

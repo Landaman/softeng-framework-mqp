@@ -1159,13 +1159,14 @@ __metadata:
     "@types/pg": ^8.10.1
     common: "workspace:*"
     cookie-parser: ~1.4.4
-    dotenv: ^16.0.3
+    eslint: latest
     eslint-config-custom: "workspace:*"
     express: 5.0.0-beta.1
     http-errors: ~1.6.3
     morgan: ~1.9.1
     nodemon: latest
     pg: ^8.11.0
+    prettier: latest
     prettier-config-custom: "workspace:*"
     ts-node: ^10.9.1
     tsconfig-custom: "workspace:*"
@@ -1457,9 +1458,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "common@workspace:packages/common"
   dependencies:
+    eslint: latest
     eslint-config-custom: "workspace:*"
+    prettier: latest
     prettier-config-custom: "workspace:*"
     tsconfig-custom: "workspace:*"
+    typescript: ^5.0.4
   languageName: unknown
   linkType: soft
 
@@ -1700,13 +1704,6 @@ __metadata:
     "@babel/runtime": ^7.8.7
     csstype: ^3.0.2
   checksum: 863ba9e086f7093df3376b43e74ce4422571d404fc9828bf2c56140963d5edf0e56160f9b2f3bb61b282c07f8fc8134f023c98fd684bddcb12daf7b0f14d951c
-  languageName: node
-  linkType: hard
-
-"dotenv@npm:^16.0.3":
-  version: 16.0.3
-  resolution: "dotenv@npm:16.0.3"
-  checksum: afcf03f373d7a6d62c7e9afea6328e62851d627a4e73f2e12d0a8deae1cd375892004f3021883f8aec85932cd2834b091f568ced92b4774625b321db83b827f8
   languageName: node
   linkType: hard
 
@@ -2282,6 +2279,7 @@ __metadata:
     eslint-config-custom: "workspace:*"
     eslint-plugin-react-hooks: ^4.6.0
     eslint-plugin-react-refresh: ^0.4.1
+    prettier: latest
     prettier-config-custom: "workspace:*"
     react: ^18.2.0
     react-bootstrap: ^2.7.4

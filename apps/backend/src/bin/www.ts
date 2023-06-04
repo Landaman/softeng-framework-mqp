@@ -12,9 +12,6 @@ if (port === undefined) {
 
 app.set("port", port);
 
-// Signals we want to handle for shutdown. We can't handle SIGKILL (this cannot be intercepted)
-const signals: string[] = ["SIGHUP", "SIGINT", "SIGTERM"];
-
 // Create the server, enable the application
 console.log("Starting server...");
 const server: http.Server = http.createServer(app);
@@ -23,14 +20,6 @@ const server: http.Server = http.createServer(app);
 server.listen(port);
 server.on("error", onError); // Error handler
 server.on("listening", onListening); // Notify that we started
-
-// Create a listener for each of the signals that we want to handle
-Object.keys(signals).forEach((signal: string): void => {
-  // On each one, call the shutdown handler
-  process.on(signal, (): void => {
-    onShutdown(signal);
-  });
-});
 
 /**
  * Event listener for HTTP server "error" event, to provide user friendly error output and then exit
@@ -72,26 +61,9 @@ function onListening(): void {
   // Get the address we're listening on
   const addr: string | AddressInfo | null = server.address();
 
-  // If it's a string, simply get it (its a pipe)
+  // If it's a string, simply get it (it's a pipe)
   const bind: string =
     typeof addr === "string" ? "pipe " + addr : "port " + addr?.port; // Otherwise get the port
   console.info("Server Listening on " + bind); // Debug output that we're listening
   console.log("Startup complete");
-}
-
-/**
- * Method to handle shutdown signals. Prints that termination has started and then gracefully exits
- * @param signal the captured signal in string form
- */
-function onShutdown(signal: string): void {
-  console.log(`Server received signal ${signal}. Shutting down...`);
-  console.info(
-    "Beginning shutdown. Waiting for any pending requests to complete..."
-  );
-
-  // Wait for any pending requests to resolve
-  server.close(() => {
-    console.info(`Pending requests resolved. Shutting down...`);
-    process.exit(0);
-  });
 }
