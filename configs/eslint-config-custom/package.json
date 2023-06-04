@@ -13,7 +13,7 @@
     "typescript": "^5.0.4"
   },
   "scripts": {
-    "shared:eslint": "cd $INIT_CWD && eslint . --report-unused-disable-directives --no-error-on-unmatched-pattern --max-warnings 0",
-    "shared:eslint:fix": "cd $INIT_CWD && eslint . --report-unused-disable-directives --no-error-on-unmatched-pattern --max-warnings 0 --fix"
+    "shared:eslint": "cd $INIT_CWD && eslint . --report-unused-disable-directives --no-error-on-unmatched-pattern --max-warnings 0 --ignore-path ${npm_package_json}/../.eslintignore",
+    "shared:eslint:fix": "cd $INIT_CWD && eslint . --report-unused-disable-directives --no-error-on-unmatched-pattern --max-warnings 0 --ignore-path ${npm_package_json}/../.eslintignore --fix"
   }
 }

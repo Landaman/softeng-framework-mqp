@@ -14,8 +14,8 @@
   "scripts": {
     "lint": "yarn shared:prettierlint && yarn shared:eslint && yarn shared:tslint",
     "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint",
-    "build": "prisma generate",
-    "build:dev": "prisma generate",
+    "build": "yarn -T run pnpify prisma generate",
+    "build:dev": "yarn -T run pnpify prisma generate",
     "migrate:dev": "prisma migrate dev",
     "migrate:reset": "prisma migrate reset",
     "migrate:deploy": "prisma migrate deploy",

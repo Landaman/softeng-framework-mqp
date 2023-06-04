@@ -13,4 +13,5 @@
     "noEmit": true,
     "noImplicitAny": true
   },
+  "exclude": ["**/node_modules", "**/.turbo", "**/build", "**/coverage", "**/.prisma/client"]
 }

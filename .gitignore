@@ -4,6 +4,8 @@
 
 **/.turbo
 
+**/.prisma/client
+
 out
 
 # dependencies
