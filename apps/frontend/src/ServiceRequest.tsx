@@ -1,4 +1,5 @@
 import { ChangeEvent, useState } from "react";
+import "./ServiceRequest.css";
 
 function ServiceRequest() {
   const [locationText, setLocationText] = useState("");
@@ -91,7 +92,17 @@ function ServiceRequest() {
             <label>Reason:</label>
             <textarea value={reasonText} rows={3} onChange={handleReasonText} />
           </div>
+          <div className="hbox-button">
+            <button className={"submit"} onClick={handleSubmit}>
+              Submit
+            </button>
+            <div className={"spacer2"}></div>
+            <button className={"cancel"} onClick={handleClear}>
+              Cancel
+            </button>
+          </div>
         </div>
+        <div className={"spacer1"}></div>
         <div className="vbox">
           <label className="selection-label">Device Type:</label>
           <div className="selection-container" onClick={handleDesktop}>
@@ -131,18 +142,6 @@ function ServiceRequest() {
             <label className="descriptor">Phone</label>
           </div>
         </div>
-      </div>
-      <div className="hbox-button">
-        <a href={`/`}>
-          <button className={"button"}>Return Home (temp)</button>
-        </a>
-        <div className={"spacer"}></div>
-        <button className={"submit"} onClick={handleSubmit}>
-          Submit
-        </button>
-        <button className={"cancel"} onClick={handleClear}>
-          Cancel
-        </button>
       </div>
     </>
   );
