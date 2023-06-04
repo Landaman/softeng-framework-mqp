@@ -1,21 +1,22 @@
 # Frontend
 
 <!-- TOC -->
-* [Frontend](#frontend)
-  * [Imports](#imports)
-  * [Package Overview](#package-overview)
-    * [Vite](#vite)
-    * [React](#react)
-    * [React-Router](#react-router)
-    * [Serve](#serve)
-    * [Axios](#axios)
-    * [Miscellaneous](#miscellaneous)
-  * [Code Structure](#code-structure)
-    * [Public and Assets Folders](#public-and-assets-folders)
-    * [App.css](#appcss)
-    * [App.tsx](#apptsx)
-    * [main.tsx](#maintsx)
-<!-- TOC -->
+
+- [Frontend](#frontend)
+  - [Imports](#imports)
+  - [Package Overview](#package-overview)
+    - [Vite](#vite)
+    - [React](#react)
+    - [React-Router](#react-router)
+    - [Serve](#serve)
+    - [Axios](#axios)
+    - [Miscellaneous](#miscellaneous)
+  - [Code Structure](#code-structure)
+  _ [Public and Assets Folders](#public-and-assets-folders)
+  _ [App.css](#appcss)
+  _ [App.tsx](#apptsx)
+  _ [main.tsx](#maintsx)
+  <!-- TOC -->
 
 This package defines the backend server, and the RESTful API it
 represents. It also includes the packages used.
@@ -27,6 +28,7 @@ As discussed in the top-level repo, this project runs completely independently
 contains NO API components**.
 
 ## Imports
+
 Note that Vite cannot successfully package all imports. If you are considering
 adding something to the frontend, make sure that it explicitly states
 it works in the browser; otherwise it likely will not. If you are
