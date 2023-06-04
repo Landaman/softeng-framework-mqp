@@ -7,7 +7,7 @@
     "eslint-config-custom": "workspace:*",
     "prettier": "latest",
     "prettier-config-custom": "workspace:*",
-    "prisma": "^4.15.0",
+    "prisma": "4.15.0",
     "tsconfig-custom": "workspace:*",
     "typescript": "^5.0.4"
   },
@@ -16,7 +16,12 @@
     "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint",
     "build": "prisma generate",
     "build:dev": "prisma generate",
-    "migrate:dev": "prisma migrate dev --skip-generate",
-    "migrate:deploy": "prisma migrate deploy --skip-generate"
+    "migrate:dev": "prisma migrate dev",
+    "migrate:reset": "prisma migrate reset",
+    "migrate:deploy": "prisma migrate deploy",
+    "db:pull": "prisma db pull"
+  },
+  "dependencies": {
+    "@prisma/client": "4.15.0"
   }
 }

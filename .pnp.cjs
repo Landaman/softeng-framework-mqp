@@ -482,11 +482,43 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@prisma/client", [\
+        ["npm:4.15.0", {\
+          "packageLocation": "./.yarn/unplugged/@prisma-client-virtual-1fb12a8bef/node_modules/@prisma/client/",\
+          "packageDependencies": [\
+            ["@prisma/client", "npm:4.15.0"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:4.15.0", {\
+          "packageLocation": "./.yarn/unplugged/@prisma-client-virtual-1fb12a8bef/node_modules/@prisma/client/",\
+          "packageDependencies": [\
+            ["@prisma/client", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:4.15.0"],\
+            ["@prisma/engines-version", "npm:4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944"],\
+            ["@types/prisma", null],\
+            ["prisma", "npm:4.15.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/prisma",\
+            "prisma"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@prisma/engines", [\
         ["npm:4.15.0", {\
           "packageLocation": "./.yarn/unplugged/@prisma-engines-npm-4.15.0-9024b482d4/node_modules/@prisma/engines/",\
           "packageDependencies": [\
             ["@prisma/engines", "npm:4.15.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@prisma/engines-version", [\
+        ["npm:4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944", {\
+          "packageLocation": "./.yarn/cache/@prisma-engines-version-npm-4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944-45ae46b86e-6da6f07674.zip/node_modules/@prisma/engines-version/",\
+          "packageDependencies": [\
+            ["@prisma/engines-version", "npm:4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -2073,6 +2105,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./packages/database/",\
           "packageDependencies": [\
             ["database", "workspace:packages/database"],\
+            ["@prisma/client", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:4.15.0"],\
             ["eslint", "npm:8.41.0"],\
             ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
             ["prettier", "npm:2.8.8"],\

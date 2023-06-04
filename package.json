@@ -20,9 +20,7 @@
     "deploy:stop": "docker-compose -f docker-compose.prod.yaml down",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
-    "postinstall": "husky install",
-    "migrate:dev":  "yarn workspace database run migrate:dev",
-    "migrate:deploy": "yarn workspace database run migrate:deploy"
+    "postinstall": "husky install"
   },
   "packageManager": "yarn@3.5.1",
   "devDependencies": {
