@@ -4,7 +4,6 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import { IEvenRequest, IEvenResponse } from "common/src/INumbers.ts";
 import axios from "axios";
-import { IHighScore } from "common/src/IHighScore.ts";
 
 /**
  * Simple app that has a counter that is even/odd
@@ -18,7 +17,7 @@ function App() {
   const [isEven, setIsEven] = useState(true);
 
   // High score from the API
-  const [highScore, setHighScore] = useState(0);
+  // const [highScore, setHighScore] = useState(0);
 
   // This "effect" (how React handles talking to external services - such as our API)
   // This MUST be done here, at the top
@@ -41,27 +40,27 @@ function App() {
         console.error(error)
       );
 
-    // This posts our attempt at a high score
-    axios
-      .post<void>("/api/highScore", {
-        score: count,
-        time: new Date(Date.now()),
-      } as IHighScore)
-      .then(() => console.info("Successfully posted score"))
-      .catch((error) => {
-        console.error(error);
-      });
-
-    // This gets the current high score
-    axios
-      .get<IHighScore>("/api/highScore")
-      .then((response) => {
-        setHighScore(response.data.score);
-        console.info(`Successfully fetched high score: ${response}`);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    // // This posts our attempt at a high score
+    // axios
+    //   .post<void>("/api/highScore", {
+    //     score: count,
+    //     time: new Date(Date.now()),
+    //   } as IHighScore)
+    //   .then(() => console.info("Successfully posted score"))
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
+    //
+    // // This gets the current high score
+    // axios
+    //   .get<IHighScore>("/api/highScore")
+    //   .then((response) => {
+    //     setHighScore(response.data.score);
+    //     console.info(`Successfully fetched high score: ${response}`);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
   }, [count]);
 
   // React code
@@ -81,7 +80,7 @@ function App() {
           count is {count}
         </button>
         <p>Count is {isEven ? "even" : "odd"}</p>
-        <p>High score is {highScore}</p>
+        {/*<p>High score is {highScore}</p>*/}
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
