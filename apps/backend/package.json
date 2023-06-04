@@ -28,6 +28,7 @@
     "@types/morgan": "^1.9.4",
     "@types/node": "^20.2.3",
     "@types/pg": "^8.10.1",
+    "database": "workspace:*",
     "eslint": "latest",
     "eslint-config-custom": "workspace:*",
     "nodemon": "latest",

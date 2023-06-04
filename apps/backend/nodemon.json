@@ -4,6 +4,6 @@
   "ext": "js,ts,json",
   "exec": "yarn -T run turbo run build:dev && node --inspect=0.0.0.0 -r ts-node/register src/bin/www.ts",
   "events": {
-    "start": "yarn -T run turbo run lint"
+    "start": "yarn -T run turbo run lint:fix"
   }
 }

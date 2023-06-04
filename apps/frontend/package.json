@@ -26,6 +26,7 @@
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react-swc": "^3.0.0",
+    "database": "workspace:*",
     "eslint": "latest",
     "eslint-config-custom": "workspace:*",
     "eslint-plugin-react-hooks": "^4.6.0",

@@ -1398,6 +1398,7 @@ __metadata:
     "@types/pg": ^8.10.1
     common: "workspace:*"
     cookie-parser: ~1.4.4
+    database: "workspace:*"
     eslint: latest
     eslint-config-custom: "workspace:*"
     express: 5.0.0-beta.1
@@ -1882,7 +1883,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"database@workspace:packages/database":
+"database@workspace:*, database@workspace:packages/database":
   version: 0.0.0-use.local
   resolution: "database@workspace:packages/database"
   dependencies:
@@ -2637,6 +2638,7 @@ __metadata:
     axios: ^1.4.0
     bootstrap: ^5.2.3
     common: "workspace:*"
+    database: "workspace:*"
     eslint: latest
     eslint-config-custom: "workspace:*"
     eslint-plugin-react-hooks: ^4.6.0
