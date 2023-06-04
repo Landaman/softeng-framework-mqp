@@ -56,6 +56,11 @@ function ServiceRequest() {
   }
 
   function handleSubmit() {
+
+    /*
+    INSERT STATEMENT HERE
+     */
+
     setLocationText("");
     setReasonText("");
     setStaffText("");

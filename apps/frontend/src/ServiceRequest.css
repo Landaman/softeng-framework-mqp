@@ -1,7 +1,9 @@
 button.submit {
-    background-color: #57B347;
+    background-color: #012D5A;
     border-width: 2px;
+    border-color: #012D5A;
     width: 100px;
+    color: white;
 }
 
 button.submit:hover {
@@ -12,6 +14,7 @@ button.cancel {
     background-color: #5F5E62;
     border-width: 2px;
     width: 100px;
+    color: white;
 }
 
 button.cancel:hover {
@@ -34,7 +37,7 @@ textarea {
 
 input.checkbox {
     width: 15px;
-    margin: 0 15px 20px 0;
+    margin: 10px 15px 10px 0;
     padding-top: 5px;
     cursor: pointer;
 }
@@ -45,7 +48,6 @@ label.selection-label {
 }
 
 label.descriptor {
-    margin-bottom: 24px;
     cursor: pointer;
 }
 
