@@ -39,12 +39,22 @@ h1 {
 
 button.submit {
   background-color: #57B347;
+  border-width: 2px;
   width: 100px;
+}
+
+button.submit:hover {
+  border-color: white;
 }
 
 button.cancel {
   background-color: #5F5E62;
+  border-width: 2px;
   width: 100px;
+}
+
+button.cancel:hover {
+  border-color: white;
 }
 
 label {
@@ -142,8 +152,7 @@ button {
 button:hover {
   border-color: #646cff;
 }
-button:focus,
-button:focus-visible {
+button:active {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
