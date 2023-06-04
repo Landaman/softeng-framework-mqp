@@ -16,8 +16,8 @@
     "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint",
     "build": "yarn -T run pnpify prisma generate",
     "build:dev": "yarn -T run pnpify prisma generate",
-    "migrate:dev": "prisma migrate dev",
-    "migrate:reset": "prisma migrate reset",
+    "migrate:dev": "prisma migrate dev --skip-generate",
+    "migrate:reset": "prisma migrate reset --skip-generate",
     "migrate:deploy": "prisma migrate deploy",
     "db:pull": "prisma db pull"
   },

@@ -5,4 +5,4 @@
 **/.idea
 **/node_modules
 **/.turbo
-**/.prisma/client
+**/.prisma

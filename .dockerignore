@@ -9,7 +9,7 @@ docker-compose*.yaml
 
 **/node_modules
 **/.turbo
-**/.prisma/client
+**/.prisma
 
 **/coverage
 

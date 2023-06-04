@@ -59,6 +59,9 @@ services:
       - /app/node_modules/
       - /app/packages/common/.turbo/
       - /app/packages/common/node_modules/
+      - /app/packages/database/.turbo
+      - /app/packages/database/node_modules
+      - /app/packages/database/.prisma
   # Backend (API)
   backend:
     # The frontend container must be able to access this, so expose it internally.
@@ -88,6 +91,9 @@ services:
       - /app/node_modules/
       - /app/packages/common/.turbo/
       - /app/packages/common/node_modules/
+      - /app/packages/database/.turbo
+      - /app/packages/database/node_modules
+      - /app/packages/database/.prisma
     # The backend depends on the database being functional
     depends_on:
       - database
