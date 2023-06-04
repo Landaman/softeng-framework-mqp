@@ -2,6 +2,8 @@
   "private": true,
   "name": "database",
   "version": "1.0.0",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "devDependencies": {
     "eslint": "latest",
     "eslint-config-custom": "workspace:*",
@@ -19,7 +21,8 @@
     "migrate:dev": "prisma migrate dev --skip-generate",
     "migrate:reset": "prisma migrate reset --skip-generate",
     "migrate:deploy": "prisma migrate deploy",
-    "db:pull": "prisma db pull"
+    "db:pull": "prisma db pull --skip-generate",
+    "db:push": "prisma db push --skip-generate"
   },
   "dependencies": {
     "@prisma/client": "4.15.0"
