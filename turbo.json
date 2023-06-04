@@ -15,7 +15,7 @@
       "dependsOn": ["^dependencies"]
     },
     "dev": {
-      "dependsOn": ["build:dev"],
+      "dependsOn": ["^build:dev"],
       "cache": false,
       "persistent": true
     },
@@ -27,6 +27,12 @@
     "build": {
       "dependsOn": ["^dependencies"],
       "outputs": ["build/**"]
+    },
+    "migrate:dev": {
+      "cache": false
+    },
+    "migrate:deploy": {
+      "cache": false
     }
   }
 }

@@ -113,8 +113,9 @@ RUN yarn turbo run lint build
 RUN yarn workspaces focus --all --production
 
 # Use entrypoint (since this contianer should be run as-is)
-# Simply serve the frontend single (so that everything goes to index.html) and the prod port
-ENTRYPOINT yarn workspace backend run deploy
+# Simply run the migrate:deploy and then deploy
+# Migrate MUST BE DONE AS PART OF THE ENTRYPOINT so that the database is running
+ENTRYPOINT yarn workspace database run migrate:deploy && yarn workspace backend run deploy
 
 # Healthceck to determine if we're actually still serving stuff, just attempt to get the URL
 # If that fails, try exiting gracefully (SIGTERM), and if that fails force the container to die with SIGKILL.

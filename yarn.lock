@@ -329,6 +329,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@prisma/engines@npm:4.15.0":
+  version: 4.15.0
+  resolution: "@prisma/engines@npm:4.15.0"
+  checksum: 61b53fe5ad7b0927de9aa4f51027e281788258d3fb5e389c3ae940829fdc5428a7108ce0cae5b329ddac0ee3206b0b9f8e8adae401c456f77d912c96368cfa5f
+  languageName: node
+  linkType: hard
+
 "@react-aria/ssr@npm:^3.5.0":
   version: 3.6.0
   resolution: "@react-aria/ssr@npm:3.6.0"
@@ -1576,6 +1583,20 @@ __metadata:
   checksum: e1a52e6c25c1314d6beef5168da704ab29c5186b877c07d822bd0806717d9a265e8493a2e35ca7e68d0f5d472d43fac1cdce70fd79fd0853dff81f3028d857b5
   languageName: node
   linkType: hard
+
+"database@workspace:packages/database":
+  version: 0.0.0-use.local
+  resolution: "database@workspace:packages/database"
+  dependencies:
+    eslint: latest
+    eslint-config-custom: "workspace:*"
+    prettier: latest
+    prettier-config-custom: "workspace:*"
+    prisma: ^4.15.0
+    tsconfig-custom: "workspace:*"
+    typescript: ^5.0.4
+  languageName: unknown
+  linkType: soft
 
 "debug@npm:2.6.9":
   version: 2.6.9
@@ -3598,6 +3619,18 @@ __metadata:
   bin:
     prettier: bin-prettier.js
   checksum: b49e409431bf129dd89238d64299ba80717b57ff5a6d1c1a8b1a28b590d998a34e083fa13573bc732bb8d2305becb4c9a4407f8486c81fa7d55100eb08263cf8
+  languageName: node
+  linkType: hard
+
+"prisma@npm:^4.15.0":
+  version: 4.15.0
+  resolution: "prisma@npm:4.15.0"
+  dependencies:
+    "@prisma/engines": 4.15.0
+  bin:
+    prisma: build/index.js
+    prisma2: build/index.js
+  checksum: a42b940396f5f101d44effad9bfccca4b062ae80a369dc44961cbc074326239340f05c5af49981b1cddb08d9155c4bcc93c4d69ed2ae4a634e1742159204cb89
   languageName: node
   linkType: hard
 

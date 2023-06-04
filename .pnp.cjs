@@ -38,6 +38,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       {\
         "name": "common",\
         "reference": "workspace:packages/common"\
+      },\
+      {\
+        "name": "database",\
+        "reference": "workspace:packages/database"\
       }\
     ],\
     "enableTopLevelFallback": true,\
@@ -45,6 +49,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
     "fallbackExclusionList": [\
       ["backend", ["workspace:apps/backend"]],\
       ["common", ["workspace:packages/common"]],\
+      ["database", ["workspace:packages/database"]],\
       ["eslint-config-custom", ["workspace:configs/eslint-config-custom"]],\
       ["frontend", ["workspace:apps/frontend"]],\
       ["prettier-config-custom", ["workspace:configs/prettier-config-custom"]],\
@@ -473,6 +478,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@popperjs-core-npm-2.11.8-f1692e11a0-e5c69fdebf.zip/node_modules/@popperjs/core/",\
           "packageDependencies": [\
             ["@popperjs/core", "npm:2.11.8"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@prisma/engines", [\
+        ["npm:4.15.0", {\
+          "packageLocation": "./.yarn/unplugged/@prisma-engines-npm-4.15.0-9024b482d4/node_modules/@prisma/engines/",\
+          "packageDependencies": [\
+            ["@prisma/engines", "npm:4.15.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -2052,6 +2066,22 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["csstype", "npm:3.1.2"]\
           ],\
           "linkType": "HARD"\
+        }]\
+      ]],\
+      ["database", [\
+        ["workspace:packages/database", {\
+          "packageLocation": "./packages/database/",\
+          "packageDependencies": [\
+            ["database", "workspace:packages/database"],\
+            ["eslint", "npm:8.41.0"],\
+            ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
+            ["prettier", "npm:2.8.8"],\
+            ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
+            ["prisma", "npm:4.15.0"],\
+            ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
+            ["typescript", "patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=b5f058"]\
+          ],\
+          "linkType": "SOFT"\
         }]\
       ]],\
       ["debug", [\
@@ -4399,6 +4429,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["prettier", "npm:2.8.8"]\
           ],\
           "linkType": "SOFT"\
+        }]\
+      ]],\
+      ["prisma", [\
+        ["npm:4.15.0", {\
+          "packageLocation": "./.yarn/unplugged/prisma-npm-4.15.0-4c274529fd/node_modules/prisma/",\
+          "packageDependencies": [\
+            ["prisma", "npm:4.15.0"],\
+            ["@prisma/engines", "npm:4.15.0"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["promise-inflight", [\

@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "name": "database",
+  "version": "1.0.0",
+  "devDependencies": {
+    "eslint": "latest",
+    "eslint-config-custom": "workspace:*",
+    "prettier": "latest",
+    "prettier-config-custom": "workspace:*",
+    "prisma": "^4.15.0",
+    "tsconfig-custom": "workspace:*",
+    "typescript": "^5.0.4"
+  },
+  "scripts": {
+    "lint": "yarn shared:prettierlint && yarn shared:eslint && yarn shared:tslint",
+    "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint",
+    "build": "prisma generate",
+    "build:dev": "prisma generate",
+    "migrate:dev": "prisma migrate dev --skip-generate",
+    "migrate:deploy": "prisma migrate deploy --skip-generate"
+  }
+}

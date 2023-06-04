@@ -10,7 +10,7 @@ x-port-bindings:
 
   # The exposed port for the database. This is done in development to allow manual SQL queries/investigation
   # on what exactly is happening. In prod, this will be DISABLED
-  DATABASE_EXPOSED: &db-exposed 8080:5432
+  DATABASE_EXPOSED: &db-exposed 5432:5432
 
 # Arguments used by both front and back
 x-arguments: &dev-args
