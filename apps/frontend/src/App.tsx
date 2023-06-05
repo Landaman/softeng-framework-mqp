@@ -47,17 +47,19 @@ function App() {
         score: count,
         time: new Date(Date.now()),
       } satisfies Prisma.HighScoreCreateInput)
-      .then(() => console.info("Successfully posted score"))
-      .catch((error) => {
-        console.error(error);
-      });
+      .then(() => {
+        console.info("Successfully posted score");
 
-    // This gets the current high score
-    axios
-      .get<HighScore>("/api/highScore")
-      .then((response) => {
-        setHighScore(response.data.score);
-        console.info(`Successfully fetched high score: ${response}`);
+        // This gets the current high score. Done after POST to avoid a race condition
+        axios
+          .get<HighScore>("/api/highScore")
+          .then((response) => {
+            setHighScore(response.data.score);
+            console.info(`Successfully fetched high score: ${response}`);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       })
       .catch((error) => {
         console.error(error);
