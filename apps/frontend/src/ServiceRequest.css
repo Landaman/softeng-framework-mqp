@@ -7,7 +7,8 @@ button.submit {
 }
 
 button.submit:hover {
-    border-color: white;
+    border-color: #2D7AD8;
+    background-color: #2D7AD8;
 }
 
 button.cancel {
@@ -18,7 +19,8 @@ button.cancel {
 }
 
 button.cancel:hover {
-    border-color: white;
+    background-color: #78767A;
+    border-color: #78767A;
 }
 
 label {
