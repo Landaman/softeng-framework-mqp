@@ -1,0 +1,15 @@
+#content-root {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#sidebar {
+  background: gainsboro;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-content: flex-start;
+}

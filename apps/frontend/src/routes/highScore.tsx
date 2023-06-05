@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
+import reactLogo from "../assets/react.svg";
 import viteLogo from "/vite.svg";
-import "./App.css";
+import "./highScore.css";
 import { IEvenRequest, IEvenResponse } from "common/src/INumbers.ts";
 import axios from "axios";
 import { Prisma, HighScore } from "database";
+import { Button } from "react-bootstrap";
 
 /**
- * Simple app that has a counter that is even/odd
+ * Simple app that has a counter that is even/odd and a high score
  * @constructor Create the react component
  */
-function App() {
+function HighScore() {
   // Changeable counter
   const [count, setCount] = useState(0);
 
@@ -79,9 +80,9 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
+        <Button onClick={() => setCount((count) => count + 1)}>
           count is {count}
-        </button>
+        </Button>
         <p>Count is {isEven ? "even" : "odd"}</p>
         <p>High score is {highScore}</p>
         <p>
@@ -95,4 +96,4 @@ function App() {
   );
 }
 
-export default App;
+export default HighScore;
