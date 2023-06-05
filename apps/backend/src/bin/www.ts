@@ -1,6 +1,7 @@
 import app from "../app.ts";
 import http from "http";
 import { AddressInfo } from "net";
+import { createHttpTerminator } from "http-terminator";
 
 // Attempt a database connection
 console.info("Connecting to database...");
@@ -28,6 +29,40 @@ app.set("port", port);
 // Create the server, enable the application
 console.info("Starting server...");
 const server: http.Server = http.createServer(app);
+
+// Setup graceful exit logic
+// Exit conditions
+[
+  "SIGHUP",
+  "SIGINT",
+  "SIGQUIT",
+  "SIGILL",
+  "SIGTRAP",
+  "SIGABRT",
+  "SIGBUS",
+  "SIGFPE",
+  "SIGUSR1",
+  "SIGSEGV",
+  "SIGUSR2",
+  "SIGTERM",
+].forEach(function (sig) {
+  // On any of those
+  process.on(sig, async function () {
+    // On shutdown request
+    console.info(`Server shutting down due to ${sig}...`);
+
+    // Create a terminator, to safely destroy the HTTP server
+    const httpTerminator = createHttpTerminator({
+      server,
+      gracefulTerminationTimeout: 10,
+    });
+    await httpTerminator.terminate();
+
+    // Log the exit
+    console.log("Server shutdown complete");
+    process.exit(0); // Exit normally
+  });
+});
 
 // Listen on the provided port, on all interfaces
 server.listen(port);
