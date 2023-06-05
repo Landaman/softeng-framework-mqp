@@ -5,10 +5,15 @@ Dockerfile
 **/.git
 docker-compose*.yaml
 
+**/build
+
 **/node_modules
 **/.turbo
+**/.prisma
 
-out
+**/coverage
+
+**/out
 
 .yarn/*
 !.yarn/cache

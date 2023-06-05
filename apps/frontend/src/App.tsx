@@ -4,7 +4,7 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import { IEvenRequest, IEvenResponse } from "common/src/INumbers.ts";
 import axios from "axios";
-import { IHighScore } from "common/src/IHighScore.ts";
+import { Prisma, HighScore } from "database";
 
 /**
  * Simple app that has a counter that is even/odd
@@ -30,7 +30,7 @@ function App() {
     axios
       .post<IEvenResponse>("/api/numbers/isEven", {
         number: count,
-      } as IEvenRequest)
+      } satisfies IEvenRequest)
       .then((response) => {
         setIsEven(response.data.isEven);
         console.info(`Got is even response for count ${count}:
@@ -46,18 +46,20 @@ function App() {
       .post<void>("/api/highScore", {
         score: count,
         time: new Date(Date.now()),
-      } as IHighScore)
-      .then(() => console.info("Successfully posted score"))
-      .catch((error) => {
-        console.error(error);
-      });
+      } satisfies Prisma.HighScoreCreateInput)
+      .then(() => {
+        console.info("Successfully posted score");
 
-    // This gets the current high score
-    axios
-      .get<IHighScore>("/api/highScore")
-      .then((response) => {
-        setHighScore(response.data.score);
-        console.info(`Successfully fetched high score: ${response}`);
+        // This gets the current high score. Done after POST to avoid a race condition
+        axios
+          .get<HighScore>("/api/highScore")
+          .then((response) => {
+            setHighScore(response.data.score);
+            console.info(`Successfully fetched high score: ${response}`);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       })
       .catch((error) => {
         console.error(error);

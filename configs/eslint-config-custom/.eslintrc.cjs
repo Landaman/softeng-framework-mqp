@@ -11,5 +11,4 @@ module.exports = {
         "prefer-const": "warn",
         "@typescript-eslint/no-empty-interface": "warn",
     },
-    ignorePatterns: ["!./*", "**/.yarn/*", "**/node_modules/*", "**/.turbo/*", "**/.pnp.cjs", "**/.pnp.loader.mjs"]
 };

@@ -10,7 +10,7 @@ x-port-bindings:
 
   # The exposed port for the database. This is done in development to allow manual SQL queries/investigation
   # on what exactly is happening. In prod, this will be DISABLED
-  DATABASE_EXPOSED: &db-exposed 8080:5432
+  DATABASE_EXPOSED: &db-exposed 5432:5432
 
 # Arguments used by both front and back
 x-arguments: &dev-args
@@ -59,6 +59,9 @@ services:
       - /app/node_modules/
       - /app/packages/common/.turbo/
       - /app/packages/common/node_modules/
+      - /app/packages/database/.turbo
+      - /app/packages/database/node_modules
+      - /app/packages/database/.prisma
   # Backend (API)
   backend:
     # The frontend container must be able to access this, so expose it internally.
@@ -88,6 +91,9 @@ services:
       - /app/node_modules/
       - /app/packages/common/.turbo/
       - /app/packages/common/node_modules/
+      - /app/packages/database/.turbo
+      - /app/packages/database/node_modules
+      - /app/packages/database/.prisma
     # The backend depends on the database being functional
     depends_on:
       - database
