@@ -1,6 +1,7 @@
-import { ChangeEvent, useState } from "react";
-// import axios from "axios";
+import { ChangeEvent, useEffect, useState } from "react";
+import axios from "axios";
 import "./ServiceRequest.css";
+import { Prisma } from "database";
 
 function ServiceRequest() {
   const [locationText, setLocationText] = useState("");
@@ -15,7 +16,6 @@ function ServiceRequest() {
 
   function handleLocationInput(e: ChangeEvent<HTMLInputElement>) {
     setLocationText(e.target.value);
-    console.log(deviceType);
   }
 
   function handleStaffInput(e: ChangeEvent<HTMLInputElement>) {
@@ -82,23 +82,23 @@ function ServiceRequest() {
   // This "effect" (how React handles talking to external services - such as our API)
   // This MUST be done here, at the top
   // Deps (at the bottom) means that every time "count" changes, the effect is rerun
-  // useEffect(() => {
-  //   // Doing a "post" request is asynchronous (it takes a while, we don't want our UI to wait forever on it),
-  //   // so we run it and then set the API even variable to the response. The angular brackets determine the return
-  //   // type
-  //   axios
-  //       .post<WHAT GOES HERE>("/api/...", {
-  //         loc: locationText,
-  //         staff: staffText,
-  //         reason: reasonText,
-  //         device: deviceType,
-  //       } as 'IT PROBABLY GOES HERE TOO')
-  //       .then((response))
-  //       .catch((error) =>
-  //           // Always handle any API errors :P
-  //           console.error(error)
-  //       );
-  // }, [submit]);
+  useEffect(() => {
+    // Doing a "post" request is asynchronous (it takes a while, we don't want our UI to wait forever on it),
+    // so we run it and then set the API even variable to the response. The angular brackets determine the return
+    // type
+    axios
+      .post<void>("/api/computerRequest", {
+        location: locationText,
+        staff: staffText,
+        reason: reasonText,
+        type: deviceType.toString(),
+      } satisfies Prisma.ComputerRequestCreateInput)
+      .then(() => console.info("Succesfully created service request"))
+      .catch((error) =>
+        // Always handle any API errors :P
+        console.error(error)
+      );
+  }, [deviceType, locationText, reasonText, staffText, submit]);
 
   return (
     <>

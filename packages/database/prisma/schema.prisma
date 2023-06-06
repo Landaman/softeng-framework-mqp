@@ -1,9 +1,10 @@
+
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
-  output = "../.prisma/client"
+  provider   = "prisma-client-js"
+  output     = "../.prisma/client"
   engineType = "binary"
 }
 
@@ -13,7 +14,17 @@ datasource db {
 }
 
 model HighScore {
-  id Int @id @default(autoincrement())
-  time DateTime
+  id    Int      @id @default(autoincrement())
+  time  DateTime
   score Int
 }
+
+model ComputerRequest {
+  id       Int    @id @default(autoincrement())
+  location String
+  staff    String
+  reason   String
+  type     String
+}
+
+Done in 0.07s.
