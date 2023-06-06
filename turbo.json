@@ -6,10 +6,10 @@
       "outputs": []
     },
     "lint": {
-      "dependsOn": ["^dependencies"]
+      "dependsOn": ["^dependencies", "^build:dev"]
     },
     "lint:fix": {
-      "dependsOn": ["^dependencies"]
+      "dependsOn": ["^dependencies", "^build:dev"]
     },
     "build:dev": {
       "dependsOn": ["^dependencies"]
