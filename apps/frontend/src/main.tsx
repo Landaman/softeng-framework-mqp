@@ -5,6 +5,7 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./routes/errorPage.tsx";
 import Root from "./routes/root.tsx";
+import "./scss/custom.scss";
 
 // Set up the page router
 const router = createBrowserRouter([
