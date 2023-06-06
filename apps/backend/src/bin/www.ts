@@ -1,6 +1,20 @@
 import app from "../app.ts";
 import http from "http";
 import { AddressInfo } from "net";
+import { createHttpTerminator } from "http-terminator";
+
+// Attempt a database connection
+console.info("Connecting to database...");
+try {
+  // This intrinsically connects to the database
+  require("./databaseConnection.ts");
+  console.log("Successfully connected to the database");
+} catch (error) {
+  // Log any errors
+  console.error(`Unable to establish database connection:
+  ${error}`);
+  process.exit(1); // Then exit
+}
 
 // Get port from environment and store in Express
 const port: string | undefined = process.env.PORT;
@@ -12,25 +26,48 @@ if (port === undefined) {
 
 app.set("port", port);
 
-// Signals we want to handle for shutdown. We can't handle SIGKILL (this cannot be intercepted)
-const signals: string[] = ["SIGHUP", "SIGINT", "SIGTERM"];
-
 // Create the server, enable the application
-console.log("Starting server...");
+console.info("Starting server...");
 const server: http.Server = http.createServer(app);
+
+// Setup graceful exit logic
+// Exit conditions
+[
+  "SIGHUP",
+  "SIGINT",
+  "SIGQUIT",
+  "SIGILL",
+  "SIGTRAP",
+  "SIGABRT",
+  "SIGBUS",
+  "SIGFPE",
+  "SIGUSR1",
+  "SIGSEGV",
+  "SIGUSR2",
+  "SIGTERM",
+].forEach(function (sig) {
+  // On any of those
+  process.on(sig, async function () {
+    // On shutdown request
+    console.info(`Server shutting down due to ${sig}...`);
+
+    // Create a terminator, to safely destroy the HTTP server
+    const httpTerminator = createHttpTerminator({
+      server,
+      gracefulTerminationTimeout: 10,
+    });
+    await httpTerminator.terminate();
+
+    // Log the exit
+    console.log("Server shutdown complete");
+    process.exit(0); // Exit normally
+  });
+});
 
 // Listen on the provided port, on all interfaces
 server.listen(port);
 server.on("error", onError); // Error handler
 server.on("listening", onListening); // Notify that we started
-
-// Create a listener for each of the signals that we want to handle
-Object.keys(signals).forEach((signal: string): void => {
-  // On each one, call the shutdown handler
-  process.on(signal, (): void => {
-    onShutdown(signal);
-  });
-});
 
 /**
  * Event listener for HTTP server "error" event, to provide user friendly error output and then exit
@@ -72,26 +109,9 @@ function onListening(): void {
   // Get the address we're listening on
   const addr: string | AddressInfo | null = server.address();
 
-  // If it's a string, simply get it (its a pipe)
+  // If it's a string, simply get it (it's a pipe)
   const bind: string =
     typeof addr === "string" ? "pipe " + addr : "port " + addr?.port; // Otherwise get the port
-  console.info("Server Listening on " + bind); // Debug output that we're listening
+  console.info("Server listening on " + bind); // Debug output that we're listening
   console.log("Startup complete");
-}
-
-/**
- * Method to handle shutdown signals. Prints that termination has started and then gracefully exits
- * @param signal the captured signal in string form
- */
-function onShutdown(signal: string): void {
-  console.log(`Server received signal ${signal}. Shutting down...`);
-  console.info(
-    "Beginning shutdown. Waiting for any pending requests to complete..."
-  );
-
-  // Wait for any pending requests to resolve
-  server.close(() => {
-    console.info(`Pending requests resolved. Shutting down...`);
-    process.exit(0);
-  });
 }

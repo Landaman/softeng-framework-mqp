@@ -1,9 +1,9 @@
 {
   "legacyWatch": true,
-  "watch": ["../packages", "./"],
-  "ext": "js,ts,json",
+  "watch": ["../../packages", "./"],
+  "ext": "cjs,mjs,js,cts,mts,ts,json,prisma",
   "exec": "yarn -T run turbo run build:dev && node --inspect=0.0.0.0 -r ts-node/register src/bin/www.ts",
   "events": {
-    "start": "yarn -T run turbo run lint"
+    "start": "yarn -T run turbo run lint:fix"
   }
 }

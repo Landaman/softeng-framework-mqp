@@ -1,5 +1,5 @@
-import { ChangeEvent, useState, useEffect } from "react";
-import axios from "axios";
+import { ChangeEvent, useState } from "react";
+// import axios from "axios";
 import "./ServiceRequest.css";
 
 function ServiceRequest() {
@@ -15,6 +15,7 @@ function ServiceRequest() {
 
   function handleLocationInput(e: ChangeEvent<HTMLInputElement>) {
     setLocationText(e.target.value);
+    console.log(deviceType);
   }
 
   function handleStaffInput(e: ChangeEvent<HTMLInputElement>) {
@@ -58,7 +59,7 @@ function ServiceRequest() {
   }
 
   function handleSubmit() {
-    setSubmit(submit+1);
+    setSubmit(submit + 1);
     setLocationText("");
     setReasonText("");
     setStaffText("");

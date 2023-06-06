@@ -3,9 +3,12 @@
   "name": "common",
   "version": "1.0.0",
   "devDependencies": {
+    "eslint": "latest",
     "eslint-config-custom": "workspace:*",
+    "prettier": "latest",
     "prettier-config-custom": "workspace:*",
-    "tsconfig-custom": "workspace:*"
+    "tsconfig-custom": "workspace:*",
+    "typescript": "^5.0.4"
   },
   "scripts": {
     "lint": "yarn shared:prettierlint && yarn shared:eslint && yarn shared:tslint",

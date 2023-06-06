@@ -44,7 +44,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #004D97;
+  background-color: #004d97;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -58,7 +58,7 @@ button:active {
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #DCE2E8;
+    background-color: #dce2e8;
   }
   a:hover {
     color: #747bff;

@@ -99,6 +99,7 @@ ENV POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 ENV POSTGRES_DB=$POSTGRES_DB
 ENV POSTGRES_CONTAINER=$POSTGRES_CONTAINER
 ENV POSTGRES_PORT=$POSTGRES_PORT
+ENV POSTGRES_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_CONTAINER}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public"
 
 # Copy the packages from production to our working directory
 COPY --from=prod-backend-builder ["/$WORKDIR/out/json", "/$WORKDIR/out/yarn.lock", "/$WORKDIR/out/full", "./"]
@@ -113,8 +114,9 @@ RUN yarn turbo run lint build
 RUN yarn workspaces focus --all --production
 
 # Use entrypoint (since this contianer should be run as-is)
-# Simply serve the frontend single (so that everything goes to index.html) and the prod port
-ENTRYPOINT yarn workspace backend run deploy
+# Simply run the migrate:deploy and then deploy
+# Migrate MUST BE DONE AS PART OF THE ENTRYPOINT so that the database is running
+ENTRYPOINT yarn workspace database run migrate:deploy && yarn workspace backend run deploy
 
 # Healthceck to determine if we're actually still serving stuff, just attempt to get the URL
 # If that fails, try exiting gracefully (SIGTERM), and if that fails force the container to die with SIGKILL.
@@ -141,6 +143,7 @@ ENV POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 ENV POSTGRES_DB=$POSTGRES_DB
 ENV POSTGRES_CONTAINER=$POSTGRES_CONTAINER
 ENV POSTGRES_PORT=$POSTGRES_PORT
+ENV POSTGRES_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_CONTAINER}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public"
 
 # Run with CMD, since dev may want to use other commands
 CMD ["yarn", "turbo", "run", "dev", "--filter=backend"]

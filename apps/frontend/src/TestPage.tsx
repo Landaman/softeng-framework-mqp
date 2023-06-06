@@ -4,7 +4,7 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import { IEvenRequest, IEvenResponse } from "common/src/INumbers.ts";
 import axios from "axios";
-import { IHighScore } from "common/src/IHighScore.ts";
+import { Prisma, HighScore } from "database";
 
 /**
  * Simple app that has a counter that is even/odd
@@ -46,7 +46,7 @@ function TestPage() {
       .post<void>("/api/highScore", {
         score: count,
         time: new Date(Date.now()),
-      } as IHighScore)
+      } satisfies Prisma.HighScoreCreateInput)
       .then(() => console.info("Successfully posted score"))
       .catch((error) => {
         console.error(error);
@@ -54,7 +54,7 @@ function TestPage() {
 
     // This gets the current high score
     axios
-      .get<IHighScore>("/api/highScore")
+      .get<HighScore>("/api/highScore")
       .then((response) => {
         setHighScore(response.data.score);
         console.info(`Successfully fetched high score: ${response}`);

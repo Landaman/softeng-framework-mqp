@@ -1,0 +1,15 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "pipeline": {
+    "build:dev": {
+      "cache": false
+    },
+    "build": {
+      "cache": false
+    },
+    "db:push": {
+      "cache": false
+    }
+  }
+}

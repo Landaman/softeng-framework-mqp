@@ -32,5 +32,13 @@
     "tsconfig-custom": "workspace:*",
     "turbo": "latest",
     "typescript": "^5.0.4"
+  },
+  "dependenciesMeta": {
+    "@prisma/client@4.15.0": {
+      "unplugged": true
+    }
+  },
+  "dependencies": {
+    "@yarnpkg/pnpify": "^4.0.0-rc.45"
   }
 }
