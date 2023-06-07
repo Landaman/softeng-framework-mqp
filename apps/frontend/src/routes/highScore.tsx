@@ -6,6 +6,7 @@ import { IEvenRequest, IEvenResponse } from "common/src/INumbers.ts";
 import axios from "axios";
 import { Prisma, HighScore } from "database";
 import { Button } from "react-bootstrap";
+import Card from "react-bootstrap/Card";
 
 /**
  * Simple app that has a counter that is even/odd and a high score
@@ -79,8 +80,11 @@ function HighScore() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      <div className="card">
-        <Button onClick={() => setCount((count) => count + 1)}>
+      <Card>
+        <Button
+          variant="primary"
+          onClick={() => setCount((count) => count + 1)}
+        >
           count is {count}
         </Button>
         <p>Count is {isEven ? "even" : "odd"}</p>
@@ -88,7 +92,7 @@ function HighScore() {
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
-      </div>
+      </Card>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
