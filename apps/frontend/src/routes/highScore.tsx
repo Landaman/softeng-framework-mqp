@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
+import reactLogo from "../assets/react.svg";
 import viteLogo from "/vite.svg";
-import "./App.css";
+import "./highScore.css";
 import { IEvenRequest, IEvenResponse } from "common/src/INumbers.ts";
 import axios from "axios";
 import { Prisma, HighScore } from "database";
+import { Button } from "react-bootstrap";
+import Card from "react-bootstrap/Card";
 
 /**
- * Simple app that has a counter that is even/odd
+ * Simple app that has a counter that is even/odd and a high score
  * @constructor Create the react component
  */
-function TestPage() {
+function HighScore() {
   // Changeable counter
   const [count, setCount] = useState(0);
 
@@ -30,7 +32,7 @@ function TestPage() {
     axios
       .post<IEvenResponse>("/api/numbers/isEven", {
         number: count,
-      } as IEvenRequest)
+      } satisfies IEvenRequest)
       .then((response) => {
         setIsEven(response.data.isEven);
         console.info(`Got is even response for count ${count}:
@@ -47,17 +49,19 @@ function TestPage() {
         score: count,
         time: new Date(Date.now()),
       } satisfies Prisma.HighScoreCreateInput)
-      .then(() => console.info("Successfully posted score"))
-      .catch((error) => {
-        console.error(error);
-      });
+      .then(() => {
+        console.info("Successfully posted score");
 
-    // This gets the current high score
-    axios
-      .get<HighScore>("/api/highScore")
-      .then((response) => {
-        setHighScore(response.data.score);
-        console.info(`Successfully fetched high score: ${response}`);
+        // This gets the current high score. Done after POST to avoid a race condition
+        axios
+          .get<HighScore>("/api/highScore")
+          .then((response) => {
+            setHighScore(response.data.score);
+            console.info(`Successfully fetched high score: ${response}`);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       })
       .catch((error) => {
         console.error(error);
@@ -66,7 +70,7 @@ function TestPage() {
 
   // React code
   return (
-    <>
+    <div className="text-center">
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -76,24 +80,25 @@ function TestPage() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
+      <Card style={{ width: "fit-content" }} className="mx-auto">
+        <Button
+          variant="primary"
+          className="align-self-center"
+          onClick={() => setCount((count) => count + 1)}
+        >
           count is {count}
-        </button>
+        </Button>
         <p>Count is {isEven ? "even" : "odd"}</p>
         <p>High score is {highScore}</p>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
-      </div>
+      </Card>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-      <a href={`/`}>
-        <button className={"button"}>Return Home</button>
-      </a>
-    </>
+    </div>
   );
 }
 
-export default TestPage;
+export default HighScore;

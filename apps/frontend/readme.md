@@ -13,8 +13,8 @@
     - [Miscellaneous](#miscellaneous)
   - [Code Structure](#code-structure)
   _ [Public and Assets Folders](#public-and-assets-folders)
-  _ [App.css](#appcss)
-  _ [App.tsx](#apptsx)
+  _ [HighScore.css](#appcss)
+  _ [highScore.tsx](#apptsx)
   _ [main.tsx](#maintsx)
   <!-- TOC -->
 
@@ -119,7 +119,7 @@ Note that putting these types of files in `/src/assets` is also generally accept
 
 See https://vitejs.dev/guide/assets.html#the-public-directory for details.
 
-### App.css
+### HighScore.css
 
 This is the CSS file for your entire application. Note that it is generally
 best practice to put everything in one CSS file, as this improves loadtime.
@@ -132,9 +132,9 @@ See the following resources for CSS help:
 - https://flexboxfroggy.com
 - https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps
 
-### App.tsx
+### highScore.tsx
 
-App.tsx is the main page of the starter code application, and the page that is
+highScore.tsx is the main page of the starter code application, and the page that is
 actually rendered. This contains the Axios examples
 
 ### main.tsx

@@ -1,9 +1,9 @@
 import React from "react";
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Homepage from "./Homepage.tsx";
-import ServiceRequest from "./ServiceRequest.tsx";
-import TestPage from "./TestPage.tsx";
+import Homepage from "./routes/Homepage.tsx";
+import ServiceRequest from "./routes/ServiceRequest.tsx";
+import TestPage from "./routes/highScore.tsx";
 import NavBar from "./NavBar.tsx";
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
       element: <ServiceRequest />,
     },
     {
-      path: "/TestPage",
+      path: "/HighScore",
       element: <TestPage />,
     },
   ]);
