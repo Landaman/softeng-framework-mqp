@@ -3,8 +3,6 @@ x-prod-args: &prod-args
   # Port that both servers will run production on
   PRODUCTION_PORT: &prod-port 80
 
-# This may seem insecure, but the DB container isn't exposed outside of docker, so it doesn't
-# matter since NOBODY except for other containers has access ot it
 x-db-info: &db-args
   POSTGRES_PASSWORD: mqp
   POSTGRES_USER: mqp
@@ -37,6 +35,11 @@ services:
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
 
+      # Auto-certificate generation parameters
+      - "--certificatesresolvers.letsencrypt.acme.email=iwright@wpi.edu"
+      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+
       # This is what will actually be used
       - "--entrypoints.websecure.address=:443"
     # Everything enters through Traefik, so this exposes the environment
@@ -46,6 +49,8 @@ services:
     # Traefik requirement
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      # Mount the certificate, so that we don't try to renew the cert every time we start up
+      - acme_cert:/etc/traefik/acme
     restart: always
     depends_on:
       frontend:
@@ -107,33 +112,8 @@ services:
 
       # Despite the "loadbalancer" naming, this just describes what port this container exposes
       - "traefik.http.services.backend-https.loadbalancer.server.port=80"
-    depends_on:
-      database:
-        condition: service_healthy
     restart: always
     healthcheck:
       *health-check
-
-  #PSQL database image
-  database:
-    # Expose the database to other containers
-    expose:
-      - *pg-port
-    image: postgres
-    # Use the DB args above
-    environment:
-      *db-args
-    volumes:
-      # This is the standard path where PSQL persists data
-      - postgres_data:/var/lib/postgresql/data
-    restart: always
-    healthcheck:
-      # PG healthcheck. Check if the database is ready, if it isn't, try gracefully killing it. If that fails,
-      # force the container to die, so the restart policy is invoked
-      test: ["CMD-SHELL", "pg_isready -q -d $${POSTGRES_DB} -U $${POSTGRES_USER}", "||", "bash", "-c", "'kill -s 15 -1 && (sleep 10; kill -s 9 -1)'"]
-      <<: *health-check
-
 volumes:
-  # Volume where the permanent PG data will be stored. The PG container can be killed, but as long as this
-  # volume is alive, the data will live on
-  postgres_data:
+  acme_cert:
