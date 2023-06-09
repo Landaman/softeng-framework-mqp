@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 import axios from "axios";
 import "./ServiceRequest.css";
 import { Prisma } from "database";
@@ -12,7 +12,46 @@ function ServiceRequest() {
   const [laptopChecked, setLaptop] = useState(false);
   const [tabletChecked, setTablet] = useState(false);
   const [phoneChecked, setPhone] = useState(false);
-  const [submit, setSubmit] = useState(0);
+
+  const handleSubmit = useCallback(() => {
+    if (
+      locationText &&
+      reasonText &&
+      staffText &&
+      (desktopChecked || laptopChecked || tabletChecked || phoneChecked)
+    ) {
+      setLocationText("");
+      setReasonText("");
+      setStaffText("");
+      setDesktop(false);
+      setLaptop(false);
+      setTablet(false);
+      setPhone(false);
+      axios
+        .post<void>("/api/computerRequest", {
+          location: locationText,
+          staff: staffText,
+          reason: reasonText,
+          type: deviceType.toString(),
+        } satisfies Prisma.ComputerRequestCreateInput)
+        .then(() => console.info("Succesfully created service request"))
+        .catch((error) =>
+          // Always handle any API errors :P
+          console.error(error)
+        );
+    } else {
+      console.error("All entries need to be filled");
+    }
+  }, [
+    desktopChecked,
+    deviceType,
+    laptopChecked,
+    locationText,
+    phoneChecked,
+    reasonText,
+    staffText,
+    tabletChecked,
+  ]);
 
   function handleLocationInput(e: ChangeEvent<HTMLInputElement>) {
     setLocationText(e.target.value);
@@ -58,17 +97,6 @@ function ServiceRequest() {
     setPhone(true);
   }
 
-  function handleSubmit() {
-    setSubmit(submit + 1);
-    setLocationText("");
-    setReasonText("");
-    setStaffText("");
-    setDesktop(false);
-    setLaptop(false);
-    setTablet(false);
-    setPhone(false);
-  }
-
   function handleClear() {
     setLocationText("");
     setReasonText("");
@@ -78,27 +106,6 @@ function ServiceRequest() {
     setTablet(false);
     setPhone(false);
   }
-
-  // This "effect" (how React handles talking to external services - such as our API)
-  // This MUST be done here, at the top
-  // Deps (at the bottom) means that every time "count" changes, the effect is rerun
-  useEffect(() => {
-    // Doing a "post" request is asynchronous (it takes a while, we don't want our UI to wait forever on it),
-    // so we run it and then set the API even variable to the response. The angular brackets determine the return
-    // type
-    axios
-      .post<void>("/api/computerRequest", {
-        location: locationText,
-        staff: staffText,
-        reason: reasonText,
-        type: deviceType.toString(),
-      } satisfies Prisma.ComputerRequestCreateInput)
-      .then(() => console.info("Succesfully created service request"))
-      .catch((error) =>
-        // Always handle any API errors :P
-        console.error(error)
-      );
-  }, [deviceType, locationText, reasonText, staffText, submit]);
 
   return (
     <>
