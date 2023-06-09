@@ -10,12 +10,14 @@
     - [React-Router](#react-router)
     - [Serve](#serve)
     - [Axios](#axios)
+    - [Bootstrap](#bootstrap)
+    - [React-Bootstrap](#react-bootstrap)
     - [Miscellaneous](#miscellaneous)
   - [Code Structure](#code-structure)
   _ [Public and Assets Folders](#public-and-assets-folders)
-  _ [App.css](#appcss)
-  _ [App.tsx](#apptsx)
-  _ [main.tsx](#maintsx)
+  _ [scss/custom.scss](#scsscustomscss)
+  _ [routes](#routes)
+  _ [root.tsx](#roottsx) \* [main.tsx](#maintsx)
   <!-- TOC -->
 
 This package defines the backend server, and the RESTful API it
@@ -99,6 +101,25 @@ Examples of how to use Axios are present in the starter-code.
 
 See https://axios-http.com/docs/intro for details
 
+### Bootstrap
+
+Bootstrap is a package that contains various prebuilt utilities for
+frontend development.
+It includes various prebuilt components, and utilities to help with alignment.
+Bootstrap contains a default color scheme that can be changed via
+SASS (a variation on CSS that compiles to CSS)
+
+See https://getbootstrap.com/docs/5.3/getting-started/introduction/ for details on Bootstrap.
+
+### React-Bootstrap
+
+React-bootstrap is a utility package that provides React components,
+to simplify using Bootstrap components.
+It directly relies on Bootstrap's styling
+and overrides.
+
+See https://react-bootstrap.netlify.app for details
+
 ### Miscellaneous
 
 All other files are the same as their counterparts in the root. See
@@ -119,25 +140,40 @@ Note that putting these types of files in `/src/assets` is also generally accept
 
 See https://vitejs.dev/guide/assets.html#the-public-directory for details.
 
-### App.css
+### scss/custom.scss
 
 This is the CSS file for your entire application. Note that it is generally
 best practice to put everything in one CSS file, as this improves loadtime.
 
 In web apps, CSS defines both style and position of items.
 
-See the following resources for CSS help:
+This application uses Bootstrap to improve development speed. This file allows you to override
+default bootstrap elements
+
+See the following resources for CSS/Bootstrap help:
 
 - https://www.w3schools.com/css/
 - https://flexboxfroggy.com
 - https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps
+- https://getbootstrap.com/docs/5.3/getting-started/introduction/
+- https://react-bootstrap.netlify.app
 
-### App.tsx
+### routes
 
-App.tsx is the main page of the starter code application, and the page that is
-actually rendered. This contains the Axios examples
+Routes is the folder where the individual pages that get rendered
+are stored, as a part of react-router's navigation setup.
+
+The root (defined by App.tsx) is simply the navbar and navigation to
+other pages, stored in Routes.
+
+### root.tsx
+
+This is the "root" that contains the menubar and the root of the
+proper page
 
 ### main.tsx
 
-This is the entrypoint for the React-app. This calls the basic method
-that React uses to render your app. You probably won't need to change this file
+This is the entrypoint for the React-app.
+This calls the basic method
+that React uses to render your app.
+It also includes the router setup for page navigation

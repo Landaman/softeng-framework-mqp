@@ -34,6 +34,7 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  margin-bottom: 15px;
 }
 
 button {
@@ -43,22 +44,21 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #004d97;
   cursor: pointer;
   transition: border-color 0.25s;
 }
 button:hover {
   border-color: #646cff;
 }
-button:focus,
-button:focus-visible {
+button:active {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #ffffff;
+    background-color: #dce2e8;
   }
   a:hover {
     color: #747bff;
