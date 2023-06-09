@@ -2,10 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import HighScore from "./routes/highScore.tsx";
 import Home from "./routes/home.tsx";
-import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./routes/errorPage.tsx";
-import Root from "./routes/root.tsx";
+import Root from "./root.tsx";
 import "./scss/custom.scss";
 
 // Set up the page router

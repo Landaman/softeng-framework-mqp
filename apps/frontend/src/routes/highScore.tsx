@@ -70,7 +70,7 @@ function HighScore() {
 
   // React code
   return (
-    <>
+    <div className="text-center">
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -80,9 +80,10 @@ function HighScore() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      <Card>
+      <Card style={{ width: "fit-content" }} className="mx-auto">
         <Button
           variant="primary"
+          className="align-self-center"
           onClick={() => setCount((count) => count + 1)}
         >
           count is {count}
@@ -96,7 +97,7 @@ function HighScore() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-    </>
+    </div>
   );
 }
 
