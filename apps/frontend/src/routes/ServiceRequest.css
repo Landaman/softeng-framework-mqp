@@ -1,0 +1,111 @@
+button.submit {
+  background-color: #012d5a;
+  border-width: 2px;
+  border-color: #012d5a;
+  width: 100px;
+  color: white;
+}
+
+button.submit:hover {
+  border-color: #2d7ad8;
+  background-color: #2d7ad8;
+}
+
+button.cancel {
+  background-color: #5f5e62;
+  border-width: 2px;
+  width: 100px;
+  color: white;
+}
+
+button.cancel:hover {
+  background-color: #78767a;
+  border-color: #78767a;
+}
+
+label {
+}
+
+input {
+  width: 250px;
+  text-wrap: normal;
+  overflow-wrap: normal;
+}
+
+textarea {
+  width: 250px;
+  resize: none;
+}
+
+input.checkbox {
+  width: 15px;
+  margin: 10px 15px 10px 0;
+  padding-top: 5px;
+  cursor: pointer;
+}
+
+label.selection-label {
+  margin-top: 10px;
+  margin-bottom: 11px;
+}
+
+label.descriptor {
+  cursor: pointer;
+}
+
+.label-container {
+  display: flex;
+  justify-content: space-between;
+  width: 400px;
+  height: 30px;
+  margin: 0 auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.label-container2 {
+  display: flex;
+  justify-content: space-between;
+  width: 400px;
+  height: 60px;
+  margin: 0 auto;
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.selection-container {
+  justify-content: space-between;
+  height: 35px;
+  cursor: pointer;
+}
+
+.hbox {
+  display: flex;
+  flex-direction: row;
+  height: 230px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hbox-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.spacer1 {
+  width: 50px;
+}
+
+.spacer2 {
+  width: 45px;
+}
+
+.vbox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 30px 45px 30px 45px;
+}

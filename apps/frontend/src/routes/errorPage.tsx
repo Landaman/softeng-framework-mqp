@@ -1,5 +1,4 @@
 import { isRouteErrorResponse, useRouteError } from "react-router-dom";
-import "./errorPage.css";
 
 /**
  * Simple page that displays an error when a router error occurs
@@ -24,7 +23,7 @@ export default function ErrorPage() {
   }
 
   return (
-    <div id="error-page">
+    <div className="text-center">
       <h1>Oops!</h1>
       <p>Sorry, an unexpected error has occurred.</p>
       <p>

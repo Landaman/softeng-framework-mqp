@@ -5,6 +5,7 @@ import logger from "morgan";
 import usersRouter from "./routes/users.ts";
 import numbersRouter from "./routes/numbers.ts";
 import highScoreRouter from "./routes/highScore.ts";
+import computerServiceRouter from "./routes/serviceRequest.ts";
 
 const app: Express = express(); // Setup the backend
 
@@ -28,6 +29,8 @@ app.use("/api/users", usersRouter);
 app.use("/api/numbers", numbersRouter);
 
 app.use("/api/highScore", highScoreRouter);
+
+app.use("/api/computerRequest", computerServiceRouter);
 
 // This is a generic path for the healthcheck. This is not publicly available anywhere
 // (e.g., Docker and the dev proxy DO NOT expose this). It exists exclusively so that can check the server
