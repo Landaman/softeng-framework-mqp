@@ -2,4 +2,22 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    background-color: #DCE2E8;
+}
+
+.homepageHeader {
+    margin: 48px;
+}
+
+.homepageButton {
+    width: 300px;
+    height: 50px;
+    background-color: #012D5A;
+    color: white;
+    margin: 10px;
+}
+
+.homepageButton:hover {
+    background-color: #2D7ADB;
 }
