@@ -1,8 +1,10 @@
 import "./NavBar.css";
+import hospital from "./assets/Hospital_Logo.png";
+
 function NavBar() {
   return (
     <div className={"navBar"}>
-      <p className={"navBarText"}>Hospital Logo</p>
+      <img src={hospital} className={"hospitalLogo"} />
       <div className={"linkdiv"}>
         <a className={"navBarLink"} href={`/`}>
           <p>Home</p>
