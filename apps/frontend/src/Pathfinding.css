@@ -1,0 +1,39 @@
+.Pathfinding {
+  flex-grow: 1;
+  display: flex;
+  background-color: #dce2e8;
+  align-items: center;
+  padding: 64px;
+  height: 100%;
+}
+
+.pathfinding-inputs {
+  align-self: stretch;
+  padding: 32px;
+  flex: 0 1 auto;
+  margin: 32px;
+  outline-color: #012d5a;
+  outline-width: 3px;
+  outline-style: solid;
+  border-radius: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.pathfindingButton {
+  width: 300px;
+  height: 50px;
+  background-color: #012d5a;
+  color: white;
+  margin: 10px;
+}
+
+.pathfindingButton:hover {
+  background-color: #2d7adb;
+}
+
+.TransformWrapper {
+  max-height: 100px;
+}

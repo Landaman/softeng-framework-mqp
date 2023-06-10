@@ -6,6 +6,7 @@ import ServiceRequest from "./ServiceRequest.tsx";
 import Login from "./Login.tsx";
 import TestPage from "./routes/highScore.tsx";
 import NavBar from "./NavBar.tsx";
+import Pathfinding from "./Pathfinding.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -24,6 +25,10 @@ function App() {
     {
       path: "/HighScore",
       element: <TestPage />,
+    },
+    {
+      path: "/Pathfinding",
+      element: <Pathfinding />,
     },
   ]);
 
