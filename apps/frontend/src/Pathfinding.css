@@ -2,16 +2,16 @@
   flex-grow: 1;
   display: flex;
   background-color: #dce2e8;
-  align-items: center;
+  align-items: stretch;
   padding: 64px;
-  height: 100%;
+  max-width: 100vw;
 }
 
 .pathfinding-inputs {
   align-self: stretch;
   padding: 32px;
   flex: 0 1 auto;
-  margin: 32px;
+  margin-right: 32px;
   outline-color: #012d5a;
   outline-width: 3px;
   outline-style: solid;
@@ -36,4 +36,20 @@
 
 .TransformWrapper {
   max-height: 100px;
+}
+
+.mapdiv {
+  flex-grow: 1;
+  outline-color: #012d5a;
+  outline-width: 3px;
+  outline-style: solid;
+  display: flex;
+  flex-direction: column;
+}
+
+.buttondiv {
+}
+
+#TransformComponent {
+  flex-grow: 1;
 }
