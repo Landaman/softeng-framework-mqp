@@ -4,13 +4,13 @@ x-prod-args: &prod-args
   PRODUCTION_PORT: &prod-port 80
 
 x-db-info: &db-args
-  POSTGRES_PASSWORD: mqp
-  POSTGRES_USER: mqp
-  POSTGRES_DB: mqp
+  POSTGRES_PASSWORD: kTtH68Ptj17iGcsaK1EB
+  POSTGRES_USER: postgres
+  POSTGRES_DB: postgres
 
 # Port and URL for the DB
 x-db-loc: &db-loc
-  POSTGRES_CONTAINER: database
+  POSTGRES_CONTAINER: team-mqp-prod.ctzj5mykyp9v.us-east-1.rds.amazonaws.com
   POSTGRES_PORT: &pg-port "5432"
 
 # Health check for all processes
