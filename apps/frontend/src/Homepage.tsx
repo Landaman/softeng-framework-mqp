@@ -15,6 +15,9 @@ function Homepage() {
       <a href={`/Login`}>
         <button className={"homepageButton"}>Login</button>
       </a>
+      <a href={`/Pathfinding`}>
+        <button className={"homepageButton"}>Pathfinding</button>
+      </a>
     </div>
   );
 }
