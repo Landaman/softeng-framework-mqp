@@ -77,7 +77,7 @@ services:
 
         # The 443 entrypoint is the actual site
         - "traefik.http.routers.frontend-https.entrypoints=websecure"
-        - "traefik.http.routers.frontend-https.rule=Host(`ec2-184-72-118-159.compute-1.amazonaws.com`)"
+        - "traefik.http.routers.frontend-https.rule=Host(`ec2-3-85-47-163.compute-1.amazonaws.com`)"
         - "traefik.http.routers.frontend-https.tls=true"
 
         # Despite the "loadbalancer" naming, this just describes what port this container exposes
@@ -107,7 +107,7 @@ services:
 
       # The 443 entrypoint is the actual site
       - "traefik.http.routers.backend-https.entrypoints=websecure"
-      - "traefik.http.routers.backend-https.rule=Host(`ec2-184-72-118-159.compute-1.amazonaws.com`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.backend-https.rule=Host(`ec2-3-85-47-163.compute-1.amazonaws.com`) && PathPrefix(`/api`)"
       - "traefik.http.routers.backend-https.tls=true"
 
       # Despite the "loadbalancer" naming, this just describes what port this container exposes
