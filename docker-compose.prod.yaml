@@ -4,13 +4,13 @@ x-prod-args: &prod-args
   PRODUCTION_PORT: &prod-port 80
 
 x-db-info: &db-args
-  POSTGRES_PASSWORD: mqp
-  POSTGRES_USER: mqp
-  POSTGRES_DB: mqp
+  POSTGRES_PASSWORD: kTtH68Ptj17iGcsaK1EB
+  POSTGRES_USER: postgres
+  POSTGRES_DB: postgres
 
 # Port and URL for the DB
 x-db-loc: &db-loc
-  POSTGRES_CONTAINER: database
+  POSTGRES_CONTAINER: team-mqp-prod.ctzj5mykyp9v.us-east-1.rds.amazonaws.com
   POSTGRES_PORT: &pg-port "5432"
 
 # Health check for all processes
@@ -35,13 +35,13 @@ services:
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
 
-      # Auto-certificate generation parameters
-      - "--certificatesresolvers.letsencrypt.acme.email=iwright@wpi.edu"
-      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
-
       # This is what will actually be used
       - "--entrypoints.websecure.address=:443"
+
+      # Auto-certificate generation parameters
+      - "--certificatesresolvers.letsencrypt.acme.email=irwright@wpi.edu"
+      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=websecure"
     # Everything enters through Traefik, so this exposes the environment
     ports:
       - "80:80"
@@ -77,11 +77,12 @@ services:
 
         # The 443 entrypoint is the actual site
         - "traefik.http.routers.frontend-https.entrypoints=websecure"
-        - "traefik.http.routers.frontend-https.rule=Host(`localhost`)"
+        - "traefik.http.routers.frontend-https.rule=Host(`ec2-3-82-199-248.compute-1.amazonaws.com`)"
         - "traefik.http.routers.frontend-https.tls=true"
 
         # Despite the "loadbalancer" naming, this just describes what port this container exposes
         - "traefik.http.services.frontend-https.loadbalancer.server.port=80"
+    image: irwright13/softeng-mqp:frontend
     restart: always
     healthcheck:
       *health-check
@@ -107,11 +108,12 @@ services:
 
       # The 443 entrypoint is the actual site
       - "traefik.http.routers.backend-https.entrypoints=websecure"
-      - "traefik.http.routers.backend-https.rule=Host(`localhost`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.backend-https.rule=Host(`ec2-3-82-199-248.compute-1.amazonaws.com`) && PathPrefix(`/api`)"
       - "traefik.http.routers.backend-https.tls=true"
 
       # Despite the "loadbalancer" naming, this just describes what port this container exposes
       - "traefik.http.services.backend-https.loadbalancer.server.port=80"
+    image: irwright13/softeng-mqp:backend
     restart: always
     healthcheck:
       *health-check

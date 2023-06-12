@@ -49,6 +49,9 @@ EXPOSE $PORT
 FROM installer AS prod-frontend-builder
 WORKDIR /$WORKDIR
 
+# Build the unplugged files and cache stuff for this specific OS
+RUN yarn install --immutable
+
 # This creates a trimmed image that is frontend and its dependencies only
 RUN yarn turbo prune --scope=frontend --docker
 
@@ -56,6 +59,9 @@ RUN yarn turbo prune --scope=frontend --docker
 # Production front builder. Creates a maximally trimmed out image
 FROM installer AS prod-backend-builder
 WORKDIR /$WORKDIR
+
+# Build the unplugged files and cache stuff for this specific OS
+RUN yarn install --immutable
 
 # This creates a trimmed image that is frontend and its dependencies only
 RUN yarn turbo prune --scope=backend --docker
