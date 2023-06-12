@@ -25,3 +25,11 @@ model ComputerRequest {
   reason   String
   type     String
 }
+
+model SanitationRequest {
+  id       Int    @id @default(autoincrement())
+  location String
+  staff    String
+  issue   String
+  urgency     String
+}
