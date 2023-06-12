@@ -82,6 +82,7 @@ services:
 
         # Despite the "loadbalancer" naming, this just describes what port this container exposes
         - "traefik.http.services.frontend-https.loadbalancer.server.port=80"
+    image: irwright13/softeng-mqp:frontend
     restart: always
     healthcheck:
       *health-check
@@ -112,6 +113,7 @@ services:
 
       # Despite the "loadbalancer" naming, this just describes what port this container exposes
       - "traefik.http.services.backend-https.loadbalancer.server.port=80"
+    image: irwright13/softeng-mqp:backend
     restart: always
     healthcheck:
       *health-check
