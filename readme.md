@@ -29,6 +29,7 @@ and the reasoning for the tooling it has.
     * [Traefik](#traefik)
   * [Miscellaneous](#miscellaneous)
     * [.run](#run)
+    * [deploy.sh](#deploysh)
     * [.turbo](#turbo)
     * [.gitignore](#gitignore)
     * [Apps](#apps)
