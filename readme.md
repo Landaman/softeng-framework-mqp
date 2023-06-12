@@ -341,6 +341,10 @@ The following details the remaining files that can be found in the top-level of 
 This is a folder used by WebStorm to store the bundled run configurations. **DO NOT modify this
 file**.
 
+### deploy.sh
+This is a file that contains a script to auto-run and deploy
+the production docker containers
+
 ### .turbo
 This is usually found in subdirectories, and is part of the Turbo.repo caching setup. You shouldn't need to
 modfiy these files, but deleting them is OK.
