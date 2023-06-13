@@ -69,7 +69,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["husky", "npm:8.0.3"],\
             ["prettier", "npm:2.8.8"],\
             ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
-            ["react-map-interaction", "virtual:66682a004190b02ca1ad7e2a5dfb090713a77006ef1c1c3b9d5d14d59e634ba0f30bb20b8ffc52bcb1fb04b39211d88b4b0c102c13ced811e0bb6d38d9071a63#npm:2.1.0"],\
             ["react-zoom-pan-pinch", "virtual:66682a004190b02ca1ad7e2a5dfb090713a77006ef1c1c3b9d5d14d59e634ba0f30bb20b8ffc52bcb1fb04b39211d88b4b0c102c13ced811e0bb6d38d9071a63#npm:3.0.8"],\
             ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
             ["turbo", "npm:1.10.1"],\
@@ -3481,7 +3480,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react", "npm:18.2.0"],\
             ["react-bootstrap", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:2.7.4"],\
             ["react-dom", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:18.2.0"],\
-            ["react-map-interaction", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:2.1.0"],\
             ["react-router-bootstrap", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.26.2"],\
             ["react-router-dom", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:6.11.2"],\
             ["react-zoom-pan-pinch", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:3.0.8"],\
@@ -5587,49 +5585,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["react-map-interaction", [\
-        ["npm:2.1.0", {\
-          "packageLocation": "./.yarn/cache/react-map-interaction-npm-2.1.0-d3a714d2b8-5bf77b5777.zip/node_modules/react-map-interaction/",\
-          "packageDependencies": [\
-            ["react-map-interaction", "npm:2.1.0"]\
-          ],\
-          "linkType": "SOFT"\
-        }],\
-        ["virtual:66682a004190b02ca1ad7e2a5dfb090713a77006ef1c1c3b9d5d14d59e634ba0f30bb20b8ffc52bcb1fb04b39211d88b4b0c102c13ced811e0bb6d38d9071a63#npm:2.1.0", {\
-          "packageLocation": "./.yarn/__virtual__/react-map-interaction-virtual-a6b4713aaa/0/cache/react-map-interaction-npm-2.1.0-d3a714d2b8-5bf77b5777.zip/node_modules/react-map-interaction/",\
-          "packageDependencies": [\
-            ["react-map-interaction", "virtual:66682a004190b02ca1ad7e2a5dfb090713a77006ef1c1c3b9d5d14d59e634ba0f30bb20b8ffc52bcb1fb04b39211d88b4b0c102c13ced811e0bb6d38d9071a63#npm:2.1.0"],\
-            ["@types/prop-types", null],\
-            ["@types/react", null],\
-            ["prop-types", null],\
-            ["react", null]\
-          ],\
-          "packagePeers": [\
-            "@types/prop-types",\
-            "@types/react",\
-            "prop-types",\
-            "react"\
-          ],\
-          "linkType": "HARD"\
-        }],\
-        ["virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:2.1.0", {\
-          "packageLocation": "./.yarn/__virtual__/react-map-interaction-virtual-f9ac74a051/0/cache/react-map-interaction-npm-2.1.0-d3a714d2b8-5bf77b5777.zip/node_modules/react-map-interaction/",\
-          "packageDependencies": [\
-            ["react-map-interaction", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:2.1.0"],\
-            ["@types/prop-types", "npm:15.7.5"],\
-            ["@types/react", "npm:18.2.7"],\
-            ["prop-types", null],\
-            ["react", "npm:18.2.0"]\
-          ],\
-          "packagePeers": [\
-            "@types/prop-types",\
-            "@types/react",\
-            "prop-types",\
-            "react"\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
       ["react-router", [\
         ["npm:6.11.2", {\
           "packageLocation": "./.yarn/cache/react-router-npm-6.11.2-a9226fcbfa-e47f875dca.zip/node_modules/react-router/",\
@@ -6249,7 +6204,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["husky", "npm:8.0.3"],\
             ["prettier", "npm:2.8.8"],\
             ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
-            ["react-map-interaction", "virtual:66682a004190b02ca1ad7e2a5dfb090713a77006ef1c1c3b9d5d14d59e634ba0f30bb20b8ffc52bcb1fb04b39211d88b4b0c102c13ced811e0bb6d38d9071a63#npm:2.1.0"],\
             ["react-zoom-pan-pinch", "virtual:66682a004190b02ca1ad7e2a5dfb090713a77006ef1c1c3b9d5d14d59e634ba0f30bb20b8ffc52bcb1fb04b39211d88b4b0c102c13ced811e0bb6d38d9071a63#npm:3.0.8"],\
             ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
             ["turbo", "npm:1.10.1"],\

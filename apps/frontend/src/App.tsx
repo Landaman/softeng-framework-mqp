@@ -12,6 +12,17 @@ import NavBar from "./NavBar.tsx";
 import Pathfinding from "./Pathfinding.tsx";
 
 function App() {
+  const navbarRouter = createBrowserRouter([
+    {
+      path: "/*",
+      element: <NavBar />,
+    },
+    {
+      path: "/Login",
+      element: null,
+    },
+  ]);
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -41,7 +52,7 @@ function App() {
 
   return (
     <div className={"main"}>
-      <NavBar />
+      <RouterProvider router={navbarRouter} />
       <RouterProvider router={router} />
     </div>
   );
