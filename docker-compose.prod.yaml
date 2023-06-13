@@ -64,6 +64,9 @@ services:
     expose:
       - *prod-port
     # Use the standard Dockerfile
+    # Environment allows this to work with prebuilt images
+    environment:
+      <<: *prod-args
     build:
       # Taken from our github repo
       context: .
@@ -93,6 +96,10 @@ services:
     expose:
       - *prod-port
     # Use the standard Dockerfile
+    # Environment allows this to work with prebuilt images
+    environment:
+      # Ignore the warnings, this just merges those three
+      <<: [ *prod-args, *db-args, *db-loc ]
     build:
       # Taken from our github repo
       context: .
