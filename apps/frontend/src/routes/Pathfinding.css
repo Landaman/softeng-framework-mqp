@@ -53,22 +53,22 @@
   object-fit: contain;
 }
 .ground {
-  background-image: url("assets/floorMaps/00_thegroundfloor.png");
+  background-image: url("../assets/floorMaps/00_thegroundfloor.png");
 }
 .L1 {
-  background-image: url("assets/floorMaps/00_thelowerlevel1.png");
+  background-image: url("../assets/floorMaps/00_thelowerlevel1.png");
 }
 .L2 {
-  background-image: url("assets/floorMaps/00_thelowerlevel2.png");
+  background-image: url("../assets/floorMaps/00_thelowerlevel2.png");
 }
 .one {
-  background-image: url("assets/floorMaps/01_thefirstfloor.png");
+  background-image: url("../assets/floorMaps/01_thefirstfloor.png");
 }
 .two {
-  background-image: url("assets/floorMaps/02_thesecondfloor.png");
+  background-image: url("../assets/floorMaps/02_thesecondfloor.png");
 }
 .three {
-  background-image: url("assets/floorMaps/03_thethirdfloor.png");
+  background-image: url("../assets/floorMaps/03_thethirdfloor.png");
 }
 
 .react-transform-component {

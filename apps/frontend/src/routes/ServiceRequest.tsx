@@ -108,7 +108,7 @@ export function ComputerService() {
   }
 
   return (
-    <>
+    <div className={"MainDiv"}>
       <h1>Computer Service</h1>
       <div className="hbox">
         <div className="vbox">
@@ -175,7 +175,7 @@ export function ComputerService() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -284,7 +284,7 @@ export function SanitationService() {
   }
 
   return (
-    <>
+    <div className={"MainDiv"}>
       <h1>Sanitation Service</h1>
       <div className="hbox">
         <div className="vbox">
@@ -351,7 +351,7 @@ export function SanitationService() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

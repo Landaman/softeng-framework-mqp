@@ -109,3 +109,11 @@ label.descriptor {
   align-items: flex-start;
   margin: 30px 45px 30px 45px;
 }
+
+.MainDiv {
+  background-color: #dce2e8;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
