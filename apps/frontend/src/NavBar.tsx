@@ -9,8 +9,11 @@ function NavBar() {
         <a className={"navBarLink"} href={`/`}>
           <p>Home</p>
         </a>
-        <a className={"navBarLink"} href={`/ServiceRequest`}>
-          <p>Service Request</p>
+        <a className={"navBarLink"} href={`/ComputerService`}>
+          <p>Computer Service</p>
+        </a>
+        <a className={"navBarLink"} href={`/SanitationService`}>
+          <p>Sanitation Service</p>
         </a>
         <a className={"navBarLink"} href={`/HighScore`}>
           <p>Test Page</p>
