@@ -19,6 +19,7 @@
     "morgan": "~1.9.1",
     "pg": "^8.11.0",
     "ts-node": "^10.9.1",
+    "database": "workspace:*",
     "tsconfig-custom": "workspace:*",
     "typescript": "^5.0.4"
   },
@@ -29,7 +30,6 @@
     "@types/morgan": "^1.9.4",
     "@types/node": "^20.2.3",
     "@types/pg": "^8.10.1",
-    "database": "workspace:*",
     "eslint": "latest",
     "eslint-config-custom": "workspace:*",
     "nodemon": "latest",
