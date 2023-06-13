@@ -9,7 +9,6 @@
     "eslint-config-custom": "workspace:*",
     "prettier": "latest",
     "prettier-config-custom": "workspace:*",
-    "prisma": "4.15.0",
     "tsconfig-custom": "workspace:*",
     "typescript": "^5.0.4"
   },
@@ -26,6 +25,7 @@
     "db:push": "prisma db push --skip-generate"
   },
   "dependencies": {
-    "@prisma/client": "4.15.0"
+    "@prisma/client": "4.15.0",
+    "prisma": "4.15.0"
   }
 }
