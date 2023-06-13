@@ -50,7 +50,7 @@ FROM installer AS prod-frontend-builder
 WORKDIR /$WORKDIR
 
 # Build the unplugged files and cache stuff for this specific OS
-RUN yarn install --immutable
+RUN yarn install --immutable --immutable-cache
 
 # This creates a trimmed image that is frontend and its dependencies only
 RUN yarn turbo prune --scope=frontend --docker
@@ -61,7 +61,7 @@ FROM installer AS prod-backend-builder
 WORKDIR /$WORKDIR
 
 # Build the unplugged files and cache stuff for this specific OS
-RUN yarn install --immutable
+RUN yarn install --immutable --immutable-cache
 
 # This creates a trimmed image that is frontend and its dependencies only
 RUN yarn turbo prune --scope=backend --docker
@@ -79,7 +79,7 @@ COPY --from=prod-frontend-builder ["/$WORKDIR/out/json", "/$WORKDIR/out/yarn.loc
 RUN yarn install --immutable
 
 # Run the turbo lint and build tasks
-RUN yarn turbo run lint build
+RUN yarn turbo run lint
 
 # This trims out all non-production items
 RUN yarn workspaces focus --all --production
@@ -114,7 +114,7 @@ COPY --from=prod-backend-builder ["/$WORKDIR/out/json", "/$WORKDIR/out/yarn.lock
 RUN yarn install --immutable
 
 # Run the turbo lint and build tasks
-RUN yarn turbo run lint build
+RUN yarn turbo run lint
 
 # This trims out all non-production items
 RUN yarn workspaces focus --all --production
