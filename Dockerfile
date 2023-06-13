@@ -81,6 +81,9 @@ RUN yarn install --immutable
 # Run the turbo lint and build tasks
 RUN yarn turbo run lint
 
+# If we bundle these, it causes issues. But separately they are fine :)
+RUN yarn turbo run build
+
 # This trims out all non-production items
 RUN yarn workspaces focus --all --production
 
@@ -115,6 +118,9 @@ RUN yarn install --immutable
 
 # Run the turbo lint and build tasks
 RUN yarn turbo run lint
+
+# If we bundle these, it causes issues. But separately they are fine :)
+RUN yarn turbo run build
 
 # This trims out all non-production items
 RUN yarn workspaces focus --all --production
