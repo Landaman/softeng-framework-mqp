@@ -1,17 +1,24 @@
+import "./Homepage.css";
 function Homepage() {
   return (
-    <>
-      <h1>Homepage</h1>
+    <div className={"homepage"}>
+      <h1 className={"homepageHeader"}>
+        Brigham and Women’s<br></br>
+        Hospital Homepage
+      </h1>
       <a href={`/ServiceRequest`}>
-        <button>Service Request</button>
+        <button className={"homepageButton"}>Service Request</button>
       </a>
       <a href={`/TestPage`}>
-        <button>Test Page</button>
+        <button className={"homepageButton"}>Test Page</button>
       </a>
       <a href={`/Login`}>
-        <button>Login</button>
+        <button className={"homepageButton"}>Login</button>
       </a>
-    </>
+      <a href={`/Pathfinding`}>
+        <button className={"homepageButton"}>Pathfinding</button>
+      </a>
+    </div>
   );
 }
 
