@@ -45,7 +45,9 @@ services:
       # Auto-certificate generation parameters
       - "--certificatesresolvers.letsencrypt.acme.email=irwright@wpi.edu"
       - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=websecure"
+
+      # Used during resolution
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
     # Everything enters through Traefik, so this exposes the environment
     ports:
       - "80:80"
