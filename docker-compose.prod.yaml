@@ -33,14 +33,14 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
 
+      # This is what will actually be used
+      - "--entrypoints.websecure.address=:443"
+
       # Expose the standard HTTP port, have it automatically redirect to https
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
-
-      # This is what will actually be used
-      - "--entrypoints.websecure.address=:443"
 
       # Auto-certificate generation parameters
       - "--certificatesresolvers.letsencrypt.acme.email=irwright@wpi.edu"
