@@ -80,17 +80,17 @@ services:
         <<: *prod-args
       # Use the prod-frontend stage
       target: prod-frontend
-      # Traefik labels
-      labels:
-        - "traefik.enable=true"
+    # Traefik labels
+    labels:
+      - "traefik.enable=true"
 
-        # The 443 entrypoint is the actual site
-        - "traefik.http.routers.frontend-https.entrypoints=websecure"
-        - "traefik.http.routers.frontend-https.rule=Host(`ec2-3-82-199-248.compute-1.amazonaws.com`)"
-        - "traefik.http.routers.frontend-https.tls=true"
+      # The 443 entrypoint is the actual site
+      - "traefik.http.routers.frontend-https.entrypoints=websecure"
+      - "traefik.http.routers.frontend-https.rule=Host(`ec2-3-82-199-248.compute-1.amazonaws.com`)"
+      - "traefik.http.routers.frontend-https.tls=true"
 
-        # Despite the "loadbalancer" naming, this just describes what port this container exposes
-        - "traefik.http.services.frontend-https.loadbalancer.server.port=80"
+      # Despite the "loadbalancer" naming, this just describes what port this container exposes
+      - "traefik.http.services.frontend-https.loadbalancer.server.port=80"
     image: irwright13/softeng-mqp:frontend
     restart: always
     healthcheck:
