@@ -10,7 +10,7 @@ function NavBar() {
         <a className={"navBarLink"} href={`/ServiceRequest`}>
           <p>Service Request</p>
         </a>
-        <a className={"navBarLink"} href={`/TestPage`}>
+        <a className={"navBarLink"} href={`/HighScore`}>
           <p>Test Page</p>
         </a>
       </div>
