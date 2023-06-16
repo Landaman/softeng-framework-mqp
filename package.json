@@ -22,8 +22,7 @@
     "lint:fix": "turbo run lint:fix",
     "postinstall": "husky install || exit 0",
     "build": "turbo run lint:fix && yarn run build:frontend && yarn run build:backend",
-    "build:frontend": "docker build --target prod-frontend --tag irwright13/softeng-mqp:frontend --platform linux/amd64 . && docker push irwright13/softeng-mqp:frontend",
-    "build:backend": "docker build --target prod-backend --tag irwright13/softeng-mqp:backend --platform linux/amd64 . && docker push irwright13/softeng-mqp:backend"
+    "docker:upload": "turbo run docker:upload"
   },
   "packageManager": "yarn@3.5.1",
   "devDependencies": {

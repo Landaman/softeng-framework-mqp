@@ -6,7 +6,9 @@
     "dev": "nodemon",
     "deploy": "ts-node --transpile-only src/bin/www.ts",
     "lint": "yarn shared:prettierlint && yarn shared:eslint && yarn shared:tslint",
-    "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint"
+    "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint",
+    "docker:build": "cd $PROJECT_CWD && docker build --target prod-backend --tag irwright13/softeng-mqp:backend --platform linux/amd64 .",
+    "docker:upload": "docker push irwright13/softeng-mqp:backend"
   },
   "dependencies": {
     "@swc/core": "^1.3.60",

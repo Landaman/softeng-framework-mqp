@@ -52,6 +52,9 @@ WORKDIR /$WORKDIR
 # Build the unplugged files and cache stuff for this specific OS
 RUN yarn install --immutable --immutable-cache
 
+# Lint everything here, before we prune stuff out
+RUN yarn turbo run lint --filter=backend,common,database,eslint-config-custom,frontend,prettier-config-custom,tsconfig-custom
+
 # This creates a trimmed image that is frontend and its dependencies only
 RUN yarn turbo prune --scope=frontend --docker
 
@@ -62,6 +65,9 @@ WORKDIR /$WORKDIR
 
 # Build the unplugged files and cache stuff for this specific OS
 RUN yarn install --immutable --immutable-cache
+
+# Lint everything here, before we prune stuff out
+RUN yarn turbo run lint --filter=backend,common,database,eslint-config-custom,frontend,prettier-config-custom,tsconfig-custom
 
 # This creates a trimmed image that is frontend and its dependencies only
 RUN yarn turbo prune --scope=backend --docker
@@ -78,11 +84,8 @@ COPY --from=prod-frontend-builder ["/$WORKDIR/out/json", "/$WORKDIR/out/yarn.loc
 # Validate the install
 RUN yarn install --immutable
 
-# Run the turbo lint and build tasks
-RUN yarn turbo run lint
-
-# If we bundle these, it causes issues. But separately they are fine :)
-RUN yarn turbo run build
+# Perform any building necessary
+RUN yarn turbo run build --filter=backend,common,database,eslint-config-custom,frontend,prettier-config-custom,tsconfig-custom
 
 # This trims out all non-production items
 RUN yarn workspaces focus --all --production
@@ -116,11 +119,8 @@ COPY --from=prod-backend-builder ["/$WORKDIR/out/json", "/$WORKDIR/out/yarn.lock
 # Validate the install
 RUN yarn install --immutable
 
-# Run the turbo lint and build tasks
-RUN yarn turbo run lint
-
-# If we bundle these, it causes issues. But separately they are fine :)
-RUN yarn turbo run build
+# Run the build task
+RUN yarn turbo run build --filter=backend,common,database,eslint-config-custom,frontend,prettier-config-custom,tsconfig-custom
 
 # This trims out all non-production items
 RUN yarn workspaces focus --all --production

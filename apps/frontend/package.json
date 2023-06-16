@@ -9,7 +9,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "yarn shared:prettierlint && yarn shared:eslint && yarn shared:tslint",
-    "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint"
+    "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint",
+    "docker:build": "cd $PROJECT_CWD && docker build --target prod-frontend --tag irwright13/softeng-mqp:frontend --platform linux/amd64 .",
+    "docker:upload": "docker push irwright13/softeng-mqp:frontend"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",

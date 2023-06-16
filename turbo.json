@@ -27,6 +27,14 @@
     "build": {
       "dependsOn": ["^dependencies"],
       "outputs": ["build/**"]
+    },
+    "docker:build": {
+      "dependsOn": ["lint"],
+      "cache": false
+    },
+    "docker:upload": {
+      "dependsOn": ["docker:build"],
+      "cache": false
     }
   }
 }
