@@ -50,10 +50,7 @@ FROM installer AS prod-frontend-builder
 WORKDIR /$WORKDIR
 
 # Build the unplugged files and cache stuff for this specific OS
-RUN yarn install --immutable --immutable-cache
-
-# Lint everything here, before we prune stuff out
-RUN yarn turbo run lint --filter=backend,common,database,eslint-config-custom,frontend,prettier-config-custom,tsconfig-custom
+RUN yarn install --immutable --immutable-cache --check-cache
 
 # This creates a trimmed image that is frontend and its dependencies only
 RUN yarn turbo prune --scope=frontend --docker
@@ -64,10 +61,7 @@ FROM installer AS prod-backend-builder
 WORKDIR /$WORKDIR
 
 # Build the unplugged files and cache stuff for this specific OS
-RUN yarn install --immutable --immutable-cache
-
-# Lint everything here, before we prune stuff out
-RUN yarn turbo run lint --filter=backend,common,database,eslint-config-custom,frontend,prettier-config-custom,tsconfig-custom
+RUN yarn install --immutable --immutable-cache --check-cache
 
 # This creates a trimmed image that is frontend and its dependencies only
 RUN yarn turbo prune --scope=backend --docker
@@ -85,7 +79,7 @@ COPY --from=prod-frontend-builder ["/$WORKDIR/out/json", "/$WORKDIR/out/yarn.loc
 RUN yarn install --immutable
 
 # Perform any building necessary
-RUN yarn turbo run build --filter=backend,common,database,eslint-config-custom,frontend,prettier-config-custom,tsconfig-custom
+RUN yarn turbo run build
 
 # This trims out all non-production items
 RUN yarn workspaces focus --all --production
@@ -120,7 +114,7 @@ COPY --from=prod-backend-builder ["/$WORKDIR/out/json", "/$WORKDIR/out/yarn.lock
 RUN yarn install --immutable
 
 # Run the build task
-RUN yarn turbo run build --filter=backend,common,database,eslint-config-custom,frontend,prettier-config-custom,tsconfig-custom
+RUN yarn turbo run build
 
 # This trims out all non-production items
 RUN yarn workspaces focus --all --production
