@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Homepage from "./Homepage.tsx";
-import ServiceRequest from "./ServiceRequest.tsx";
+import ServiceRequest from "./routes/ServiceRequest.tsx";
 import Login from "./Login.tsx";
 import TestPage from "./routes/highScore.tsx";
 import NavBar from "./NavBar.tsx";
