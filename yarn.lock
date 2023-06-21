@@ -14,6 +14,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@auth0/auth0-react@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "@auth0/auth0-react@npm:2.1.1"
+  dependencies:
+    "@auth0/auth0-spa-js": ^2.0.8
+  peerDependencies:
+    react: ^16.11.0 || ^17 || ^18
+    react-dom: ^16.11.0 || ^17 || ^18
+  checksum: 37093c8ec5a4dc6bff4b04f8b8a3beba5aa378c223dd07ef00d8e0e624ee6eaa15ac6f2464b3d26b02bd272d5b569de9903b6256352c94939285310c877d9da2
+  languageName: node
+  linkType: hard
+
+"@auth0/auth0-spa-js@npm:^2.0.8":
+  version: 2.0.8
+  resolution: "@auth0/auth0-spa-js@npm:2.0.8"
+  checksum: 98a278aa0cc7ee81e8cdcc2c1684adb129461a54a197623d133a257b49961812354f07c962f8f40f5e62b2837dd291e62d61592ea7d7b7666c3ab9030794160d
+  languageName: node
+  linkType: hard
+
 "@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.21.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.3, @babel/runtime@npm:^7.8.7":
   version: 7.22.3
   resolution: "@babel/runtime@npm:7.22.3"
@@ -2745,6 +2764,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "frontend@workspace:apps/frontend"
   dependencies:
+    "@auth0/auth0-react": ^2.1.1
     "@popperjs/core": ^2.11.8
     "@types/bootstrap": ^5.2.6
     "@types/node": ^20.2.5
