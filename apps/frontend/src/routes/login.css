@@ -3,7 +3,7 @@
   float: left;
   width: 960px;
   height: 1080px;
-  background: rgba(1, 45, 90, 0.79) url("assets/Hospitalpic.jpeg") no-repeat;
+  background: rgba(1, 45, 90, 0.79) url("../assets/Hospitalpic.jpeg") no-repeat;
   background-size: cover;
   background-blend-mode: multiply;
 }

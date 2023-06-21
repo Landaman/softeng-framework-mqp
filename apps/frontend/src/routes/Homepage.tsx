@@ -7,7 +7,7 @@ function Homepage() {
         <a href={`/ServiceRequest`}>
           <button>Service Request</button>
         </a>
-        <a href={`/TestPage`}>
+        <a href={`/HighScore`}>
           <button>Test Page</button>
         </a>
       </div>
