@@ -1,6 +1,6 @@
 import "./NavBar.css";
 import { Dropdown } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
+
 function NavBar() {
   return (
     <div className={"navBar"}>
@@ -21,12 +21,8 @@ function NavBar() {
           Login
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          <LinkContainer to="/login">
-            <Dropdown.Item>Login</Dropdown.Item>
-          </LinkContainer>
-          <LinkContainer to="/login">
-            <Dropdown.Item>Logout</Dropdown.Item>
-          </LinkContainer>
+          <Dropdown.Item as="button">Login</Dropdown.Item>
+          <Dropdown.Item as="button">Logout</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </div>
