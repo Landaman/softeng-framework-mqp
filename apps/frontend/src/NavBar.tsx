@@ -1,8 +1,11 @@
 import "./NavBar.css";
 import { Dropdown } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useLocation } from "react-router-dom";
 
 function NavBar() {
+  const location = useLocation();
+
   const { loginWithRedirect, logout, user, isAuthenticated, isLoading } =
     useAuth0();
 
@@ -29,8 +32,12 @@ function NavBar() {
         <Dropdown.Menu>
           <Dropdown.Item
             as="button"
-            onClick={() => {
-              loginWithRedirect();
+            onClick={async () => {
+              await loginWithRedirect({
+                appState: {
+                  returnTo: location.pathname,
+                },
+              });
             }}
           >
             Login
