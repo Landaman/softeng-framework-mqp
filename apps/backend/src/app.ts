@@ -10,16 +10,6 @@ import { auth } from "express-oauth2-jwt-bearer";
 
 const app: Express = express(); // Setup the backend
 
-// JWT checker to ensure that routes are authorized
-const jwtCheck = auth({
-  audience: "/api",
-  issuerBaseURL: "https://dev-k32g5z85431gyr5t.us.auth0.com/",
-  tokenSigningAlg: "RS256",
-});
-
-// Enforce on all endpoints
-app.use(jwtCheck);
-
 // Setup generic middlewear
 app.use(
   logger("dev", {
@@ -32,6 +22,16 @@ app.use(
 app.use(express.json()); // This processes requests as JSON
 app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser
+
+// JWT checker to ensure that routes are authorized
+const jwtCheck = auth({
+  audience: "/api",
+  issuerBaseURL: "https://dev-k32g5z85431gyr5t.us.auth0.com/",
+  tokenSigningAlg: "RS256",
+});
+
+// Enforce on all endpoints
+app.use(jwtCheck);
 
 // Setup routers. ALL ROUTERS MUST use /api as a start point, or they
 // won't be reached by the default proxy and prod setup
