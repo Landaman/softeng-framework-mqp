@@ -1966,8 +1966,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint", "npm:8.41.0"],\
             ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
             ["express", "npm:5.0.0-beta.1"],\
+            ["express-oauth2-jwt-bearer", "npm:1.5.0"],\
             ["http-errors", "npm:1.6.3"],\
             ["http-terminator", "npm:3.2.0"],\
+            ["jose", "npm:4.14.4"],\
             ["morgan", "npm:1.9.1"],\
             ["nodemon", "npm:2.0.22"],\
             ["pg", "virtual:9a28949798a912c67218bf8cea1001b3cae21be82aaad0589210650a91ed87ad2b921ce3379d36f5723672b5e5a668da59a3e262568425b08570aa654e7b0112#npm:8.11.0"],\
@@ -3282,6 +3284,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["express-oauth2-jwt-bearer", [\
+        ["npm:1.5.0", {\
+          "packageLocation": "./.yarn/cache/express-oauth2-jwt-bearer-npm-1.5.0-9afdb3ff54-642650d56b.zip/node_modules/express-oauth2-jwt-bearer/",\
+          "packageDependencies": [\
+            ["express-oauth2-jwt-bearer", "npm:1.5.0"],\
+            ["jose", "npm:4.14.4"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["fast-deep-equal", [\
         ["npm:3.1.3", {\
           "packageLocation": "./.yarn/cache/fast-deep-equal-npm-3.1.3-790edcfcf5-e21a9d8d84.zip/node_modules/fast-deep-equal/",\
@@ -4176,6 +4188,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/isexe-npm-2.0.0-b58870bd2e-26bf6c5480.zip/node_modules/isexe/",\
           "packageDependencies": [\
             ["isexe", "npm:2.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["jose", [\
+        ["npm:4.14.4", {\
+          "packageLocation": "./.yarn/cache/jose-npm-4.14.4-8255fd76fa-2d820a91a8.zip/node_modules/jose/",\
+          "packageDependencies": [\
+            ["jose", "npm:4.14.4"]\
           ],\
           "linkType": "HARD"\
         }]\
