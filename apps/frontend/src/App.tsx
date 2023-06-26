@@ -10,6 +10,7 @@ import Login from "./Login.tsx";
 import TestPage from "./routes/highScore.tsx";
 import NavBar from "./NavBar.tsx";
 import Pathfinding from "./routes/Pathfinding.tsx";
+import MapEditor from "./routes/MapEditor.tsx";
 
 function App() {
   const navbarRouter = createBrowserRouter([
@@ -47,6 +48,10 @@ function App() {
     {
       path: "/Pathfinding",
       element: <Pathfinding />,
+    },
+    {
+      path: "/MapEditor",
+      element: <MapEditor />,
     },
   ]);
 

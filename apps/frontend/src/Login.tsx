@@ -1,13 +1,11 @@
 import "./login.css";
-import { Button } from "react-bootstrap";
 import { useState, useEffect, useCallback, ChangeEvent } from "react";
 import { User } from "database";
 import axios from "axios";
 
 function Login() {
-   
   const [user, setUser] = useState("");
-   
+
   const [password, setPassword] = useState("");
   const [dbPass, setDbPass] = useState("");
 
@@ -86,13 +84,9 @@ function Login() {
             style={{ marginBottom: "63px" }}
             onChange={handlePasswordInput}
           />
-          <Button
-            className={"defaultbutton"}
-            variant="contained"
-            onClick={handleLoginButton}
-          >
+          <button className={"loginButton"} onClick={handleLoginButton}>
             Login{" "}
-          </Button>
+          </button>
         </div>
       </div>
     </>

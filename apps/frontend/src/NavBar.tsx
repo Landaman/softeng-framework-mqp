@@ -21,6 +21,9 @@ function NavBar() {
         <a className={"navBarLink"} href={`/Pathfinding`}>
           <p>Pathfinding</p>
         </a>
+        <a className={"navBarLink"} href={`/MapEditor`}>
+          <p>Map Editor</p>
+        </a>
       </div>
       <p className={"navBarLogin"}>Login Stuff</p>
     </div>
