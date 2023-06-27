@@ -42,7 +42,24 @@ function MapEditor() {
     canvas.setAttribute("width", String(style_width * dpi));
 
     context.imageSmoothingEnabled = false;
-    nodes.forEach((node) => c.current.fillRect(node.x1, node.y1, 5, 5));
+
+    let oldX = 0;
+    let oldY = 0;
+    if (nodes.length > 0) {
+      context.fillRect(nodes[0].x1, nodes[0].y1, 5, 5);
+      oldX = nodes[0].x1;
+      oldY = nodes[0].y1;
+    }
+    context.beginPath();
+    for (let i = 1; i < nodes.length; i++) {
+      const n = nodes[i];
+      context.moveTo(oldX, oldY);
+      context.fillRect(n.x1, n.y1, 5, 5);
+      context.lineTo(n.x1, n.y1);
+      oldX = n.x1;
+      oldY = n.y1;
+    }
+    context.stroke();
     c.current = context;
   });
 
