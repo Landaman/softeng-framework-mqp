@@ -1,43 +1,78 @@
 import "./Pathfinding.css";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { useEffect, useState, useRef } from "react";
+import { useLayoutEffect, useState, useRef, MutableRefObject } from "react";
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+function createNode(x, y) {
+  const x1 = x;
+  const y1 = y;
+  const n: Node = { x1, y1 };
+  return n;
+}
+
+interface Node {
+  x1: number;
+  y1: number;
+}
 function Pathfinding() {
-  const canvasRef = useRef(null);
-  const c = useRef(null);
-  useEffect(() => {
+  const [nodes, setNodes] = useState<Array<Node>>([
+    createNode(100, 100),
+    createNode(200, 100),
+    createNode(200, 200),
+    createNode(100, 200),
+  ]);
+  const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>;
+  const c = useRef() as MutableRefObject<CanvasRenderingContext2D>;
+  useLayoutEffect(() => {
     const dpi = window.devicePixelRatio;
     const canvas = canvasRef.current;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const context = canvas.getContext("2d");
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    const context = canvas.getContext("2d") as CanvasRenderingContext2D;
     const style_height = +getComputedStyle(canvas)
       .getPropertyValue("height")
       .slice(0, -2);
+
     //get CSS width
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     const style_width = +getComputedStyle(canvas)
       .getPropertyValue("width")
       .slice(0, -2);
+
     //scale the canvas
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    canvas.setAttribute("height", style_height * dpi);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    canvas.setAttribute("width", style_width * dpi);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const canvasX = canvas.width;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const canvasY = canvas.height;
+    canvas.setAttribute("height", String(style_height * dpi));
+    canvas.setAttribute("width", String(style_width * dpi));
+
     context.imageSmoothingEnabled = false;
-    context.fillRect(canvasX / 2, canvasY / 2, 3, 3);
+
+    let oldX = 0;
+    let oldY = 0;
+    if (nodes.length > 0) {
+      context.fillRect(nodes[0].x1 - 3, nodes[0].y1 - 3, 6, 6);
+      oldX = nodes[0].x1;
+      oldY = nodes[0].y1;
+    }
+    context.beginPath();
+    for (let i = 1; i < nodes.length; i++) {
+      const n = nodes[i];
+      context.moveTo(oldX, oldY);
+      context.fillRect(n.x1 - 3, n.y1 - 3, 6, 6);
+      context.lineTo(n.x1, n.y1);
+      oldX = n.x1;
+      oldY = n.y1;
+      console.log("i");
+    }
+    context.stroke();
     c.current = context;
-  }, []);
+  });
+
+  function drawPath() {
+    setNodes([
+      createNode(100, 100),
+      createNode(200, 100),
+      createNode(200, 200),
+      createNode(100, 200),
+    ]);
+  }
+
   const [floor, setfloor] = useState("pathfindingCanvas L1");
   function groundFloor() {
     setfloor("pathfindingCanvas ground");
@@ -64,18 +99,7 @@ function Pathfinding() {
     clearCanvas();
   }
   function clearCanvas() {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    c.current.clearRect(
-      0,
-      0,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      canvasRef.current.width,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      canvasRef.current.height
-    );
+    setNodes([]);
   }
 
   return (
@@ -84,12 +108,14 @@ function Pathfinding() {
         <h1>Get Directions</h1>
         <input />
         <input />
-        <button className={"pathfindingButton"}>Submit</button>
+        <button onClick={drawPath} className={"pathfindingButton"}>
+          Submit
+        </button>
       </div>
       <div className={"mapdiv"}>
         <TransformWrapper>
           <TransformComponent>
-            <canvas className={floor} ref={canvasRef} id={"test"}></canvas>
+            <canvas className={floor} ref={canvasRef}></canvas>
           </TransformComponent>
         </TransformWrapper>
         <div className={"buttondiv"}>
