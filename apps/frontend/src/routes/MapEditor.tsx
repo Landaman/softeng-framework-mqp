@@ -1,26 +1,30 @@
 import "./MapEditor.css";
 import { useState, useRef, MutableRefObject, useLayoutEffect } from "react";
+import { MapNode, MapEdge } from "../MapComponents.ts";
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-function createNode(x, y) {
+function createMapNode(x: number, y: number) {
   const x1 = x - 514;
-  const y1 = y - 114;
-  const n: Node = { x1, y1 };
+  const y1 = y - 115;
+  const color = "blue";
+  const n: MapNode = { x1, y1, color };
   return n;
 }
 
-interface Node {
-  x1: number;
-  y1: number;
+function createMapEdge(i1: number, i2: number) {
+  const index1 = i1;
+  const index2 = i2;
+  const e: MapEdge = { index1, index2 };
+  return e;
 }
 function MapEditor() {
-  const [nodes, setNodes] = useState<Array<Node>>([]);
+  const [mapNodes, setMapNodes] = useState<Array<MapNode>>([]);
+  const [mapEdges, setMapEdges] = useState<Array<MapEdge>>([]);
   const [nodeChecked, setNode] = useState(false);
   const [edgeChecked, setEdge] = useState(false);
   const [moveChecked, setMove] = useState(false);
   const [mode, setMode] = useState("");
   const [movingIndex, setMovingIndex] = useState(-1);
+  let tempEdgeIndex = -1;
 
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>;
   const c = useRef() as MutableRefObject<CanvasRenderingContext2D>;
@@ -43,23 +47,28 @@ function MapEditor() {
 
     context.imageSmoothingEnabled = false;
 
-    let oldX = 0;
-    let oldY = 0;
-    if (nodes.length > 0) {
-      context.fillRect(nodes[0].x1, nodes[0].y1, 5, 5);
-      oldX = nodes[0].x1;
-      oldY = nodes[0].y1;
+    // draw nodes
+
+    for (let i = 0; i < mapNodes.length; i++) {
+      const n = mapNodes[i];
+      context.fillRect(n.x1, n.y1, 6, 6);
     }
+
+    // draw edges
     context.beginPath();
-    for (let i = 1; i < nodes.length; i++) {
-      const n = nodes[i];
-      context.moveTo(oldX, oldY);
-      context.fillRect(n.x1, n.y1, 5, 5);
-      context.lineTo(n.x1, n.y1);
-      oldX = n.x1;
-      oldY = n.y1;
+    for (let i = 0; i < mapEdges.length; i++) {
+      const edge = mapEdges[i];
+      context.moveTo(
+        mapNodes[edge.index1].x1 + 3,
+        mapNodes[edge.index1].y1 + 3
+      );
+      context.lineTo(
+        mapNodes[edge.index2].x1 + 3,
+        mapNodes[edge.index2].y1 + 3
+      );
     }
     context.stroke();
+
     c.current = context;
   });
 
@@ -70,10 +79,26 @@ function MapEditor() {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     if (mode === "Node") {
-      setNodes((prevState) => [...prevState, createNode(clientX, clientY)]);
+      setMapNodes((prevState) => [
+        ...prevState,
+        createMapNode(clientX, clientY),
+      ]);
       console.log(mode);
     } else if (mode === "Move") {
-      setMovingIndex(findNode(clientX - 512, clientY - 114));
+      setMovingIndex(findNode(clientX - 514, clientY - 115));
+    } else if (mode === "Edge") {
+      if (tempEdgeIndex === -1) {
+        tempEdgeIndex = findNode(clientX - 514, clientY - 115);
+      } else {
+        const temp = findNode(clientX - 514, clientY - 115);
+        if (temp != -1) {
+          setMapEdges((prevState) => [
+            ...prevState,
+            createMapEdge(tempEdgeIndex, temp),
+          ]);
+          tempEdgeIndex = -1;
+        }
+      }
     }
   };
 
@@ -89,17 +114,17 @@ function MapEditor() {
     console.log(movingIndex);
     const { clientX, clientY } = event;
     if (movingIndex != -1) {
-      updateNode(movingIndex, clientX, clientY);
+      updateNode(movingIndex, clientX, clientY, "blue");
     }
   };
 
-  function updateNode(index: number, x: number, y: number) {
+  function updateNode(index: number, x: number, y: number, color: string) {
     const x1 = x - 514;
-    const y1 = y - 114;
-    const n: Node = { x1, y1 };
-    const temp = nodes;
+    const y1 = y - 115;
+    const n: MapNode = { x1, y1, color };
+    const temp = [...mapNodes];
     temp[index] = n;
-    setNodes(temp);
+    setMapNodes(temp);
   }
 
   const [floor, setfloor] = useState("mapEditorCanvas L1");
@@ -128,7 +153,8 @@ function MapEditor() {
     clearCanvas();
   }
   function clearCanvas() {
-    setNodes([]);
+    setMapNodes([]);
+    setMapEdges([]);
   }
 
   function handleNode() {
@@ -153,12 +179,12 @@ function MapEditor() {
   }
 
   function findNode(x: number, y: number) {
-    for (let i = 0; i < nodes.length; i++) {
+    for (let i = 0; i < mapNodes.length; i++) {
       if (
-        x - 3 < nodes[i].x1 &&
-        nodes[i].x1 < x + 3 &&
-        y - 3 < nodes[i].y1 &&
-        nodes[i].y1 < y + 3
+        x - 3 < mapNodes[i].x1 &&
+        mapNodes[i].x1 < x + 3 &&
+        y - 3 < mapNodes[i].y1 &&
+        mapNodes[i].y1 < y + 3
       ) {
         return i;
       }
