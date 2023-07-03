@@ -22,9 +22,11 @@ function MapEditor() {
   const [nodeChecked, setNode] = useState(false);
   const [edgeChecked, setEdge] = useState(false);
   const [moveChecked, setMove] = useState(false);
+  const [deleteChecked, setDelete] = useState(false);
   const [mode, setMode] = useState("");
   const [movingIndex, setMovingIndex] = useState(-1);
-  let tempEdgeIndex = -1;
+  const [hoverNode, setHoverNode] = useState(-1);
+  const [selectedNode, setSelectedNode] = useState(-1);
 
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>;
   const c = useRef() as MutableRefObject<CanvasRenderingContext2D>;
@@ -48,10 +50,15 @@ function MapEditor() {
     context.imageSmoothingEnabled = false;
 
     // draw nodes
-
     for (let i = 0; i < mapNodes.length; i++) {
       const n = mapNodes[i];
-      context.fillRect(n.x1, n.y1, 6, 6);
+      if (i === selectedNode || i === hoverNode) {
+        context.fillStyle = "#00FF00";
+        context.fillRect(n.x1, n.y1, 6, 6);
+        context.fillStyle = "black";
+      } else {
+        context.fillRect(n.x1, n.y1, 6, 6);
+      }
     }
 
     // draw edges
@@ -85,25 +92,34 @@ function MapEditor() {
       ]);
       console.log(mode);
     } else if (mode === "Move") {
-      setMovingIndex(findNode(clientX - 514, clientY - 115));
+      setMovingIndex(findNode(clientX, clientY));
     } else if (mode === "Edge") {
-      if (tempEdgeIndex === -1) {
-        tempEdgeIndex = findNode(clientX - 514, clientY - 115);
+      if (selectedNode === -1) {
+        setSelectedNode(findNode(clientX, clientY));
       } else {
-        const temp = findNode(clientX - 514, clientY - 115);
+        const temp = findNode(clientX, clientY);
         if (temp != -1) {
           setMapEdges((prevState) => [
             ...prevState,
-            createMapEdge(tempEdgeIndex, temp),
+            createMapEdge(selectedNode, temp),
           ]);
-          tempEdgeIndex = -1;
+          setSelectedNode(-1);
+        }
+      }
+    } else if (mode === "Delete") {
+      if (selectedNode === -1) {
+        setSelectedNode(findNode(clientX, clientY));
+      } else {
+        const temp = findNode(clientX, clientY);
+        if (temp === selectedNode) {
+          deleteNode(temp);
+        } else {
+          setSelectedNode(temp);
         }
       }
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   const handleMouseUp = () => {
     setMovingIndex(-1);
   };
@@ -111,10 +127,11 @@ function MapEditor() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const handleMouseMove = (event) => {
-    console.log(movingIndex);
     const { clientX, clientY } = event;
     if (movingIndex != -1) {
       updateNode(movingIndex, clientX, clientY, "blue");
+    } else {
+      setHoverNode(findNode(clientX, clientY));
     }
   };
 
@@ -125,6 +142,33 @@ function MapEditor() {
     const temp = [...mapNodes];
     temp[index] = n;
     setMapNodes(temp);
+  }
+
+  function deleteNode(index: number) {
+    const tempNodes = [];
+    for (let i = 0; i < mapNodes.length; i++) {
+      if (i != index) {
+        tempNodes.push(mapNodes[i]);
+      }
+    }
+    setMapNodes(tempNodes);
+
+    const tempEdges = [];
+    for (let i = 0; i < mapEdges.length; i++) {
+      const e = mapEdges[i];
+      if (!(e.index1 === index || e.index2 === index)) {
+        if (e.index1 > index) {
+          e.index1 -= 1;
+        }
+        if (e.index2 > index) {
+          e.index2 -= 1;
+        }
+        tempEdges.push(e);
+      }
+    }
+    setMapEdges(tempEdges);
+    setSelectedNode(-1);
+    setHoverNode(-1);
   }
 
   const [floor, setfloor] = useState("mapEditorCanvas L1");
@@ -155,36 +199,54 @@ function MapEditor() {
   function clearCanvas() {
     setMapNodes([]);
     setMapEdges([]);
+    setSelectedNode(-1);
   }
 
   function handleNode() {
     setNode(true);
     setEdge(false);
     setMove(false);
+    setDelete(false);
     setMode("Node");
+    setSelectedNode(-1);
   }
 
   function handleEdge() {
     setNode(false);
     setEdge(true);
     setMove(false);
+    setDelete(false);
     setMode("Edge");
+    setSelectedNode(-1);
   }
 
   function handleMove() {
     setNode(false);
     setEdge(false);
     setMove(true);
+    setDelete(false);
     setMode("Move");
+    setSelectedNode(-1);
+  }
+
+  function handleDelete() {
+    setNode(false);
+    setEdge(false);
+    setMove(false);
+    setDelete(true);
+    setMode("Delete");
+    setSelectedNode(-1);
   }
 
   function findNode(x: number, y: number) {
+    const adjX = x - 514;
+    const adjY = y - 115;
     for (let i = 0; i < mapNodes.length; i++) {
       if (
-        x - 3 < mapNodes[i].x1 &&
-        mapNodes[i].x1 < x + 3 &&
-        y - 3 < mapNodes[i].y1 &&
-        mapNodes[i].y1 < y + 3
+        adjX - 6 < mapNodes[i].x1 &&
+        mapNodes[i].x1 < adjX + 6 &&
+        adjY - 6 < mapNodes[i].y1 &&
+        mapNodes[i].y1 < adjY + 6
       ) {
         return i;
       }
@@ -196,33 +258,44 @@ function MapEditor() {
     <div className={"Pathfinding"}>
       <div className={"pathfinding-inputs"}>
         <h1>Map Editor</h1>
-        <label className="selection-label">Device Type:</label>
-        <div className="selection-container" onClick={handleNode}>
-          <input
-            className="checkbox"
-            type="checkbox"
-            checked={nodeChecked}
-            onChange={handleNode}
-          ></input>
-          <label className="descriptor">Add Node</label>
-        </div>
-        <div className="selection-container" onClick={handleEdge}>
-          <input
-            className="checkbox"
-            type="checkbox"
-            checked={edgeChecked}
-            onChange={handleEdge}
-          ></input>
-          <label className="descriptor">Add Edge</label>
-        </div>
-        <div className="selection-container" onClick={handleMove}>
-          <input
-            className="checkbox"
-            type="checkbox"
-            checked={moveChecked}
-            onChange={handleMove}
-          ></input>
-          <label className="descriptor">Move Nodes</label>
+        <div className={"modesDiv"}>
+          <label className="selection-label">Device Type:</label>
+          <div className="mode-container" onClick={handleNode}>
+            <input
+              className="checkbox"
+              type="checkbox"
+              checked={nodeChecked}
+              onChange={handleNode}
+            ></input>
+            <label>Add Node</label>
+          </div>
+          <div className="mode-container" onClick={handleEdge}>
+            <input
+              className="checkbox"
+              type="checkbox"
+              checked={edgeChecked}
+              onChange={handleEdge}
+            ></input>
+            <label>Add Edge</label>
+          </div>
+          <div className="mode-container" onClick={handleMove}>
+            <input
+              className="checkbox"
+              type="checkbox"
+              checked={moveChecked}
+              onChange={handleMove}
+            ></input>
+            <label>Move Nodes</label>
+          </div>
+          <div className="mode-container" onClick={handleDelete}>
+            <input
+              className="checkbox"
+              type="checkbox"
+              checked={deleteChecked}
+              onChange={handleDelete}
+            ></input>
+            <label>Delete</label>
+          </div>
         </div>
         <button onClick={groundFloor} className={"floorButton"}>
           Ground

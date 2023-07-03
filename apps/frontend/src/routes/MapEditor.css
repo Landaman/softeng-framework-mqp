@@ -86,8 +86,18 @@ label.selection-label {
   margin-bottom: 11px;
 }
 
-.selection-container {
-  justify-content: space-between;
-  height: 35px;
+.mode-container {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  height: 25px;
   cursor: pointer;
+}
+
+.modesDiv {
+  width: 200px;
+  align-items: start;
+  display: flex;
+  flex-direction: column;
+  margin: 25px;
 }
