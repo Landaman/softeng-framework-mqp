@@ -87,7 +87,7 @@ function ServiceRequest() {
     // so we run it and then set the API even variable to the response. The angular brackets determine the return
     // type
     axios
-      .post<void>("/api/computerRequest", {
+      .post<void>("/api/computerRequests", {
         location: locationText,
         staff: staffText,
         reason: reasonText,
