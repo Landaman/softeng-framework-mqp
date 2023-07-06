@@ -4,7 +4,7 @@ import { isRouteErrorResponse, useRouteError } from "react-router-dom";
  * Simple page that displays an error when a router error occurs
  */
 export default function ErrorPage() {
-  // We genuienly have no idea as to this thing type
+  // We genuinely have no idea as to this thing type
   const error = useRouteError();
   console.error(error);
 
