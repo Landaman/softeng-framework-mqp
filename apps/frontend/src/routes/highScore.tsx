@@ -7,12 +7,14 @@ import axios from "axios";
 import { Prisma, HighScore } from "database";
 import { Button } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
+import { useAuth0 } from "@auth0/auth0-react";
 
 /**
  * Simple app that has a counter that is even/odd and a high score
  * @constructor Create the react component
  */
 function HighScore() {
+  const { getAccessTokenSilently } = useAuth0();
   // Changeable counter
   const [count, setCount] = useState(0);
 
@@ -26,47 +28,61 @@ function HighScore() {
   // This MUST be done here, at the top
   // Deps (at the bottom) means that every time "count" changes, the effect is rerun
   useEffect(() => {
-    // Doing a "post" request is asynchronous (it takes a while, we don't want our UI to wait forever on it),
-    // so we run it and then set the API even variable to the response. The angular brackets determine the return
-    // type
-    axios
-      .post<IEvenResponse>("/api/numbers/isEven", {
-        number: count,
-      } satisfies IEvenRequest)
-      .then((response) => {
-        setIsEven(response.data.isEven);
-        console.info(`Got is even response for count ${count}:
-                ${response}`);
-      })
-      .catch((error) =>
-        // Always handle any API errors :P
-        console.error(error)
+    // This lets you use async functions in useEffect. DO NOT make the outer function async
+    const fun = async () => {
+      const token = await getAccessTokenSilently();
+
+      // Doing a "post" request is asynchronous (it takes a while, we don't want our UI to wait forever on it),
+      // so we run it and then set the API even variable to the response. The angular brackets determine the return
+      // type
+      const isEvenResponse = await axios.post<IEvenResponse>(
+        "/api/numbers/isEven",
+        {
+          number: count,
+        } satisfies IEvenRequest,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
-    // This posts our attempt at a high score
-    axios
-      .post<void>("/api/highScore", {
-        score: count,
-        time: new Date(Date.now()),
-      } satisfies Prisma.HighScoreCreateInput)
-      .then(() => {
-        console.info("Successfully posted score");
+      // Handle the response
+      setIsEven(isEvenResponse.data.isEven);
+      console.info(
+        `Got is even response for count ${count}: ${isEvenResponse.data.isEven}`
+      );
 
-        // This gets the current high score. Done after POST to avoid a race condition
-        axios
-          .get<HighScore>("/api/highScore")
-          .then((response) => {
-            setHighScore(response.data.score);
-            console.info(`Successfully fetched high score: ${response}`);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      })
-      .catch((error) => {
-        console.error(error);
+      // This posts our attempt at a high score
+      await axios.post<void>(
+        "/api/highScore",
+        {
+          score: count,
+          time: new Date(Date.now()),
+        } satisfies Prisma.HighScoreCreateInput,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.info("Successfully posted score");
+
+      // This gets the current high score. Done after POST to avoid a race condition
+      const highScoreResponse = await axios.get<HighScore>("/api/highScore", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
-  }, [count]);
+
+      // Handle the response
+      setHighScore(highScoreResponse.data.score);
+      console.info(`Successfully fetched high score: ${highScoreResponse}`);
+    };
+
+    fun().catch((error) => console.error(error));
+  }, [getAccessTokenSilently, count]);
 
   // React code
   return (
