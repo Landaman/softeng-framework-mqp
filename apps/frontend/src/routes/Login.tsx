@@ -1,4 +1,4 @@
-import "./login.css";
+import "./Login.css";
 import { Button } from "react-bootstrap";
 import { useState } from "react";
 function Login() {

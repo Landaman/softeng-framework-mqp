@@ -9,7 +9,7 @@ import {
 import Homepage from "./routes/Homepage.tsx";
 import ServiceRequest from "./routes/ServiceRequest.tsx";
 import Login from "./routes/Login.tsx";
-import TestPage from "./routes/highScore.tsx";
+import TestPage from "./routes/HighScore.tsx";
 import NavBar from "./NavBar.tsx";
 import { Auth0Provider } from "@auth0/auth0-react";
 
@@ -24,15 +24,15 @@ function App() {
           element: <Homepage />,
         },
         {
-          path: "ServiceRequest",
+          path: "service-request",
           element: <ServiceRequest />,
         },
         {
-          path: "Login",
+          path: "login",
           element: <Login />,
         },
         {
-          path: "HighScore",
+          path: "high-score",
           element: <TestPage />,
         },
       ],

@@ -4,9 +4,9 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import usersRouter from "./routes/users.ts";
 import numbersRouter from "./routes/numbers.ts";
-import highScoreRouter from "./routes/highScore.ts";
-import computerServiceRouter from "./routes/computerRequests.ts";
-import { auth } from "express-oauth2-jwt-bearer";
+import highScoreRouter from "./routes/high-score.ts";
+import computerServiceRouter from "./routes/computer-requests.ts";
+// import { auth } from "express-oauth2-jwt-bearer";
 
 const app: Express = express(); // Setup the backend
 
@@ -24,14 +24,14 @@ app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser
 
 // JWT checker to ensure that routes are authorized
-const jwtCheck = auth({
-  audience: "/api",
-  issuerBaseURL: "https://dev-k32g5z85431gyr5t.us.auth0.com/",
-  tokenSigningAlg: "RS256",
-});
+// const jwtCheck = auth({
+//   audience: "/api",
+//   issuerBaseURL: "https://dev-k32g5z85431gyr5t.us.auth0.com/",
+//   tokenSigningAlg: "RS256",
+// });
 
 // Enforce on all endpoints
-app.use(jwtCheck);
+// app.use(jwtCheck);
 
 // Setup routers. ALL ROUTERS MUST use /api as a start point, or they
 // won't be reached by the default proxy and prod setup
@@ -39,9 +39,9 @@ app.use("/api/users", usersRouter);
 
 app.use("/api/numbers", numbersRouter);
 
-app.use("/api/highScore", highScoreRouter);
+app.use("/api/high-score", highScoreRouter);
 
-app.use("/api/computerRequests", computerServiceRouter);
+app.use("/api/computer-requests", computerServiceRouter);
 
 // This is a generic path for the healthcheck. This is not publicly available anywhere
 // (e.g., Docker and the dev proxy DO NOT expose this). It exists exclusively so that can check the server

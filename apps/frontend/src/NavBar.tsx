@@ -16,10 +16,10 @@ function NavBar() {
         <a className={"navBarLink"} href={`/`}>
           <p>Home</p>
         </a>
-        <a className={"navBarLink"} href={`/ServiceRequest`}>
+        <a className={"navBarLink"} href={`/service-request`}>
           <p>Service Request</p>
         </a>
-        <a className={"navBarLink"} href={`/HighScore`}>
+        <a className={"navBarLink"} href={`/high-score`}>
           <p>Test Page</p>
         </a>
       </div>

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import reactLogo from "../assets/react.svg";
 import viteLogo from "/vite.svg";
-import "./highScore.css";
-import { IEvenRequest, IEvenResponse } from "common/src/INumbers.ts";
+import "./HighScore.css";
+import { IEvenRequest, IEvenResponse } from "common/src/numbers.ts";
 import axios from "axios";
 import { Prisma, HighScore } from "database";
 import { Button } from "react-bootstrap";
@@ -55,7 +55,7 @@ function HighScore() {
 
       // This posts our attempt at a high score
       await axios.post<void>(
-        "/api/highScore",
+        "/api/high-score",
         {
           score: count,
           time: new Date(Date.now()),

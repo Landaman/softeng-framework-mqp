@@ -1,9 +1,12 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import axios from "axios";
 import "./ServiceRequest.css";
 import { Prisma } from "database";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function ServiceRequest() {
+  const { getAccessTokenSilently } = useAuth0();
+
   const [locationText, setLocationText] = useState("");
   const [staffText, setStaffText] = useState("");
   const [reasonText, setReasonText] = useState("");
@@ -12,7 +15,6 @@ function ServiceRequest() {
   const [laptopChecked, setLaptop] = useState(false);
   const [tabletChecked, setTablet] = useState(false);
   const [phoneChecked, setPhone] = useState(false);
-  const [submit, setSubmit] = useState(0);
 
   function handleLocationInput(e: ChangeEvent<HTMLInputElement>) {
     setLocationText(e.target.value);
@@ -58,15 +60,25 @@ function ServiceRequest() {
     setPhone(true);
   }
 
-  function handleSubmit() {
-    setSubmit(submit + 1);
-    setLocationText("");
-    setReasonText("");
-    setStaffText("");
-    setDesktop(false);
-    setLaptop(false);
-    setTablet(false);
-    setPhone(false);
+  async function handleSubmit() {
+    // Doing a "post" request is asynchronous (it takes a while, we don't want our UI to wait forever on it),
+    // so we run it and then set the API even variable to the response. The angular brackets determine the return
+    // type
+    await axios.post<void>(
+      "/api/computer-requests",
+      {
+        location: locationText,
+        staff: staffText,
+        reason: reasonText,
+        type: deviceType.toString(),
+      } satisfies Prisma.ComputerRequestCreateInput,
+      {
+        headers: {
+          Authorization: `Bearer ${await getAccessTokenSilently()}`,
+        },
+      }
+    );
+    console.info("Successfully created service request");
   }
 
   function handleClear() {
@@ -78,27 +90,6 @@ function ServiceRequest() {
     setTablet(false);
     setPhone(false);
   }
-
-  // This "effect" (how React handles talking to external services - such as our API)
-  // This MUST be done here, at the top
-  // Deps (at the bottom) means that every time "count" changes, the effect is rerun
-  useEffect(() => {
-    // Doing a "post" request is asynchronous (it takes a while, we don't want our UI to wait forever on it),
-    // so we run it and then set the API even variable to the response. The angular brackets determine the return
-    // type
-    axios
-      .post<void>("/api/computerRequests", {
-        location: locationText,
-        staff: staffText,
-        reason: reasonText,
-        type: deviceType.toString(),
-      } satisfies Prisma.ComputerRequestCreateInput)
-      .then(() => console.info("Succesfully created service request"))
-      .catch((error) =>
-        // Always handle any API errors :P
-        console.error(error)
-      );
-  }, [deviceType, locationText, reasonText, staffText, submit]);
 
   return (
     <>
