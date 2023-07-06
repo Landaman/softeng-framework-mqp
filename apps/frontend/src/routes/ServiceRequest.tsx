@@ -3,6 +3,8 @@ import axios from "axios";
 import "./ServiceRequest.css";
 import { Prisma } from "database";
 import { useAuth0 } from "@auth0/auth0-react";
+import { NavLink } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 function ServiceRequest() {
   const { getAccessTokenSilently } = useAuth0();
@@ -158,6 +160,12 @@ function ServiceRequest() {
             <label className="descriptor">Phone</label>
           </div>
         </div>
+
+        <NavLink to={"/service-request/view"}>
+          <Button variant="secondary" size="sm" className="align-self-end">
+            View All Requests
+          </Button>
+        </NavLink>
       </div>
     </>
   );

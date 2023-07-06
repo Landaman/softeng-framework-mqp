@@ -70,7 +70,7 @@ function HighScore() {
       console.info("Successfully posted score");
 
       // This gets the current high score. Done after POST to avoid a race condition
-      const highScoreResponse = await axios.get<HighScore>("/api/highScore", {
+      const highScoreResponse = await axios.get<HighScore>("/api/high-score", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
