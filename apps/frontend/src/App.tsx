@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -8,39 +7,59 @@ import {
 } from "react-router-dom";
 import Homepage from "./routes/Homepage.tsx";
 import ServiceRequest from "./routes/ServiceRequest.tsx";
+import ComputerRequestTable from "./routes/ComputerRequestTable.tsx";
 import Login from "./routes/Login.tsx";
 import TestPage from "./routes/HighScore.tsx";
 import NavBar from "./NavBar.tsx";
 import { Auth0Provider } from "@auth0/auth0-react";
+import ErrorPage from "./routes/ErrorPage.tsx";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
+      errorElement: <ErrorPage />,
       element: <Root />,
       children: [
         {
-          path: "",
-          element: <Homepage />,
-        },
-        {
-          path: "service-request",
-          element: <ServiceRequest />,
-        },
-        {
-          path: "login",
-          element: <Login />,
-        },
-        {
-          path: "high-score",
-          element: <TestPage />,
+          errorElement: <ErrorPage />,
+          children: [
+            {
+              path: "",
+              element: <Homepage />,
+            },
+            {
+              path: "service-request",
+              children: [
+                {
+                  path: "create",
+                  element: <ServiceRequest />,
+                },
+                {
+                  path: "view",
+                  element: <ComputerRequestTable />,
+                },
+                {
+                  path: "*",
+                  element: <ErrorPage />,
+                },
+              ],
+            },
+            {
+              path: "login",
+              element: <Login />,
+            },
+            {
+              path: "high-score",
+              element: <TestPage />,
+            },
+          ],
         },
       ],
     },
   ]);
 
   return <RouterProvider router={router} />;
-
   function Root() {
     const navigate = useNavigate();
 
@@ -56,9 +75,10 @@ function App() {
         authorizationParams={{
           redirect_uri: window.location.origin,
           audience: "/api",
+          scope: "openid profile email offline_access",
         }}
       >
-        <div className={"main"}>
+        <div className="w-100 h-100">
           <NavBar />
           <Outlet />
         </div>

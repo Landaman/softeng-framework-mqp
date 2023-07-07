@@ -16,7 +16,7 @@ function NavBar() {
         <a className={"navBarLink"} href={`/`}>
           <p>Home</p>
         </a>
-        <a className={"navBarLink"} href={`/service-request`}>
+        <a className={"navBarLink"} href={`/service-request/create`}>
           <p>Service Request</p>
         </a>
         <a className={"navBarLink"} href={`/high-score`}>
