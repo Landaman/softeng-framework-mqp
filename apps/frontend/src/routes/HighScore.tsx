@@ -7,6 +7,7 @@ import axios from "axios";
 import { Prisma, HighScore } from "database";
 import { Button } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
+import Stack from "react-bootstrap/Stack";
 import { useAuth0 } from "@auth0/auth0-react";
 
 /**
@@ -86,7 +87,7 @@ function HighScore() {
 
   // React code
   return (
-    <div className="text-center">
+    <Stack className="align-items-center">
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -95,25 +96,32 @@ function HighScore() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
-      <Card style={{ width: "fit-content" }} className="mx-auto">
-        <Button
-          variant="primary"
-          className="align-self-center"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          count is {count}
-        </Button>
-        <p>Count is {isEven ? "even" : "odd"}</p>
-        <p>High score is {highScore}</p>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <h1 className="fw-bold">Vite + React</h1>
+      <Card style={{ width: "fit-content" }}>
+        <Card.Header>
+          <h4>Counter</h4>
+        </Card.Header>
+        <Card.Body>
+          <p className="text-black">Count is {isEven ? "even" : "odd"}</p>
+          <p className="text-black">High score is {highScore}</p>
+          <p className="text-black">
+            Edit <code className="text-danger">src/App.tsx</code> and save to
+            test HMR
+          </p>
+        </Card.Body>
+        <Card.Footer>
+          <Button
+            variant="primary"
+            onClick={() => setCount((count) => count + 1)}
+          >
+            count is {count}
+          </Button>
+        </Card.Footer>
       </Card>
-      <p className="read-the-docs">
+      <p className="text-secondary">
         Click on the Vite and React logos to learn more
       </p>
-    </div>
+    </Stack>
   );
 }
 
