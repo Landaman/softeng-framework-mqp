@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -76,9 +75,10 @@ function App() {
         authorizationParams={{
           redirect_uri: window.location.origin,
           audience: "/api",
+          scope: "openid profile email offline_access",
         }}
       >
-        <div className={"main"}>
+        <div className="w-100 h-100">
           <NavBar />
           <Outlet />
         </div>
