@@ -19,6 +19,7 @@ router.post("/", async function (req: Request, res: Response) {
       `Unable to save high score attempt ${highScoreAttempt}: ${error}`
     );
     res.sendStatus(400); // Send error
+    return; // Don't try to send duplicate statuses
   }
 
   res.sendStatus(200); // Otherwise say it's fine
