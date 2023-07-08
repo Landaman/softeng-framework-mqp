@@ -59,7 +59,7 @@ const defaultColumn: Partial<ColumnDef<ComputerRequest>> = {
     return table.getColumn(id)?.columnDef.meta?.isEditable ? (
       <Form.Control
         size="sm"
-        className="border-0 p-0"
+        className="border-0 p-0 bg-transparent"
         value={value as string}
         onChange={(e) => setValue(e.target.value)}
         onBlur={onBlur}
@@ -187,7 +187,7 @@ export default function ComputerRequestTable() {
 
         // Do the request, patch the request and get back the updated service request
         const newRequest = await axios.patch<ComputerRequest>(
-          "/api/computer-request/" +
+          "/api/computer-requests/" +
             table.getRow(rowIndex.toString())?.original.id,
           updateInput,
           {
@@ -219,7 +219,7 @@ export default function ComputerRequestTable() {
       <Spinner></Spinner>
     </div>
   ) : (
-    <Table bordered responsive>
+    <Table bordered responsive hover>
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
