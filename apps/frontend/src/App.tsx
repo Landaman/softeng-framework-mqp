@@ -78,7 +78,7 @@ function App() {
           scope: "openid profile email offline_access",
         }}
       >
-        <div className="w-100 h-100">
+        <div className="w-100 h-100 d-flex flex-column overflow-auto">
           <NavBar />
           <Outlet />
         </div>
