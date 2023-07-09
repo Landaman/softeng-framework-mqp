@@ -2,12 +2,45 @@ import "./NavBar.css";
 import { Dropdown } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 function NavBar() {
   const location = useLocation();
 
-  const { loginWithRedirect, logout, user, isAuthenticated, isLoading } =
-    useAuth0();
+  const {
+    loginWithRedirect,
+    logout,
+    user,
+    isAuthenticated,
+    isLoading,
+    getAccessTokenSilently,
+  } = useAuth0();
+
+  // This ensures the access token we have is actually valid. Tries to get the access token, and if that fails requires
+  // re-logging in
+  useEffect(() => {
+    const fun = async () => {
+      try {
+        await getAccessTokenSilently();
+      } catch (error) {
+        await loginWithRedirect({
+          appState: {
+            returnTo: location.pathname,
+          },
+        });
+      }
+    };
+
+    if (!isLoading && isAuthenticated) {
+      fun();
+    }
+  }, [
+    getAccessTokenSilently,
+    isAuthenticated,
+    isLoading,
+    location.pathname,
+    loginWithRedirect,
+  ]);
 
   return (
     <div className={"navBar"}>

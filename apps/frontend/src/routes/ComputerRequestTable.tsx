@@ -5,13 +5,13 @@ import {
   getCoreRowModel,
   RowData,
   useReactTable,
+  getSortedRowModel,
 } from "@tanstack/react-table";
 import { ComputerRequest } from "database";
 import { useEffect, useMemo, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
-import Spinner from "react-bootstrap/Spinner";
 import { Table } from "react-bootstrap";
 import { Prisma } from "database";
 
@@ -63,6 +63,13 @@ const defaultColumn: Partial<ColumnDef<ComputerRequest>> = {
         value={value as string}
         onChange={(e) => setValue(e.target.value)}
         onBlur={onBlur}
+        onKeyDown={(e) => {
+          // Nice QOL feature that removes the "blur" focus when Enter is pressed
+          if (e.code === "Enter") {
+            e.preventDefault(); // Prevents this from going to the input, doesn't really matter
+            e.currentTarget.blur(); // Blur out the input
+          }
+        }}
       />
     ) : (
       value
@@ -79,15 +86,10 @@ export default function ComputerRequestTable() {
   // The computer requests list
   const [requests, setRequests] = useState<ComputerRequest[]>([]);
 
-  const [isLoading, setLoading] = useState(true);
-
   // This gets the requests from the API
   useEffect(() => {
     // This trick lets us use an async function in useEffect
     const fun = async () => {
-      // Start loading
-      setLoading(true);
-
       // Get the requests from the API
       const requests = await axios.get<ComputerRequest[]>(
         "/api/computer-requests",
@@ -100,9 +102,6 @@ export default function ComputerRequestTable() {
 
       // Set the requests
       setRequests(requests.data);
-
-      // Stop the loading
-      setLoading(false);
     };
 
     // Let the error fall through, it will be handled by react router
@@ -176,11 +175,17 @@ export default function ComputerRequestTable() {
     columns: columns,
     defaultColumn: defaultColumn,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    initialState: {
+      sorting: [
+        {
+          id: "id",
+          desc: false,
+        },
+      ],
+    },
     meta: {
       updateData: async (rowIndex, updateParams: unknown) => {
-        // Enable loading
-        setLoading(true);
-
         // We need to cast the update params to be the computer request create input, as that
         // is what we actually want to send to the API via axios
         const updateInput = updateParams as Prisma.ComputerRequestCreateInput;
@@ -207,18 +212,11 @@ export default function ComputerRequestTable() {
             }
           })
         );
-
-        // Now that we're done, disable loading
-        setLoading(false);
       },
     },
   });
 
-  return isLoading ? (
-    <div className="w-100 h-100 d-flex justify-content-center p-lg-4">
-      <Spinner></Spinner>
-    </div>
-  ) : (
+  return (
     <Table bordered responsive hover>
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
