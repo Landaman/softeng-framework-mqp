@@ -35,11 +35,9 @@ function App() {
             },
             {
               path: "service-requests",
-              element: <ErrorPage />,
               children: [
                 {
                   path: "computer",
-                  element: <ErrorPage />,
                   children: [
                     {
                       path: "create",
