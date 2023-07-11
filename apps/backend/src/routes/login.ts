@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from "express";
 import { Prisma } from "database";
-import PrismaClient from "../bin/databaseConnection.ts";
+import PrismaClient from "../bin/database-connection.ts";
 
 const router: Router = express.Router();
 
