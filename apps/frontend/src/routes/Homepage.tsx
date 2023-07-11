@@ -2,20 +2,17 @@ import "./Homepage.css";
 function Homepage() {
   return (
     <div className={"homepage"}>
-      <h1 className={"homepageHeader"}>
-        Brigham and Women’s<br></br>
-        Hospital Homepage
-      </h1>
+      <h1>Homepage</h1>
       <a href={`/ServiceRequest`}>
         <button className={"homepageButton"}>Service Request</button>
       </a>
-      <a href={`/TestPage`}>
+      <a href={`/high-score`}>
         <button className={"homepageButton"}>Test Page</button>
       </a>
-      <a href={`/Login`}>
+      <a href={`/login`}>
         <button className={"homepageButton"}>Login</button>
       </a>
-      <a href={`/Pathfinding`}>
+      <a href={`/pathfinding`}>
         <button className={"homepageButton"}>Pathfinding</button>
       </a>
     </div>

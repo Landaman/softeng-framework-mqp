@@ -21,7 +21,8 @@
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "postinstall": "husky install || exit 0",
-    "build": "turbo run lint:fix build && docker-compose -f docker-compose.prod.yaml build && docker-compose -f docker-compose.prod.yaml push"
+    "build": "turbo run lint:fix && yarn run build:frontend && yarn run build:backend",
+    "docker:upload": "turbo run docker:upload"
   },
   "packageManager": "yarn@3.5.1",
   "devDependencies": {

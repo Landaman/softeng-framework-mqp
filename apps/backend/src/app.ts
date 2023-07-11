@@ -4,9 +4,10 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import usersRouter from "./routes/users.ts";
 import numbersRouter from "./routes/numbers.ts";
-import highScoreRouter from "./routes/highScore.ts";
-import computerServiceRouter from "./routes/serviceRequest.ts";
+import highScoreRouter from "./routes/high-score.ts";
+import computerServiceRouter from "./routes/computer-requests.ts";
 import loginRouter from "./routes/login.ts";
+import { auth } from "express-oauth2-jwt-bearer";
 
 const app: Express = express(); // Setup the backend
 
@@ -23,15 +24,25 @@ app.use(express.json()); // This processes requests as JSON
 app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser
 
+// JWT checker to ensure that routes are authorized
+// Enforce on all endpoints
+app.use(
+  auth({
+    audience: "/api",
+    issuerBaseURL: "https://dev-k32g5z85431gyr5t.us.auth0.com/",
+    tokenSigningAlg: "RS256",
+  })
+);
+
 // Setup routers. ALL ROUTERS MUST use /api as a start point, or they
 // won't be reached by the default proxy and prod setup
 app.use("/api/users", usersRouter);
 
 app.use("/api/numbers", numbersRouter);
 
-app.use("/api/highScore", highScoreRouter);
+app.use("/api/high-score", highScoreRouter);
 
-app.use("/api/computerRequest", computerServiceRouter);
+app.use("/api/computer-request", computerServiceRouter);
 
 app.use("/api/user", loginRouter);
 
