@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import axios from "axios";
 import "./ServiceRequest.css";
 import { Prisma } from "database";
@@ -188,6 +188,7 @@ export function ComputerService() {
 }
 
 export function SanitationService() {
+  const { getAccessTokenSilently } = useAuth0();
   const [locationText, setLocationText] = useState("");
   const [staffText, setStaffText] = useState("");
   const [issueText, setIssueText] = useState("");
@@ -197,7 +198,7 @@ export function SanitationService() {
   const [urgentChecked, setUrgent] = useState(false);
   const [extremelyUrgentChecked, setExtremelyUrgent] = useState(false);
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = async () => {
     if (
       locationText &&
       issueText &&
@@ -211,31 +212,25 @@ export function SanitationService() {
       setPrompt(false);
       setUrgent(false);
       setExtremelyUrgent(false);
-      axios
-        .post<void>("/api/sanitation-request", {
+      await axios.post<void>(
+        "/api/sanitation-requests",
+        {
           location: locationText,
           staff: staffText,
           issue: issueText,
           urgency: urgency.toString(),
-        } satisfies Prisma.SanitationRequestCreateInput)
-        .then(() => console.info("Successfully created service request"))
-        .catch((error) =>
-          // Always handle any API errors :P
-          console.error(error)
-        );
+        } satisfies Prisma.SanitationRequestCreateInput,
+        {
+          headers: {
+            Authorization: `Bearer ${await getAccessTokenSilently()}`,
+          },
+        }
+      );
+      console.info("Successfully created service request");
     } else {
       console.error("All entries need to be filled");
     }
-  }, [
-    mildChecked,
-    urgency,
-    promptChecked,
-    locationText,
-    urgentChecked,
-    issueText,
-    staffText,
-    extremelyUrgentChecked,
-  ]);
+  };
 
   function handleLocationInput(e: ChangeEvent<HTMLInputElement>) {
     setLocationText(e.target.value);

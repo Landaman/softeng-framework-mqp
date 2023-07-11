@@ -48,7 +48,7 @@ function App() {
                       element: <ComputerRequestTable />,
                     },
                     {
-                      path: "*",
+                      path: "",
                       element: <ErrorPage />,
                     },
                   ],
@@ -57,6 +57,10 @@ function App() {
                   path: "sanitation",
                   element: <SanitationService />,
                 },
+                {
+                  path: "",
+                  element: <ErrorPage />,
+                },
               ],
             },
             {
@@ -64,16 +68,16 @@ function App() {
               element: <TestPage />,
             },
             {
-              path: "*",
-              element: <ErrorPage />,
-            },
-            {
               path: "pathfinding",
               element: <Pathfinding />,
             },
             {
-              path: "/MapEditor",
+              path: "MapEditor",
               element: <MapEditor />,
+            },
+            {
+              path: "*",
+              element: <ErrorPage />,
             },
           ],
         },

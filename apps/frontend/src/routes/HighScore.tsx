@@ -37,7 +37,7 @@ function HighScore() {
       // so we run it and then set the API even variable to the response. The angular brackets determine the return
       // type
       const isEvenResponse = await axios.post<IEvenResponse>(
-        "/api/numbers/isEven",
+        "/api/numbers/is-even",
         {
           number: count,
         } satisfies IEvenRequest,

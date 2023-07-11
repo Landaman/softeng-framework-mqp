@@ -4,7 +4,7 @@ import { IEvenRequest, IEvenResponse } from "common/src/numbers.ts";
 const router: Router = express.Router();
 
 // Whenever a POST request is made, parse the number, and return whether it is even
-router.post("/isEven", function (req: Request, res: Response): void {
+router.post("/is-even", function (req: Request, res: Response): void {
   // Create an even response, based on the parsed even request
   res.send({
     isEven: (req.body as IEvenRequest).number % 2 === 0,
