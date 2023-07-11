@@ -3,8 +3,11 @@ function Homepage() {
   return (
     <div className={"homepage"}>
       <h1>Homepage</h1>
-      <a href={`/ServiceRequest`}>
-        <button className={"homepageButton"}>Service Request</button>
+      <a href={`/service-requests/computer`}>
+        <button className={"homepageButton"}>Computer Request</button>
+      </a>
+      <a href={`/service-requests/sanitation`}>
+        <button className={"homepageButton"}>Sanitation Request</button>
       </a>
       <a href={`/high-score`}>
         <button className={"homepageButton"}>Test Page</button>

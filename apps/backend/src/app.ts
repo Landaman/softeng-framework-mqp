@@ -42,7 +42,7 @@ app.use("/api/numbers", numbersRouter);
 
 app.use("/api/high-score", highScoreRouter);
 
-app.use("/api/computer-request", computerServiceRouter);
+app.use("/api/computer-requests", computerServiceRouter);
 
 app.use("/api/user", loginRouter);
 
