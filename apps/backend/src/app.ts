@@ -6,6 +6,7 @@ import usersRouter from "./routes/users.ts";
 import numbersRouter from "./routes/numbers.ts";
 import highScoreRouter from "./routes/high-score.ts";
 import computerServiceRouter from "./routes/computer-requests.ts";
+import sanitationServiceRouter from "./routes/sanitation-requests.ts";
 import loginRouter from "./routes/login.ts";
 import { auth } from "express-oauth2-jwt-bearer";
 
@@ -43,6 +44,8 @@ app.use("/api/numbers", numbersRouter);
 app.use("/api/high-score", highScoreRouter);
 
 app.use("/api/computer-requests", computerServiceRouter);
+
+app.use("/api/sanitation-requests", sanitationServiceRouter);
 
 app.use("/api/user", loginRouter);
 
