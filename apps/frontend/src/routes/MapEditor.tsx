@@ -49,18 +49,6 @@ function MapEditor() {
 
     context.imageSmoothingEnabled = false;
 
-    // draw nodes
-    for (let i = 0; i < mapNodes.length; i++) {
-      const n = mapNodes[i];
-      if (i === selectedNode || i === hoverNode) {
-        context.fillStyle = "#00FF00";
-        context.fillRect(n.x1, n.y1, 6, 6);
-        context.fillStyle = "black";
-      } else {
-        context.fillRect(n.x1, n.y1, 6, 6);
-      }
-    }
-
     // draw edges
     context.beginPath();
     for (let i = 0; i < mapEdges.length; i++) {
@@ -75,6 +63,18 @@ function MapEditor() {
       );
     }
     context.stroke();
+
+    // draw nodes
+    for (let i = 0; i < mapNodes.length; i++) {
+      const n = mapNodes[i];
+      if (i === selectedNode || i === hoverNode) {
+        context.fillStyle = "#00FF00";
+        context.fillRect(n.x1, n.y1, 6, 6);
+        context.fillStyle = "black";
+      } else {
+        context.fillRect(n.x1, n.y1, 6, 6);
+      }
+    }
 
     c.current = context;
   });

@@ -1,5 +1,5 @@
 import express, { Router, Request, Response } from "express";
-import { IEvenRequest, IEvenResponse } from "common/src/INumbers.ts";
+import { IEvenRequest, IEvenResponse } from "common/src/numbers.ts";
 
 const router: Router = express.Router();
 

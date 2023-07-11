@@ -124,6 +124,6 @@ documents the recommended structure for using this.
   (see Express docs for info), logging, and basic error trapping.
   routes/\* define the routers Express uses. This is where the bulk
   of processing is done
-- bin/databaseConnection.ts provides a database connection the rest of the
+- bin/database-connection.ts provides a database connection the rest of the
   database package can use. When this is required by www.ts, it automatically starts
   the database. It also automatically disconnects WHENEVER the client exits

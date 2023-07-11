@@ -27,9 +27,9 @@ model ComputerRequest {
 }
 
 model User {
-  id Int    @id @default(autoincrement())
-  first String
-  last String
+  id       Int    @id @default(autoincrement())
+  first    String
+  last     String
   username String
   password String
 }
@@ -38,6 +38,6 @@ model SanitationRequest {
   id       Int    @id @default(autoincrement())
   location String
   staff    String
-  issue   String
-  urgency     String
+  issue    String
+  urgency  String
 }
