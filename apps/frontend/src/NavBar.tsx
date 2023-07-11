@@ -62,6 +62,9 @@ function NavBar() {
         <a className={"navBarLink"} href={`/pathfinding`}>
           <p>Pathfinding</p>
         </a>
+        <a className={"navBarLink"} href={`/MapEditor`}>
+          <p>Map Editor</p>
+        </a>
       </div>
       <Dropdown id="loginDropdown" className="navBarLink">
         <Dropdown.Toggle variant="secondary" size="sm">

@@ -17,6 +17,7 @@ import NavBar from "./NavBar.tsx";
 import { Auth0Provider } from "@auth0/auth0-react";
 import ErrorPage from "./routes/ErrorPage.tsx";
 import Pathfinding from "./routes/Pathfinding.tsx";
+import MapEditor from "./routes/MapEditor.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -34,11 +35,9 @@ function App() {
             },
             {
               path: "service-requests",
-              element: <ErrorPage />,
               children: [
                 {
                   path: "computer",
-                  element: <ErrorPage />,
                   children: [
                     {
                       path: "create",
@@ -68,6 +67,14 @@ function App() {
               path: "*",
               element: <ErrorPage />,
             },
+            {
+              path: "pathfinding",
+              element: <Pathfinding />,
+            },
+            {
+              path: "/MapEditor",
+              element: <MapEditor />,
+            },
           ],
         },
       ],
@@ -75,10 +82,6 @@ function App() {
     {
       path: "login",
       element: <Login />,
-    },
-    {
-      path: "pathfinding",
-      element: <Pathfinding />,
     },
   ]);
 
