@@ -1,4 +1,4 @@
-<<<<<<< HEAD:apps/frontend/src/app.css #root {
+#root {
   min-height: 100vh;
   min-width: 100vw;
   margin: 0 auto;
@@ -12,7 +12,7 @@
   flex-direction: column;
 }
 
-=======>>>>>>>main:apps/frontend/src/routes/highscore.css .logo {
+.logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
