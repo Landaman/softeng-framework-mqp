@@ -3,6 +3,7 @@ import { Dropdown } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import hospital from "./assets/Hospital_Logo.png";
 
 function NavBar() {
   const location = useLocation();
@@ -44,16 +45,25 @@ function NavBar() {
 
   return (
     <div className={"navBar"}>
-      <p className={"navBarText"}>Hospital Logo</p>
+      <img src={hospital} className={"hospitalLogo"} />
       <div className={"linkdiv"}>
         <a className={"navBarLink"} href={`/`}>
           <p>Home</p>
         </a>
-        <a className={"navBarLink"} href={`/service-request/create`}>
-          <p>Service Request</p>
+        <a className={"navBarLink"} href={`/service-requests/computer/create`}>
+          <p>Computer Service</p>
+        </a>
+        <a className={"navBarLink"} href={`/service-requests/sanitation`}>
+          <p>Sanitation Service</p>
         </a>
         <a className={"navBarLink"} href={`/high-score`}>
           <p>Test Page</p>
+        </a>
+        <a className={"navBarLink"} href={`/pathfinding`}>
+          <p>Pathfinding</p>
+        </a>
+        <a className={"navBarLink"} href={`/MapEditor`}>
+          <p>Map Editor</p>
         </a>
       </div>
       <Dropdown id="loginDropdown" className="navBarLink">

@@ -3,4 +3,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: #dce2e8;
+}
+
+.homepageHeader {
+  margin: 48px;
+}
+
+.homepageButton {
+  width: 300px;
+  height: 50px;
+  background-color: #012d5a;
+  color: white;
+  margin: 10px;
+}
+
+.homepageButton:hover {
+  background-color: #2d7adb;
 }

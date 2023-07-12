@@ -25,3 +25,19 @@ model ComputerRequest {
   reason   String
   type     String
 }
+
+model User {
+  id       Int    @id @default(autoincrement())
+  first    String
+  last     String
+  username String
+  password String
+}
+
+model SanitationRequest {
+  id       Int    @id @default(autoincrement())
+  location String
+  staff    String
+  issue    String
+  urgency  String
+}

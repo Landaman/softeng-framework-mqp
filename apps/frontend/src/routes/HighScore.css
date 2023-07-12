@@ -1,3 +1,17 @@
+#root {
+  min-height: 100vh;
+  min-width: 100vw;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.main {
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

@@ -6,13 +6,18 @@ import {
   useNavigate,
 } from "react-router-dom";
 import Homepage from "./routes/Homepage.tsx";
-import ServiceRequest from "./routes/ServiceRequest.tsx";
+import {
+  ComputerService,
+  SanitationService,
+} from "./routes/ServiceRequest.tsx";
 import ComputerRequestTable from "./routes/ComputerRequestTable.tsx";
 import Login from "./routes/Login.tsx";
 import TestPage from "./routes/HighScore.tsx";
 import NavBar from "./NavBar.tsx";
 import { Auth0Provider } from "@auth0/auth0-react";
 import ErrorPage from "./routes/ErrorPage.tsx";
+import Pathfinding from "./routes/Pathfinding.tsx";
+import MapEditor from "./routes/MapEditor.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -29,33 +34,58 @@ function App() {
               element: <Homepage />,
             },
             {
-              path: "service-request",
+              path: "service-requests",
               children: [
                 {
-                  path: "create",
-                  element: <ServiceRequest />,
+                  path: "computer",
+                  children: [
+                    {
+                      path: "create",
+                      element: <ComputerService />,
+                    },
+                    {
+                      path: "view",
+                      element: <ComputerRequestTable />,
+                    },
+                    {
+                      path: "",
+                      element: <ErrorPage />,
+                    },
+                  ],
                 },
                 {
-                  path: "view",
-                  element: <ComputerRequestTable />,
+                  path: "sanitation",
+                  element: <SanitationService />,
                 },
                 {
-                  path: "*",
+                  path: "",
                   element: <ErrorPage />,
                 },
               ],
             },
             {
-              path: "login",
-              element: <Login />,
-            },
-            {
               path: "high-score",
               element: <TestPage />,
+            },
+            {
+              path: "pathfinding",
+              element: <Pathfinding />,
+            },
+            {
+              path: "MapEditor",
+              element: <MapEditor />,
+            },
+            {
+              path: "*",
+              element: <ErrorPage />,
             },
           ],
         },
       ],
+    },
+    {
+      path: "login",
+      element: <Login />,
     },
   ]);
 

@@ -3,14 +3,21 @@ function Homepage() {
   return (
     <div className={"homepage"}>
       <h1>Homepage</h1>
-      <div>
-        <a href={`/ServiceRequest`}>
-          <button>Service Request</button>
-        </a>
-        <a href={`/HighScore`}>
-          <button>Test Page</button>
-        </a>
-      </div>
+      <a href={`/service-requests/computer`}>
+        <button className={"homepageButton"}>Computer Request</button>
+      </a>
+      <a href={`/service-requests/sanitation`}>
+        <button className={"homepageButton"}>Sanitation Request</button>
+      </a>
+      <a href={`/high-score`}>
+        <button className={"homepageButton"}>Test Page</button>
+      </a>
+      <a href={`/login`}>
+        <button className={"homepageButton"}>Login</button>
+      </a>
+      <a href={`/pathfinding`}>
+        <button className={"homepageButton"}>Pathfinding</button>
+      </a>
     </div>
   );
 }

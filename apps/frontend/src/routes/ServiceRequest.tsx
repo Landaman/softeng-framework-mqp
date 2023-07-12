@@ -6,7 +6,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { NavLink } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
-function ServiceRequest() {
+export function ComputerService() {
   const { getAccessTokenSilently } = useAuth0();
 
   const [locationText, setLocationText] = useState("");
@@ -63,24 +63,40 @@ function ServiceRequest() {
   }
 
   async function handleSubmit() {
-    // Doing a "post" request is asynchronous (it takes a while, we don't want our UI to wait forever on it),
-    // so we run it and then set the API even variable to the response. The angular brackets determine the return
-    // type
-    await axios.post<void>(
-      "/api/computer-requests",
-      {
-        location: locationText,
-        staff: staffText,
-        reason: reasonText,
-        type: deviceType.toString(),
-      } satisfies Prisma.ComputerRequestCreateInput,
-      {
-        headers: {
-          Authorization: `Bearer ${await getAccessTokenSilently()}`,
-        },
-      }
-    );
-    console.info("Successfully created service request");
+    if (
+      locationText &&
+      reasonText &&
+      staffText &&
+      (desktopChecked || laptopChecked || tabletChecked || phoneChecked)
+    ) {
+      setLocationText("");
+      setReasonText("");
+      setStaffText("");
+      setDesktop(false);
+      setLaptop(false);
+      setTablet(false);
+      setPhone(false);
+      // Doing a "post" request is asynchronous (it takes a while, we don't want our UI to wait forever on it),
+      // so we run it and then set the API even variable to the response. The angular brackets determine the return
+      // type
+      await axios.post<void>(
+        "/api/computer-requests",
+        {
+          location: locationText,
+          staff: staffText,
+          reason: reasonText,
+          type: deviceType.toString(),
+        } satisfies Prisma.ComputerRequestCreateInput,
+        {
+          headers: {
+            Authorization: `Bearer ${await getAccessTokenSilently()}`,
+          },
+        }
+      );
+      console.info("Successfully created service request");
+    } else {
+      console.error("All entries need to be filled");
+    }
   }
 
   function handleClear() {
@@ -161,7 +177,7 @@ function ServiceRequest() {
           </div>
         </div>
 
-        <NavLink to={"/service-request/view"}>
+        <NavLink to={"/service-requests/computer/view"}>
           <Button variant="secondary" size="sm" className="align-self-end">
             View All Requests
           </Button>
@@ -171,4 +187,173 @@ function ServiceRequest() {
   );
 }
 
-export default ServiceRequest;
+export function SanitationService() {
+  const { getAccessTokenSilently } = useAuth0();
+  const [locationText, setLocationText] = useState("");
+  const [staffText, setStaffText] = useState("");
+  const [issueText, setIssueText] = useState("");
+  const [urgency, setUrgency] = useState("");
+  const [mildChecked, setMild] = useState(false);
+  const [promptChecked, setPrompt] = useState(false);
+  const [urgentChecked, setUrgent] = useState(false);
+  const [extremelyUrgentChecked, setExtremelyUrgent] = useState(false);
+
+  const handleSubmit = async () => {
+    if (
+      locationText &&
+      issueText &&
+      staffText &&
+      (mildChecked || promptChecked || urgentChecked || extremelyUrgentChecked)
+    ) {
+      setLocationText("");
+      setIssueText("");
+      setStaffText("");
+      setMild(false);
+      setPrompt(false);
+      setUrgent(false);
+      setExtremelyUrgent(false);
+      await axios.post<void>(
+        "/api/sanitation-requests",
+        {
+          location: locationText,
+          staff: staffText,
+          issue: issueText,
+          urgency: urgency.toString(),
+        } satisfies Prisma.SanitationRequestCreateInput,
+        {
+          headers: {
+            Authorization: `Bearer ${await getAccessTokenSilently()}`,
+          },
+        }
+      );
+      console.info("Successfully created service request");
+    } else {
+      console.error("All entries need to be filled");
+    }
+  };
+
+  function handleLocationInput(e: ChangeEvent<HTMLInputElement>) {
+    setLocationText(e.target.value);
+  }
+
+  function handleStaffInput(e: ChangeEvent<HTMLInputElement>) {
+    setStaffText(e.target.value);
+  }
+
+  function handleIssueText(e: ChangeEvent<HTMLTextAreaElement>) {
+    setIssueText(e.target.value);
+  }
+
+  function handleMild() {
+    setUrgency("Mild");
+    setMild(true);
+    setPrompt(false);
+    setUrgent(false);
+    setExtremelyUrgent(false);
+  }
+
+  function handlePrompt() {
+    setUrgency("Prompt");
+    setMild(false);
+    setPrompt(true);
+    setUrgent(false);
+    setExtremelyUrgent(false);
+  }
+
+  function handleUrgent() {
+    setUrgency("Urgent");
+    setMild(false);
+    setPrompt(false);
+    setUrgent(true);
+    setExtremelyUrgent(false);
+  }
+
+  function handleExtremelyUrgent() {
+    setUrgency("Extremely Urgent");
+    setMild(false);
+    setPrompt(false);
+    setUrgent(false);
+    setExtremelyUrgent(true);
+  }
+
+  function handleClear() {
+    setLocationText("");
+    setIssueText("");
+    setStaffText("");
+    setMild(false);
+    setPrompt(false);
+    setUrgent(false);
+    setExtremelyUrgent(false);
+  }
+
+  return (
+    <>
+      <h1>Sanitation Service</h1>
+      <div className="hbox">
+        <div className="vbox">
+          <div className="label-container">
+            <label>Location:</label>
+            <input value={locationText} onChange={handleLocationInput} />
+          </div>
+          <div className="label-container">
+            <label>Associated Staff:</label>
+            <input value={staffText} onChange={handleStaffInput} />
+          </div>
+          <div className="label-container2">
+            <label>Issue:</label>
+            <textarea value={issueText} rows={3} onChange={handleIssueText} />
+          </div>
+          <div className="hbox-button">
+            <button className={"submit"} onClick={handleSubmit}>
+              Submit
+            </button>
+            <div className={"spacer2"}></div>
+            <button className={"cancel"} onClick={handleClear}>
+              Cancel
+            </button>
+          </div>
+        </div>
+        <div className={"spacer1"}></div>
+        <div className="vbox">
+          <label className="selection-label">Urgency:</label>
+          <div className="selection-container" onClick={handleMild}>
+            <input
+              className="checkbox"
+              type="checkbox"
+              checked={mildChecked}
+              onChange={handleMild}
+            ></input>
+            <label className="descriptor">Mild</label>
+          </div>
+          <div className="selection-container" onClick={handlePrompt}>
+            <input
+              className="checkbox"
+              type="checkbox"
+              checked={promptChecked}
+              onChange={handlePrompt}
+            ></input>
+            <label className="descriptor">Prompt</label>
+          </div>
+          <div className="selection-container" onClick={handleUrgent}>
+            <input
+              className="checkbox"
+              type="checkbox"
+              checked={urgentChecked}
+              onChange={handleUrgent}
+            ></input>
+            <label className="descriptor">Urgent</label>
+          </div>
+          <div className="selection-container" onClick={handleExtremelyUrgent}>
+            <input
+              className="checkbox"
+              type="checkbox"
+              checked={extremelyUrgentChecked}
+              onChange={handleExtremelyUrgent}
+            ></input>
+            <label className="descriptor">Extremely Urgent</label>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

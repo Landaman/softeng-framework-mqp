@@ -28,12 +28,14 @@ label {
 
 input {
   width: 250px;
+  height: 24px;
   text-wrap: normal;
   overflow-wrap: normal;
 }
 
 textarea {
   width: 250px;
+  height: 500px;
   resize: none;
 }
 
@@ -82,7 +84,7 @@ label.descriptor {
 .hbox {
   display: flex;
   flex-direction: row;
-  height: 230px;
+  height: 300px;
   justify-content: center;
   flex-wrap: wrap;
 }
@@ -108,4 +110,12 @@ label.descriptor {
   flex-direction: column;
   align-items: flex-start;
   margin: 30px 45px 30px 45px;
+}
+
+.MainDiv {
+  background-color: #dce2e8;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
