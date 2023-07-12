@@ -69,7 +69,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["husky", "npm:8.0.3"],\
             ["prettier", "npm:2.8.8"],\
             ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
-            ["react-zoom-pan-pinch", "virtual:66682a004190b02ca1ad7e2a5dfb090713a77006ef1c1c3b9d5d14d59e634ba0f30bb20b8ffc52bcb1fb04b39211d88b4b0c102c13ced811e0bb6d38d9071a63#npm:3.0.8"],\
             ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
             ["turbo", "npm:1.10.1"],\
             ["typescript", "patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=b5f058"]\
@@ -3568,7 +3567,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-dom", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:18.2.0"],\
             ["react-router-bootstrap", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.26.2"],\
             ["react-router-dom", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:6.11.2"],\
-            ["react-zoom-pan-pinch", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:3.0.8"],\
+            ["react-zoom-pan-pinch", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:3.1.0"],\
             ["sass", "npm:1.62.1"],\
             ["serve", "npm:14.2.0"],\
             ["sort-by", "npm:1.2.0"],\
@@ -5789,34 +5788,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["react-zoom-pan-pinch", [\
-        ["npm:3.0.8", {\
-          "packageLocation": "./.yarn/cache/react-zoom-pan-pinch-npm-3.0.8-d63612676f-3d3b3adb5d.zip/node_modules/react-zoom-pan-pinch/",\
+        ["npm:3.1.0", {\
+          "packageLocation": "./.yarn/cache/react-zoom-pan-pinch-npm-3.1.0-5586ec00be-3289cd01ed.zip/node_modules/react-zoom-pan-pinch/",\
           "packageDependencies": [\
-            ["react-zoom-pan-pinch", "npm:3.0.8"]\
+            ["react-zoom-pan-pinch", "npm:3.1.0"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:66682a004190b02ca1ad7e2a5dfb090713a77006ef1c1c3b9d5d14d59e634ba0f30bb20b8ffc52bcb1fb04b39211d88b4b0c102c13ced811e0bb6d38d9071a63#npm:3.0.8", {\
-          "packageLocation": "./.yarn/__virtual__/react-zoom-pan-pinch-virtual-b305c22b14/0/cache/react-zoom-pan-pinch-npm-3.0.8-d63612676f-3d3b3adb5d.zip/node_modules/react-zoom-pan-pinch/",\
+        ["virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:3.1.0", {\
+          "packageLocation": "./.yarn/__virtual__/react-zoom-pan-pinch-virtual-42e7977214/0/cache/react-zoom-pan-pinch-npm-3.1.0-5586ec00be-3289cd01ed.zip/node_modules/react-zoom-pan-pinch/",\
           "packageDependencies": [\
-            ["react-zoom-pan-pinch", "virtual:66682a004190b02ca1ad7e2a5dfb090713a77006ef1c1c3b9d5d14d59e634ba0f30bb20b8ffc52bcb1fb04b39211d88b4b0c102c13ced811e0bb6d38d9071a63#npm:3.0.8"],\
-            ["@types/react", null],\
-            ["@types/react-dom", null],\
-            ["react", null],\
-            ["react-dom", null]\
-          ],\
-          "packagePeers": [\
-            "@types/react-dom",\
-            "@types/react",\
-            "react-dom",\
-            "react"\
-          ],\
-          "linkType": "HARD"\
-        }],\
-        ["virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:3.0.8", {\
-          "packageLocation": "./.yarn/__virtual__/react-zoom-pan-pinch-virtual-af8056978d/0/cache/react-zoom-pan-pinch-npm-3.0.8-d63612676f-3d3b3adb5d.zip/node_modules/react-zoom-pan-pinch/",\
-          "packageDependencies": [\
-            ["react-zoom-pan-pinch", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:3.0.8"],\
+            ["react-zoom-pan-pinch", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:3.1.0"],\
             ["@types/react", "npm:18.2.7"],\
             ["@types/react-dom", "npm:18.2.4"],\
             ["react", "npm:18.2.0"],\
@@ -6299,7 +6281,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["husky", "npm:8.0.3"],\
             ["prettier", "npm:2.8.8"],\
             ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
-            ["react-zoom-pan-pinch", "virtual:66682a004190b02ca1ad7e2a5dfb090713a77006ef1c1c3b9d5d14d59e634ba0f30bb20b8ffc52bcb1fb04b39211d88b4b0c102c13ced811e0bb6d38d9071a63#npm:3.0.8"],\
             ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
             ["turbo", "npm:1.10.1"],\
             ["typescript", "patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=b5f058"]\
