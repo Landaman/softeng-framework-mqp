@@ -36,7 +36,6 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "@yarnpkg/pnpify": "^4.0.0-rc.45",
-    "react-zoom-pan-pinch": "^3.0.8"
+    "@yarnpkg/pnpify": "^4.0.0-rc.45"
   }
 }
