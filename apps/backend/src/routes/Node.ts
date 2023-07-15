@@ -4,7 +4,7 @@ import PrismaClient from "../bin/databaseConnection.ts";
 
 const router: Router = express.Router();
 
-router.post("/node", async function (req: Request, res: Response) {
+router.post("/", async function (req: Request, res: Response) {
   const nodeAttempt: Prisma.NodeCreateInput = req.body;
 
   // Attempt to save the high score
@@ -21,12 +21,12 @@ router.post("/node", async function (req: Request, res: Response) {
   res.sendStatus(200); // Otherwise say it's fine
 });
 
-router.get(`/node`, async function (req: Request, res: Response) {
+router.get(`/`, async function (req: Request, res: Response) {
   const nodes = await PrismaClient.node.findMany();
   res.send(nodes);
 });
 
-router.put("/node:nodeID", async function (req: Request, res: Response) {
+router.put("/", async function (req: Request, res: Response) {
   const id = req.params[0];
   const location = await PrismaClient.locationName.findUnique({
     where: {
@@ -62,7 +62,7 @@ router.put("/node:nodeID", async function (req: Request, res: Response) {
   res.sendStatus(200); // Otherwise say it's fine
 });
 
-router.delete("/node:nodeID", async function (req: Request, res: Response) {
+router.delete("/", async function (req: Request, res: Response) {
   try {
     await PrismaClient.node.delete({
       where: { nodeID: req.params[0] },
@@ -75,3 +75,5 @@ router.delete("/node:nodeID", async function (req: Request, res: Response) {
 
   res.sendStatus(200); // Otherwise say it's fine
 });
+
+export default router;

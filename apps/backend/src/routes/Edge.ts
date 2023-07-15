@@ -4,12 +4,12 @@ import PrismaClient from "../bin/databaseConnection.ts";
 
 const router: Router = express.Router();
 
-router.get(`/edge`, async function (req: Request, res: Response) {
+router.get(`/`, async function (req: Request, res: Response) {
   const edges = await PrismaClient.edge.findMany();
   res.send(edges);
 });
 
-router.post("/edge", async function (req: Request, res: Response) {
+router.post("/", async function (req: Request, res: Response) {
   const edgeAttempt: Prisma.EdgeCreateInput = req.body;
 
   // Attempt to save the high score
@@ -72,7 +72,7 @@ router.put("/edge:edgeID", async function (req: Request, res: Response) {
   res.sendStatus(200); // Otherwise say it's fine
 });
 
-router.delete("/edge", async function (req: Request, res: Response) {
+router.delete("/", async function (req: Request, res: Response) {
   try {
     await PrismaClient.edge.delete({
       where: { edgeID: req.params[0] },
@@ -85,3 +85,5 @@ router.delete("/edge", async function (req: Request, res: Response) {
 
   res.sendStatus(200); // Otherwise say it's fine
 });
+
+export default router;

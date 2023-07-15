@@ -1,27 +1,29 @@
 import "./Pathfinding.css";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { useLayoutEffect, useState, useRef, MutableRefObject } from "react";
+import {
+  useLayoutEffect,
+  useState,
+  useRef,
+  MutableRefObject,
+  useEffect,
+} from "react";
+import { Edge, Node } from "database";
+import axios from "axios";
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-function createNode(x, y) {
-  const x1 = x;
-  const y1 = y;
-  const n: Node = { x1, y1 };
-  return n;
-}
-
-interface Node {
-  x1: number;
-  y1: number;
-}
 function Pathfinding() {
-  const [nodes, setNodes] = useState<Array<Node>>([
-    createNode(100, 100),
-    createNode(200, 100),
-    createNode(200, 200),
-    createNode(100, 200),
-  ]);
+  const [nodes, setNodes] = useState<Array<Node>>([]);
+  const [edges, setEdges] = useState<Array<Edge>>([]);
+  useEffect(() => {
+    axios.get<Node[]>(`/api/node/${""}`).then((response) => {
+      console.log(response.data);
+      setNodes(response.data as Array<Node>);
+    });
+    axios.get<Edge[]>(`/api/node/${""}`).then((response) => {
+      setEdges(response.data as Array<Edge>);
+    });
+  }, []);
+
+  console.log(nodes.length);
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>;
   const c = useRef() as MutableRefObject<CanvasRenderingContext2D>;
   useLayoutEffect(() => {
@@ -46,18 +48,18 @@ function Pathfinding() {
     let oldX = 0;
     let oldY = 0;
     if (nodes.length > 0) {
-      context.fillRect(nodes[0].x1 - 3, nodes[0].y1 - 3, 6, 6);
-      oldX = nodes[0].x1;
-      oldY = nodes[0].y1;
+      context.fillRect(nodes[0].xCoord - 3, nodes[0].yCoord - 3, 6, 6);
+      oldX = nodes[0].xCoord;
+      oldY = nodes[0].yCoord;
     }
     context.beginPath();
     for (let i = 1; i < nodes.length; i++) {
       const n = nodes[i];
       context.moveTo(oldX, oldY);
-      context.fillRect(n.x1 - 3, n.y1 - 3, 6, 6);
-      context.lineTo(n.x1, n.y1);
-      oldX = n.x1;
-      oldY = n.y1;
+      context.fillRect(n.xCoord - 3, n.yCoord - 3, 6, 6);
+      context.lineTo(n.xCoord, n.yCoord);
+      oldX = n.xCoord;
+      oldY = n.yCoord;
       console.log("i");
     }
     context.stroke();
@@ -65,12 +67,7 @@ function Pathfinding() {
   });
 
   function drawPath() {
-    setNodes([
-      createNode(100, 100),
-      createNode(200, 100),
-      createNode(200, 200),
-      createNode(100, 200),
-    ]);
+    setEdges(edges);
   }
 
   const [floor, setfloor] = useState("pathfindingCanvas L1");
