@@ -1,7 +1,6 @@
 export interface MapNode {
   x1: number;
   y1: number;
-  color: string;
 }
 
 export interface MapEdge {

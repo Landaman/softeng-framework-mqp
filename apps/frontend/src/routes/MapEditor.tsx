@@ -5,8 +5,7 @@ import { MapNode, MapEdge } from "../MapComponents.ts";
 function createMapNode(x: number, y: number) {
   const x1 = x - 514;
   const y1 = y - 115;
-  const color = "blue";
-  const n: MapNode = { x1, y1, color };
+  const n: MapNode = { x1, y1 };
   return n;
 }
 
@@ -16,6 +15,11 @@ function createMapEdge(i1: number, i2: number) {
   const e: MapEdge = { index1, index2 };
   return e;
 }
+
+const distance = (
+  a: { x1: number; y1: number },
+  b: { x1: number; y1: number }
+) => Math.sqrt(Math.pow(a.x1 - b.x1, 2) + Math.pow(a.y1 - b.y1, 2));
 function MapEditor() {
   const [mapNodes, setMapNodes] = useState<Array<MapNode>>([]);
   const [mapEdges, setMapEdges] = useState<Array<MapEdge>>([]);
@@ -27,6 +31,8 @@ function MapEditor() {
   const [movingIndex, setMovingIndex] = useState(-1);
   const [hoverNode, setHoverNode] = useState(-1);
   const [selectedNode, setSelectedNode] = useState(-1);
+  const [hoverEdge, setHoverEdge] = useState(-1);
+  const [selectedEdge, setSelectedEdge] = useState(-1);
 
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>;
   const c = useRef() as MutableRefObject<CanvasRenderingContext2D>;
@@ -50,8 +56,11 @@ function MapEditor() {
     context.imageSmoothingEnabled = false;
 
     // draw edges
-    context.beginPath();
     for (let i = 0; i < mapEdges.length; i++) {
+      if (i === hoverEdge || i === selectedEdge) {
+        context.strokeStyle = "#00FF00";
+      }
+      context.beginPath();
       const edge = mapEdges[i];
       context.moveTo(
         mapNodes[edge.index1].x1 + 3,
@@ -61,8 +70,9 @@ function MapEditor() {
         mapNodes[edge.index2].x1 + 3,
         mapNodes[edge.index2].y1 + 3
       );
+      context.stroke();
+      context.strokeStyle = "black";
     }
-    context.stroke();
 
     // draw nodes
     for (let i = 0; i < mapNodes.length; i++) {
@@ -90,7 +100,6 @@ function MapEditor() {
         ...prevState,
         createMapNode(clientX, clientY),
       ]);
-      console.log(mode);
     } else if (mode === "Move") {
       setMovingIndex(findNode(clientX, clientY));
     } else if (mode === "Edge") {
@@ -107,14 +116,35 @@ function MapEditor() {
         }
       }
     } else if (mode === "Delete") {
-      if (selectedNode === -1) {
-        setSelectedNode(findNode(clientX, clientY));
-      } else {
+      if (selectedNode != -1) {
         const temp = findNode(clientX, clientY);
         if (temp === selectedNode) {
           deleteNode(temp);
         } else {
           setSelectedNode(temp);
+          if (temp === -1) {
+            setSelectedEdge(findEdge(clientX, clientY));
+          }
+        }
+      } else if (selectedEdge != -1) {
+        const temp = findEdge(clientX, clientY);
+        if (temp === selectedEdge) {
+          deleteEdge(temp);
+        } else {
+          setSelectedNode(findNode(clientX, clientY));
+          if (selectedNode != -1) {
+            setSelectedEdge(-1);
+          } else {
+            setSelectedEdge(temp);
+          }
+        }
+      } else {
+        let temp = findNode(clientX, clientY);
+        setSelectedNode(temp);
+        if (selectedNode != -1) {
+          setSelectedEdge(-1);
+        } else {
+          setSelectedEdge(findEdge(clientX, clientY));
         }
       }
     }
@@ -129,16 +159,21 @@ function MapEditor() {
   const handleMouseMove = (event) => {
     const { clientX, clientY } = event;
     if (movingIndex != -1) {
-      updateNode(movingIndex, clientX, clientY, "blue");
+      updateNode(movingIndex, clientX, clientY);
     } else {
       setHoverNode(findNode(clientX, clientY));
+      if (hoverNode === -1) {
+        setHoverEdge(findEdge(clientX, clientY));
+      } else {
+        setHoverEdge(-1);
+      }
     }
   };
 
-  function updateNode(index: number, x: number, y: number, color: string) {
+  function updateNode(index: number, x: number, y: number) {
     const x1 = x - 514;
     const y1 = y - 115;
-    const n: MapNode = { x1, y1, color };
+    const n: MapNode = { x1, y1 };
     const temp = [...mapNodes];
     temp[index] = n;
     setMapNodes(temp);
@@ -169,6 +204,17 @@ function MapEditor() {
     setMapEdges(tempEdges);
     setSelectedNode(-1);
     setHoverNode(-1);
+  }
+
+  function deleteEdge(index: number) {
+    const tempEdges = [];
+    for (let i = 0; i < mapEdges.length; i++) {
+      if (i != index) {
+        tempEdges.push(mapEdges[i]);
+      }
+    }
+    setMapEdges(tempEdges);
+    setSelectedEdge(-1);
   }
 
   const [floor, setfloor] = useState("mapEditorCanvas L1");
@@ -254,12 +300,29 @@ function MapEditor() {
     return -1;
   }
 
+  function findEdge(x: number, y: number) {
+    const x1 = x - 514;
+    const y1 = y - 115;
+    for (let i = 0; i < mapEdges.length; i++) {
+      const n1 = mapNodes[mapEdges[i].index1];
+      const n2 = mapNodes[mapEdges[i].index2];
+
+      if (
+        1 >
+        distance(n1, { x1, y1 }) + distance(n2, { x1, y1 }) - distance(n1, n2)
+      ) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
   return (
     <div className={"Pathfinding"}>
       <div className={"pathfinding-inputs"}>
         <h1>Map Editor</h1>
         <div className={"modesDiv"}>
-          <label className="selection-label">Device Type:</label>
+          <label className="selection-label">Mode</label>
           <div className="mode-container" onClick={handleNode}>
             <input
               className="checkbox"
