@@ -1,22 +1,19 @@
 import "./Pathfinding.css";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { useLayoutEffect, useState, useRef, MutableRefObject } from "react";
+import { MapNode } from "../MapComponents.ts";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 function createNode(x, y) {
   const x1 = x;
   const y1 = y;
-  const n: Node = { x1, y1 };
+  const n: MapNode = { x1, y1 };
   return n;
 }
 
-interface Node {
-  x1: number;
-  y1: number;
-}
 function Pathfinding() {
-  const [nodes, setNodes] = useState<Array<Node>>([
+  const [mapNodes, setMapNodes] = useState<Array<MapNode>>([
     createNode(100, 100),
     createNode(200, 100),
     createNode(200, 200),
@@ -45,14 +42,14 @@ function Pathfinding() {
 
     let oldX = 0;
     let oldY = 0;
-    if (nodes.length > 0) {
-      context.fillRect(nodes[0].x1 - 3, nodes[0].y1 - 3, 6, 6);
-      oldX = nodes[0].x1;
-      oldY = nodes[0].y1;
+    if (mapNodes.length > 0) {
+      context.fillRect(mapNodes[0].x1 - 3, mapNodes[0].y1 - 3, 6, 6);
+      oldX = mapNodes[0].x1;
+      oldY = mapNodes[0].y1;
     }
     context.beginPath();
-    for (let i = 1; i < nodes.length; i++) {
-      const n = nodes[i];
+    for (let i = 1; i < mapNodes.length; i++) {
+      const n = mapNodes[i];
       context.moveTo(oldX, oldY);
       context.fillRect(n.x1 - 3, n.y1 - 3, 6, 6);
       context.lineTo(n.x1, n.y1);
@@ -65,7 +62,7 @@ function Pathfinding() {
   });
 
   function drawPath() {
-    setNodes([
+    setMapNodes([
       createNode(100, 100),
       createNode(200, 100),
       createNode(200, 200),
@@ -99,7 +96,7 @@ function Pathfinding() {
     clearCanvas();
   }
   function clearCanvas() {
-    setNodes([]);
+    setMapNodes([]);
   }
 
   return (
