@@ -40,26 +40,35 @@ function Pathfinding() {
       .slice(0, -2);
 
     //scale the canvas
-    canvas.setAttribute("height", String(style_height * dpi));
-    canvas.setAttribute("width", String(style_width * dpi));
+    const canvasY = style_height * dpi;
+    const canvasX = style_width * dpi;
+    canvas.setAttribute("height", String(canvasY));
+    canvas.setAttribute("width", String(canvasX));
 
     context.imageSmoothingEnabled = false;
 
     let oldX = 0;
     let oldY = 0;
     if (nodes.length > 0) {
-      context.fillRect(nodes[0].xCoord - 3, nodes[0].yCoord - 3, 6, 6);
-      oldX = nodes[0].xCoord;
-      oldY = nodes[0].yCoord;
+      context.fillRect(
+        nodes[0].xCoord * (canvasX / 5000) - 3,
+        nodes[0].yCoord * (canvasY / 3400) - 3,
+        6,
+        6
+      );
+      oldX = nodes[0].xCoord * (canvasX / 5000) - 3;
+      oldY = nodes[0].yCoord * (canvasY / 3400) - 3;
     }
     context.beginPath();
     for (let i = 1; i < nodes.length; i++) {
       const n = nodes[i];
+      const scaleX = n.xCoord * (canvasX / 5000) - 3;
+      const scaleY = n.yCoord * (canvasY / 3400) - 3;
       context.moveTo(oldX, oldY);
-      context.fillRect(n.xCoord - 3, n.yCoord - 3, 6, 6);
-      context.lineTo(n.xCoord, n.yCoord);
-      oldX = n.xCoord;
-      oldY = n.yCoord;
+      context.fillRect(scaleX, scaleY, 6, 6);
+      context.lineTo(scaleX, scaleY);
+      oldX = scaleX;
+      oldY = scaleY;
       console.log("i");
     }
     context.stroke();
