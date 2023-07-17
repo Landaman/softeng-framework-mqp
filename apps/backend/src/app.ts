@@ -4,11 +4,13 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import usersRouter from "./routes/users.ts";
 import numbersRouter from "./routes/numbers.ts";
-import highScoreRouter from "./routes/highScore.ts";
-import computerServiceRouter from "./routes/serviceRequest.ts";
+import highScoreRouter from "./routes/high-score.ts";
+import computerServiceRouter from "./routes/computer-requests.ts";
+import sanitationServiceRouter from "./routes/sanitation-requests.ts";
 import loginRouter from "./routes/login.ts";
 import nodeRouter from "./routes/Node.ts";
 import edgeRouter from "./routes/Edge.ts";
+import { auth } from "express-oauth2-jwt-bearer";
 
 const app: Express = express(); // Setup the backend
 
@@ -25,29 +27,41 @@ app.use(express.json()); // This processes requests as JSON
 app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser
 
+// This is a generic path for the healthcheck. This is not publicly available anywhere
+// (e.g., Docker and the dev proxy DO NOT expose this). It exists exclusively so that can check the server
+// is alive/responsive. If this returns anything other than 200, Docker will automatically kill your backend
+// (under the assumption that something has gone horribly wrong). This must come before the authentication endpoint
+app.use("/healthcheck", function (req: Request, res: Response): void {
+  res.sendStatus(200);
+});
+
+// JWT checker to ensure that routes are authorized
+// Enforce on all endpoints
+app.use(
+  auth({
+    audience: "/api",
+    issuerBaseURL: "https://dev-k32g5z85431gyr5t.us.auth0.com/",
+    tokenSigningAlg: "RS256",
+  })
+);
+
 // Setup routers. ALL ROUTERS MUST use /api as a start point, or they
 // won't be reached by the default proxy and prod setup
 app.use("/api/users", usersRouter);
 
 app.use("/api/numbers", numbersRouter);
 
-app.use("/api/highScore", highScoreRouter);
+app.use("/api/high-score", highScoreRouter);
 
-app.use("/api/computerRequest", computerServiceRouter);
+app.use("/api/computer-requests", computerServiceRouter);
+
+app.use("/api/sanitation-requests", sanitationServiceRouter);
 
 app.use("/api/user", loginRouter);
 
 app.use("/api/node", nodeRouter);
 
 app.use("/api/edge", edgeRouter);
-
-// This is a generic path for the healthcheck. This is not publicly available anywhere
-// (e.g., Docker and the dev proxy DO NOT expose this). It exists exclusively so that can check the server
-// is alive/responsive. If this returns anything other than 200, Docker will automatically kill your backend
-// (under the assumption that something has gone horribly wrong)
-app.use("/healthcheck", function (req: Request, res: Response): void {
-  res.sendStatus(200);
-});
 
 /**
  * Catch all 404 errors, and forward them to the error handler

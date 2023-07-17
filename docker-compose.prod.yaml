@@ -2,6 +2,7 @@
 x-prod-args: &prod-args
   # Port that both servers will run production on
   PRODUCTION_PORT: &prod-port 80
+  PORT: *prod-port # Duplicate this under the name that the env variable will expect. Build args will override as necessary
 
 x-db-info: &db-args
   POSTGRES_PASSWORD: kTtH68Ptj17iGcsaK1EB
@@ -12,6 +13,9 @@ x-db-info: &db-args
 x-db-loc: &db-loc
   POSTGRES_CONTAINER: team-mqp-prod.ctzj5mykyp9v.us-east-1.rds.amazonaws.com
   POSTGRES_PORT: &pg-port "5432"
+
+  # The environment variables will expect this to already be formed, build args will override it
+  POSTGRES_URL: "postgresql://postgres:kTtH68Ptj17iGcsaK1EB@team-mqp-prod.ctzj5mykyp9v.us-east-1.rds.amazonaws.com:5432/postgres?schema=public"
 
 # Health check for all processes
 x-health-check: &health-check
@@ -29,19 +33,21 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
 
+      # This is what will actually be used
+      - "--entrypoints.websecure.address=:443"
+
       # Expose the standard HTTP port, have it automatically redirect to https
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
 
-      # This is what will actually be used
-      - "--entrypoints.websecure.address=:443"
-
       # Auto-certificate generation parameters
       - "--certificatesresolvers.letsencrypt.acme.email=irwright@wpi.edu"
       - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=websecure"
+
+      # Used during resolution
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
     # Everything enters through Traefik, so this exposes the environment
     ports:
       - "80:80"
@@ -64,6 +70,9 @@ services:
     expose:
       - *prod-port
     # Use the standard Dockerfile
+    # Environment allows this to work with prebuilt images
+    environment:
+      <<: *prod-args
     build:
       # Taken from our github repo
       context: .
@@ -71,17 +80,17 @@ services:
         <<: *prod-args
       # Use the prod-frontend stage
       target: prod-frontend
-      # Traefik labels
-      labels:
-        - "traefik.enable=true"
+    # Traefik labels
+    labels:
+      - "traefik.enable=true"
 
-        # The 443 entrypoint is the actual site
-        - "traefik.http.routers.frontend-https.entrypoints=websecure"
-        - "traefik.http.routers.frontend-https.rule=Host(`ec2-3-82-199-248.compute-1.amazonaws.com`)"
-        - "traefik.http.routers.frontend-https.tls=true"
+      # The 443 entrypoint is the actual site
+      - "traefik.http.routers.frontend-https.entrypoints=websecure"
+      - "traefik.http.routers.frontend-https.rule=Host(`ec2-3-82-199-248.compute-1.amazonaws.com`)"
+      - "traefik.http.routers.frontend-https.tls=true"
 
-        # Despite the "loadbalancer" naming, this just describes what port this container exposes
-        - "traefik.http.services.frontend-https.loadbalancer.server.port=80"
+      # Despite the "loadbalancer" naming, this just describes what port this container exposes
+      - "traefik.http.services.frontend-https.loadbalancer.server.port=80"
     image: irwright13/softeng-mqp:frontend
     restart: always
     healthcheck:
@@ -93,6 +102,10 @@ services:
     expose:
       - *prod-port
     # Use the standard Dockerfile
+    # Environment allows this to work with prebuilt images
+    environment:
+      # Ignore the warnings, this just merges those three
+      <<: [ *prod-args, *db-args, *db-loc ]
     build:
       # Taken from our github repo
       context: .

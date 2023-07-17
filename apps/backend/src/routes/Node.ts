@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from "express";
 import { Prisma } from "database";
-import PrismaClient from "../bin/databaseConnection.ts";
+import PrismaClient from "../bin/database-connection.ts";
 
 const router: Router = express.Router();
 
@@ -25,6 +25,11 @@ router.get(`/`, async function (req: Request, res: Response) {
   const nodes = await PrismaClient.node.findMany();
   res.send(nodes);
 });
+
+// router.get(`/:floor`, async function (req: Request, res: Response) {
+//   const nodes = await PrismaClient.node.findMany({where: {floor:req.body}});
+//   res.send(nodes);
+// });
 
 router.put("/", async function (req: Request, res: Response) {
   const id = req.params[0];

@@ -9,13 +9,12 @@
     "eslint-config-custom": "workspace:*",
     "prettier": "latest",
     "prettier-config-custom": "workspace:*",
-    "prisma": "4.15.0",
     "tsconfig-custom": "workspace:*",
     "typescript": "^5.0.4"
   },
   "scripts": {
-    "lint": "yarn shared:prettierlint && yarn shared:eslint && yarn shared:tslint",
-    "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint",
+    "lint": "yarn shared:prettierlint && yarn shared:eslint && yarn shared:tslint && prisma validate",
+    "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint && prisma format",
     "build": "yarn -T run pnpify prisma generate",
     "build:dev": "yarn -T run pnpify prisma generate",
     "migrate:dev": "prisma migrate dev --skip-generate",
@@ -26,6 +25,7 @@
     "db:push": "prisma db push --skip-generate"
   },
   "dependencies": {
-    "@prisma/client": "4.15.0"
+    "@prisma/client": "4.15.0",
+    "prisma": "4.15.0"
   }
 }

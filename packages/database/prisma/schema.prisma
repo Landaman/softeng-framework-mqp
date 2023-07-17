@@ -1,7 +1,5 @@
-
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 
 generator client {
   provider   = "prisma-client-js"
@@ -29,22 +27,22 @@ model ComputerRequest {
 }
 
 model Node {
-  nodeID       String       @id @unique
+  nodeID       String        @id @unique
   xCoord       Int
   yCoord       Int
   floor        String
   building     String
   locationName locationName? @relation(fields: [location], references: [longName], onDelete: Cascade, onUpdate: Cascade)
-  location     String?  @unique
-  startEdges   Edge[] @relation("startNode")
-  endEdges   Edge[] @relation("endNode")
+  location     String?       @unique
+  startEdges   Edge[]        @relation("startNode")
+  endEdges     Edge[]        @relation("endNode")
 }
 
 model Edge {
-  edgeID      String  @id @unique
-  startNode   Node    @relation("startNode", fields: [startNodeId], references: [nodeID], onDelete: Cascade, onUpdate: Cascade)
+  edgeID      String @id @unique
+  startNode   Node   @relation("startNode", fields: [startNodeId], references: [nodeID], onDelete: Cascade, onUpdate: Cascade)
   startNodeId String
-  endNode     Node    @relation("endNode", fields: [endNodeId], references: [nodeID], onDelete: Cascade, onUpdate: Cascade)
+  endNode     Node   @relation("endNode", fields: [endNodeId], references: [nodeID], onDelete: Cascade, onUpdate: Cascade)
   endNodeId   String
 }
 
@@ -70,4 +68,3 @@ model SanitationRequest {
   issue    String
   urgency  String
 }
-

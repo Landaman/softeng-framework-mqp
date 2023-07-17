@@ -9,20 +9,38 @@ import {
 } from "react";
 import { Edge, Node } from "database";
 import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function Pathfinding() {
   const [nodes, setNodes] = useState<Array<Node>>([]);
   const [edges, setEdges] = useState<Array<Edge>>([]);
+  const { getAccessTokenSilently } = useAuth0();
   useEffect(() => {
-    axios.get<Node[]>(`/api/node/${""}`).then((response) => {
-      console.log(response.data.length);
-      setNodes(response.data as Array<Node>);
-    });
-    axios.get<Edge[]>(`/api/node/${""}`).then((response) => {
-      console.log(response.data.length);
-      setEdges(response.data as Array<Edge>);
-    });
-  }, []);
+    const get = async () => {
+      axios
+        .get<Node[]>(`/api/node/${""}`, {
+          headers: {
+            Authorization: `Bearer ${await getAccessTokenSilently()}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data.length);
+          setNodes(response.data as Array<Node>);
+        });
+
+      axios
+        .get<Edge[]>(`/api/node/${""}`, {
+          headers: {
+            Authorization: `Bearer ${await getAccessTokenSilently()}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data.length);
+          setEdges(response.data as Array<Edge>);
+        });
+    };
+    get();
+  }, [getAccessTokenSilently]);
 
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>;
   const c = useRef() as MutableRefObject<CanvasRenderingContext2D>;
@@ -66,7 +84,7 @@ function Pathfinding() {
       const scaleY = n.yCoord * (canvasY / 3400) - 3;
       context.moveTo(oldX, oldY);
       context.fillRect(scaleX, scaleY, 6, 6);
-      context.lineTo(scaleX, scaleY);
+      // context.lineTo(scaleX, scaleY);
       oldX = scaleX;
       oldY = scaleY;
     }

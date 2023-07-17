@@ -7,7 +7,7 @@ import { createHttpTerminator } from "http-terminator";
 console.info("Connecting to database...");
 try {
   // This intrinsically connects to the database
-  require("./databaseConnection.ts");
+  require("./database-connection.ts");
   console.log("Successfully connected to the database");
 } catch (error) {
   // Log any errors
