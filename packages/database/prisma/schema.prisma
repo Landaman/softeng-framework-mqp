@@ -26,6 +26,33 @@ model ComputerRequest {
   type     String
 }
 
+model Node {
+  nodeID       String        @id @unique
+  xCoord       Int
+  yCoord       Int
+  floor        String
+  building     String
+  locationName locationName? @relation(fields: [location], references: [longName], onDelete: Cascade, onUpdate: Cascade)
+  location     String?       @unique
+  startEdges   Edge[]        @relation("startNode")
+  endEdges     Edge[]        @relation("endNode")
+}
+
+model Edge {
+  edgeID      String @id @unique
+  startNode   Node   @relation("startNode", fields: [startNodeId], references: [nodeID], onDelete: Cascade, onUpdate: Cascade)
+  startNodeId String
+  endNode     Node   @relation("endNode", fields: [endNodeId], references: [nodeID], onDelete: Cascade, onUpdate: Cascade)
+  endNodeId   String
+}
+
+model locationName {
+  shortName    String
+  longName     String @id @unique
+  locationType String
+  node         Node?
+}
+
 model User {
   id       Int    @id @default(autoincrement())
   first    String

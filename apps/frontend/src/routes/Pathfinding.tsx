@@ -1,24 +1,47 @@
 import "./Pathfinding.css";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { useLayoutEffect, useState, useRef, MutableRefObject } from "react";
-import { MapNode } from "../MapComponents.ts";
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-function createNode(x, y) {
-  const x1 = x;
-  const y1 = y;
-  const n: MapNode = { x1, y1 };
-  return n;
-}
+import {
+  useLayoutEffect,
+  useState,
+  useRef,
+  MutableRefObject,
+  useEffect,
+} from "react";
+import { Edge, Node } from "database";
+import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function Pathfinding() {
-  const [mapNodes, setMapNodes] = useState<Array<MapNode>>([
-    createNode(100, 100),
-    createNode(200, 100),
-    createNode(200, 200),
-    createNode(100, 200),
-  ]);
+  const [nodes, setNodes] = useState<Array<Node>>([]);
+  const [edges, setEdges] = useState<Array<Edge>>([]);
+  const { getAccessTokenSilently } = useAuth0();
+  useEffect(() => {
+    const get = async () => {
+      axios
+        .get<Node[]>(`/api/node/${""}`, {
+          headers: {
+            Authorization: `Bearer ${await getAccessTokenSilently()}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data.length);
+          setNodes(response.data as Array<Node>);
+        });
+
+      axios
+        .get<Edge[]>(`/api/node/${""}`, {
+          headers: {
+            Authorization: `Bearer ${await getAccessTokenSilently()}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data.length);
+          setEdges(response.data as Array<Edge>);
+        });
+    };
+    get();
+  }, [getAccessTokenSilently]);
+
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>;
   const c = useRef() as MutableRefObject<CanvasRenderingContext2D>;
   useLayoutEffect(() => {
@@ -35,39 +58,42 @@ function Pathfinding() {
       .slice(0, -2);
 
     //scale the canvas
-    canvas.setAttribute("height", String(style_height * dpi));
-    canvas.setAttribute("width", String(style_width * dpi));
+    const canvasY = style_height * dpi;
+    const canvasX = style_width * dpi;
+    canvas.setAttribute("height", String(canvasY));
+    canvas.setAttribute("width", String(canvasX));
 
     context.imageSmoothingEnabled = false;
 
     let oldX = 0;
     let oldY = 0;
-    if (mapNodes.length > 0) {
-      context.fillRect(mapNodes[0].x1 - 3, mapNodes[0].y1 - 3, 6, 6);
-      oldX = mapNodes[0].x1;
-      oldY = mapNodes[0].y1;
+    if (nodes.length > 0) {
+      context.fillRect(
+        nodes[0].xCoord * (canvasX / 5000) - 3,
+        nodes[0].yCoord * (canvasY / 3400) - 3,
+        6,
+        6
+      );
+      oldX = nodes[0].xCoord * (canvasX / 5000) - 3;
+      oldY = nodes[0].yCoord * (canvasY / 3400) - 3;
     }
     context.beginPath();
-    for (let i = 1; i < mapNodes.length; i++) {
-      const n = mapNodes[i];
+    for (let i = 1; i < nodes.length; i++) {
+      const n = nodes[i];
+      const scaleX = n.xCoord * (canvasX / 5000) - 3;
+      const scaleY = n.yCoord * (canvasY / 3400) - 3;
       context.moveTo(oldX, oldY);
-      context.fillRect(n.x1 - 3, n.y1 - 3, 6, 6);
-      context.lineTo(n.x1, n.y1);
-      oldX = n.x1;
-      oldY = n.y1;
-      console.log("i");
+      context.fillRect(scaleX, scaleY, 6, 6);
+      // context.lineTo(scaleX, scaleY);
+      oldX = scaleX;
+      oldY = scaleY;
     }
     context.stroke();
     c.current = context;
   });
 
   function drawPath() {
-    setMapNodes([
-      createNode(100, 100),
-      createNode(200, 100),
-      createNode(200, 200),
-      createNode(100, 200),
-    ]);
+    setEdges(edges);
   }
 
   const [floor, setfloor] = useState("pathfindingCanvas L1");
@@ -96,7 +122,7 @@ function Pathfinding() {
     clearCanvas();
   }
   function clearCanvas() {
-    setMapNodes([]);
+    setNodes([]);
   }
 
   return (

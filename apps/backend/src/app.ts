@@ -8,6 +8,8 @@ import highScoreRouter from "./routes/high-score.ts";
 import computerServiceRouter from "./routes/computer-requests.ts";
 import sanitationServiceRouter from "./routes/sanitation-requests.ts";
 import loginRouter from "./routes/login.ts";
+import nodeRouter from "./routes/Node.ts";
+import edgeRouter from "./routes/Edge.ts";
 import { auth } from "express-oauth2-jwt-bearer";
 
 const app: Express = express(); // Setup the backend
@@ -57,6 +59,9 @@ app.use("/api/sanitation-requests", sanitationServiceRouter);
 
 app.use("/api/user", loginRouter);
 
+app.use("/api/node", nodeRouter);
+
+app.use("/api/edge", edgeRouter);
 /**
  * Catch all 404 errors, and forward them to the error handler
  */
