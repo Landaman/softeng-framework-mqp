@@ -21,7 +21,8 @@
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "postinstall": "husky install || exit 0",
-    "build": "turbo run lint:fix build && docker-compose -f docker-compose.prod.yaml build && docker-compose -f docker-compose.prod.yaml push"
+    "build": "turbo run lint:fix && yarn run build:frontend && yarn run build:backend",
+    "docker:upload": "turbo run docker:upload --concurrency=1"
   },
   "packageManager": "yarn@3.5.1",
   "devDependencies": {
@@ -35,7 +36,6 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "@yarnpkg/pnpify": "^4.0.0-rc.45",
-    "react-zoom-pan-pinch": "^3.0.8"
+    "@yarnpkg/pnpify": "^4.0.0-rc.45"
   }
 }

@@ -28,12 +28,14 @@ label {
 
 input {
   width: 250px;
+  height: 24px;
   text-wrap: normal;
   overflow-wrap: normal;
 }
 
 textarea {
   width: 250px;
+  height: 500px;
   resize: none;
 }
 
@@ -82,7 +84,7 @@ label.descriptor {
 .hbox {
   display: flex;
   flex-direction: row;
-  height: 230px;
+  height: 300px;
   justify-content: center;
   flex-wrap: wrap;
 }

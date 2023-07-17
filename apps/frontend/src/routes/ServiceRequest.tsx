@@ -1,9 +1,18 @@
-import { ChangeEvent, useCallback, useState } from "react";
-import axios from "axios";
+import { ChangeEvent, useState } from "react";
 import "./ServiceRequest.css";
-import { Prisma } from "database";
+import { useAuth0 } from "@auth0/auth0-react";
+import { NavLink } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import ComputerRequestDao, {
+  ComputerRequest,
+} from "../database/computer-request-dao.ts";
+import SanitationRequestDao, {
+  SanitationRequest,
+} from "../database/sanitaiton-request-dao.ts";
 
 export function ComputerService() {
+  const { getAccessTokenSilently } = useAuth0();
+
   const [locationText, setLocationText] = useState("");
   const [staffText, setStaffText] = useState("");
   const [reasonText, setReasonText] = useState("");
@@ -12,46 +21,6 @@ export function ComputerService() {
   const [laptopChecked, setLaptop] = useState(false);
   const [tabletChecked, setTablet] = useState(false);
   const [phoneChecked, setPhone] = useState(false);
-
-  const handleSubmit = useCallback(() => {
-    if (
-      locationText &&
-      reasonText &&
-      staffText &&
-      (desktopChecked || laptopChecked || tabletChecked || phoneChecked)
-    ) {
-      setLocationText("");
-      setReasonText("");
-      setStaffText("");
-      setDesktop(false);
-      setLaptop(false);
-      setTablet(false);
-      setPhone(false);
-      axios
-        .post<void>("/api/computerRequest", {
-          location: locationText,
-          staff: staffText,
-          reason: reasonText,
-          type: deviceType.toString(),
-        } satisfies Prisma.ComputerRequestCreateInput)
-        .then(() => console.info("Successfully created service request"))
-        .catch((error) =>
-          // Always handle any API errors :P
-          console.error(error)
-        );
-    } else {
-      console.error("All entries need to be filled");
-    }
-  }, [
-    desktopChecked,
-    deviceType,
-    laptopChecked,
-    locationText,
-    phoneChecked,
-    reasonText,
-    staffText,
-    tabletChecked,
-  ]);
 
   function handleLocationInput(e: ChangeEvent<HTMLInputElement>) {
     setLocationText(e.target.value);
@@ -97,6 +66,35 @@ export function ComputerService() {
     setPhone(true);
   }
 
+  async function handleSubmit() {
+    if (
+      locationText &&
+      reasonText &&
+      staffText &&
+      (desktopChecked || laptopChecked || tabletChecked || phoneChecked)
+    ) {
+      setLocationText("");
+      setReasonText("");
+      setStaffText("");
+      setDesktop(false);
+      setLaptop(false);
+      setTablet(false);
+      setPhone(false);
+      // Defer to the DAO to create the request
+      const dao = new ComputerRequestDao();
+      await dao.create(await getAccessTokenSilently(), {
+        id: 0,
+        location: locationText,
+        staff: staffText,
+        reason: reasonText,
+        type: deviceType,
+      } satisfies ComputerRequest);
+      console.info("Successfully created service request");
+    } else {
+      console.error("All entries need to be filled");
+    }
+  }
+
   function handleClear() {
     setLocationText("");
     setReasonText("");
@@ -108,7 +106,7 @@ export function ComputerService() {
   }
 
   return (
-    <div className={"MainDiv"}>
+    <>
       <h1>Computer Service</h1>
       <div className="hbox">
         <div className="vbox">
@@ -174,12 +172,19 @@ export function ComputerService() {
             <label className="descriptor">Phone</label>
           </div>
         </div>
+
+        <NavLink to={"/service-requests/computer/view"}>
+          <Button variant="secondary" size="sm" className="align-self-end">
+            View All Requests
+          </Button>
+        </NavLink>
       </div>
-    </div>
+    </>
   );
 }
 
 export function SanitationService() {
+  const { getAccessTokenSilently } = useAuth0();
   const [locationText, setLocationText] = useState("");
   const [staffText, setStaffText] = useState("");
   const [issueText, setIssueText] = useState("");
@@ -189,7 +194,7 @@ export function SanitationService() {
   const [urgentChecked, setUrgent] = useState(false);
   const [extremelyUrgentChecked, setExtremelyUrgent] = useState(false);
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = async () => {
     if (
       locationText &&
       issueText &&
@@ -203,31 +208,20 @@ export function SanitationService() {
       setPrompt(false);
       setUrgent(false);
       setExtremelyUrgent(false);
-      axios
-        .post<void>("/api/sanitationRequest", {
-          location: locationText,
-          staff: staffText,
-          issue: issueText,
-          urgency: urgency.toString(),
-        } satisfies Prisma.SanitationRequestCreateInput)
-        .then(() => console.info("Successfully created service request"))
-        .catch((error) =>
-          // Always handle any API errors :P
-          console.error(error)
-        );
+      const dao = new SanitationRequestDao();
+
+      await dao.create(await getAccessTokenSilently(), {
+        id: 0,
+        location: locationText,
+        staff: staffText,
+        issue: issueText,
+        urgency: urgency,
+      } satisfies SanitationRequest);
+      console.info("Successfully created service request");
     } else {
       console.error("All entries need to be filled");
     }
-  }, [
-    mildChecked,
-    urgency,
-    promptChecked,
-    locationText,
-    urgentChecked,
-    issueText,
-    staffText,
-    extremelyUrgentChecked,
-  ]);
+  };
 
   function handleLocationInput(e: ChangeEvent<HTMLInputElement>) {
     setLocationText(e.target.value);
@@ -284,7 +278,7 @@ export function SanitationService() {
   }
 
   return (
-    <div className={"MainDiv"}>
+    <>
       <h1>Sanitation Service</h1>
       <div className="hbox">
         <div className="vbox">
@@ -351,8 +345,6 @@ export function SanitationService() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
-
-export default ComputerService;
