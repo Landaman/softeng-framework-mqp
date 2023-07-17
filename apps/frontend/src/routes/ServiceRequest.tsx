@@ -1,10 +1,14 @@
 import { ChangeEvent, useState } from "react";
-import axios from "axios";
 import "./ServiceRequest.css";
-import { Prisma } from "database";
 import { useAuth0 } from "@auth0/auth0-react";
 import { NavLink } from "react-router-dom";
 import { Button } from "react-bootstrap";
+import ComputerRequestDao, {
+  ComputerRequest,
+} from "../database/computer-request-dao.ts";
+import SanitationRequestDao, {
+  SanitationRequest,
+} from "../database/sanitaiton-request-dao.ts";
 
 export function ComputerService() {
   const { getAccessTokenSilently } = useAuth0();
@@ -76,23 +80,15 @@ export function ComputerService() {
       setLaptop(false);
       setTablet(false);
       setPhone(false);
-      // Doing a "post" request is asynchronous (it takes a while, we don't want our UI to wait forever on it),
-      // so we run it and then set the API even variable to the response. The angular brackets determine the return
-      // type
-      await axios.post<void>(
-        "/api/computer-requests",
-        {
-          location: locationText,
-          staff: staffText,
-          reason: reasonText,
-          type: deviceType.toString(),
-        } satisfies Prisma.ComputerRequestCreateInput,
-        {
-          headers: {
-            Authorization: `Bearer ${await getAccessTokenSilently()}`,
-          },
-        }
-      );
+      // Defer to the DAO to create the request
+      const dao = new ComputerRequestDao();
+      await dao.create(await getAccessTokenSilently(), {
+        id: 0,
+        location: locationText,
+        staff: staffText,
+        reason: reasonText,
+        type: deviceType,
+      } satisfies ComputerRequest);
       console.info("Successfully created service request");
     } else {
       console.error("All entries need to be filled");
@@ -212,20 +208,15 @@ export function SanitationService() {
       setPrompt(false);
       setUrgent(false);
       setExtremelyUrgent(false);
-      await axios.post<void>(
-        "/api/sanitation-requests",
-        {
-          location: locationText,
-          staff: staffText,
-          issue: issueText,
-          urgency: urgency.toString(),
-        } satisfies Prisma.SanitationRequestCreateInput,
-        {
-          headers: {
-            Authorization: `Bearer ${await getAccessTokenSilently()}`,
-          },
-        }
-      );
+      const dao = new SanitationRequestDao();
+
+      await dao.create(await getAccessTokenSilently(), {
+        id: 0,
+        location: locationText,
+        staff: staffText,
+        issue: issueText,
+        urgency: urgency,
+      } satisfies SanitationRequest);
       console.info("Successfully created service request");
     } else {
       console.error("All entries need to be filled");
