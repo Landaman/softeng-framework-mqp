@@ -15,15 +15,15 @@ function Pathfinding() {
   const [edges, setEdges] = useState<Array<Edge>>([]);
   useEffect(() => {
     axios.get<Node[]>(`/api/node/${""}`).then((response) => {
-      console.log(response.data);
+      console.log(response.data.length);
       setNodes(response.data as Array<Node>);
     });
     axios.get<Edge[]>(`/api/node/${""}`).then((response) => {
+      console.log(response.data.length);
       setEdges(response.data as Array<Edge>);
     });
   }, []);
 
-  console.log(nodes.length);
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>;
   const c = useRef() as MutableRefObject<CanvasRenderingContext2D>;
   useLayoutEffect(() => {
@@ -69,7 +69,6 @@ function Pathfinding() {
       context.lineTo(scaleX, scaleY);
       oldX = scaleX;
       oldY = scaleY;
-      console.log("i");
     }
     context.stroke();
     c.current = context;
