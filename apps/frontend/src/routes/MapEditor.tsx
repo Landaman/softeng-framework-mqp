@@ -1,11 +1,22 @@
 import "./MapEditor.css";
-import { useState, useRef, MutableRefObject, useLayoutEffect } from "react";
+import {
+  useState,
+  useRef,
+  MutableRefObject,
+  useLayoutEffect,
+  useEffect,
+} from "react";
 import { MapNode, MapEdge } from "../MapComponents.ts";
+import { Edge } from "database";
+import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function createMapNode(x: number, y: number) {
   const x1 = x - 514;
   const y1 = y - 115;
-  const n: MapNode = { x1, y1 };
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const n: MapNode = { x1, y1, null: any };
   return n;
 }
 
@@ -33,9 +44,42 @@ function MapEditor() {
   const [selectedNode, setSelectedNode] = useState(-1);
   const [hoverEdge, setHoverEdge] = useState(-1);
   const [selectedEdge, setSelectedEdge] = useState(-1);
+  const [dataNodes, setDataNodes] = useState<Array<Node>>([]);
+  const [dataEdges, setDataEdges] = useState<Array<Edge>>([]);
+  const { getAccessTokenSilently } = useAuth0();
+  const [canvasX, setCanvasX] = useState(0);
+  const [canvasY, setCanvasY] = useState(0);
 
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>;
   const c = useRef() as MutableRefObject<CanvasRenderingContext2D>;
+
+  useEffect(() => {
+    const get = async () => {
+      axios
+        .get<Node[]>(`/api/node/${""}`, {
+          headers: {
+            Authorization: `Bearer ${await getAccessTokenSilently()}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data.length);
+          setDataNodes(response.data as Array<Node>);
+        });
+
+      axios
+        .get<Edge[]>(`/api/node/${""}`, {
+          headers: {
+            Authorization: `Bearer ${await getAccessTokenSilently()}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data.length);
+          setDataEdges(response.data as Array<Edge>);
+        });
+    };
+    get();
+  }, [getAccessTokenSilently]);
+
   useLayoutEffect(() => {
     const dpi = window.devicePixelRatio;
     const canvas = canvasRef.current;
@@ -50,8 +94,10 @@ function MapEditor() {
       .slice(0, -2);
 
     //scale the canvas
-    canvas.setAttribute("height", String(style_height * dpi));
-    canvas.setAttribute("width", String(style_width * dpi));
+    setCanvasY(style_height * dpi);
+    setCanvasX(style_width * dpi);
+    canvas.setAttribute("height", String(canvasY));
+    canvas.setAttribute("width", String(canvasX));
 
     context.imageSmoothingEnabled = false;
 
@@ -87,8 +133,24 @@ function MapEditor() {
     }
 
     c.current = context;
-  });
+  }, [
+    canvasX,
+    canvasY,
+    hoverEdge,
+    hoverNode,
+    mapEdges,
+    mapNodes,
+    selectedEdge,
+    selectedNode,
+  ]);
 
+  function buildMap(floor: string) {
+    console.log(floor);
+    console.log(dataEdges);
+    for (let i = 0; i < dataNodes.length; i++) {
+      //let x = dataNodes[i].xCoord * (canvasX / 5000) - 3;
+    }
+  }
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const handleMouseDown = (event) => {
@@ -173,7 +235,9 @@ function MapEditor() {
   function updateNode(index: number, x: number, y: number) {
     const x1 = x - 514;
     const y1 = y - 115;
-    const n: MapNode = { x1, y1 };
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const n: MapNode = { x1, y1, null: Node };
     const temp = [...mapNodes];
     temp[index] = n;
     setMapNodes(temp);
@@ -220,6 +284,7 @@ function MapEditor() {
   const [floor, setfloor] = useState("mapEditorCanvas L1");
   function groundFloor() {
     setfloor("mapEditorCanvas ground");
+    buildMap("asdf");
     clearCanvas();
   }
   function FloorL1() {
