@@ -33,4 +33,6 @@ export interface Dao<Type, KeyType> {
    * @param key the key of the object to delete
    */
   delete(token: string, key: KeyType): Promise<void>;
+
+  update(token: string, row: Type): Promise<void>;
 }

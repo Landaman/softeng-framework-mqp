@@ -84,4 +84,26 @@ export default class ComputerRequestDao
       },
     });
   }
+
+  /**
+   * Updates the given computer request
+   * @param token the token to use for the API calls
+   * @param row the row to update
+   */
+  async update(token: string, row: ComputerRequest): Promise<void> {
+    await axios.patch(
+      "/api/computer-requests/" + row.id,
+      {
+        location: row.location,
+        staff: row.staff,
+        reason: row.reason,
+        type: row.type,
+      } satisfies Prisma.ComputerRequestUpdateInput,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  }
 }

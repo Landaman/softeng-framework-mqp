@@ -7,13 +7,14 @@ import {
   useReactTable,
   getSortedRowModel,
 } from "@tanstack/react-table";
-import { ComputerRequest } from "database";
 import { useEffect, useMemo, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import axios from "axios";
 import Form from "react-bootstrap/Form";
 import { Table } from "react-bootstrap";
 import { Prisma } from "database";
+import ComputerRequestDao, {
+  ComputerRequest,
+} from "../database/computer-request-dao.ts";
 
 // Update the table meta and column metas, so that we can provide additional information to the table and columns
 declare module "@tanstack/react-table" {
@@ -90,18 +91,12 @@ export default function ComputerRequestTable() {
   useEffect(() => {
     // This trick lets us use an async function in useEffect
     const fun = async () => {
+      const requestDao = new ComputerRequestDao();
       // Get the requests from the API
-      const requests = await axios.get<ComputerRequest[]>(
-        "/api/computer-requests",
-        {
-          headers: {
-            Authorization: `Bearer ${await getAccessTokenSilently()}`,
-          },
-        }
-      );
+      const requests = await requestDao.getAll(await getAccessTokenSilently());
 
       // Set the requests
-      setRequests(requests.data);
+      setRequests(requests);
     };
 
     // Let the error fall through, it will be handled by react router
@@ -190,17 +185,37 @@ export default function ComputerRequestTable() {
         // is what we actually want to send to the API via axios
         const updateInput = updateParams as Prisma.ComputerRequestCreateInput;
 
-        // Do the request, patch the request and get back the updated service request
-        const newRequest = await axios.patch<ComputerRequest>(
-          "/api/computer-requests/" +
-            table.getRow(rowIndex.toString())?.original.id,
-          updateInput,
-          {
-            headers: {
-              Authorization: `Bearer ${await getAccessTokenSilently()}`,
-            },
-          }
-        );
+        // Get the original service request
+        const originalRequest = table.getRow(rowIndex.toString())?.original;
+
+        // Get the DAO to do the update with
+        const dao = new ComputerRequestDao();
+
+        const newRequest = {
+          id: originalRequest.id,
+          location: originalRequest.location,
+          staff: originalRequest.staff,
+          reason: originalRequest.reason,
+          type: originalRequest.type,
+        } satisfies ComputerRequest;
+
+        if (updateInput.location) {
+          newRequest.type = updateInput.type;
+        }
+
+        if (updateInput.staff) {
+          newRequest.location = updateInput.location;
+        }
+
+        if (updateInput.reason) {
+          newRequest.reason = updateInput.reason;
+        }
+
+        if (updateInput.type) {
+          newRequest.type = updateInput.type;
+        }
+
+        await dao.update(await getAccessTokenSilently(), newRequest);
 
         // Go through the requests, replace only the new request to be the data
         setRequests(
@@ -208,7 +223,7 @@ export default function ComputerRequestTable() {
             if (index !== rowIndex) {
               return request;
             } else {
-              return newRequest.data;
+              return newRequest;
             }
           })
         );

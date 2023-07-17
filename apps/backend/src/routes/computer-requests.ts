@@ -113,6 +113,8 @@ router.patch("/:id", async function (req: Request, res: Response) {
     console.error(`Unable to patch computer service request: ${error}`);
 
     res.sendStatus(400); // Send error
+
+    return;
   }
 
   // Set the status to be OK, since if we got this far the Prisma worked

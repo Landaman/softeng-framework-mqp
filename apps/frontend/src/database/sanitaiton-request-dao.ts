@@ -87,4 +87,26 @@ export default class SanitationRequestDao
       },
     });
   }
+
+  /**
+   * Updates the given computer request
+   * @param token the token to use for the API calls
+   * @param row the row to update
+   */
+  async update(token: string, row: SanitationRequest): Promise<void> {
+    await axios.patch(
+      "/api/computer-requests/" + row.id,
+      {
+        location: row.location,
+        staff: row.staff,
+        issue: row.issue,
+        urgency: row.urgency,
+      } satisfies Prisma.SanitationRequestUpdateInput,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  }
 }
