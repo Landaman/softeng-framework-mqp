@@ -62,7 +62,6 @@ app.use("/api/user", loginRouter);
 app.use("/api/node", nodeRouter);
 
 app.use("/api/edge", edgeRouter);
-
 /**
  * Catch all 404 errors, and forward them to the error handler
  */
