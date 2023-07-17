@@ -7,16 +7,16 @@ import {
   useEffect,
 } from "react";
 import { MapNode, MapEdge } from "../MapComponents.ts";
-import { Edge } from "database";
+import { Edge, Node } from "database";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 
 function createMapNode(x: number, y: number) {
-  const x1 = x - 514;
-  const y1 = y - 115;
+  const x1 = x;
+  const y1 = y;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const n: MapNode = { x1, y1, null: any };
+  const n: MapNode = { x1, y1 };
   return n;
 }
 
@@ -145,11 +145,18 @@ function MapEditor() {
   ]);
 
   function buildMap(floor: string) {
-    console.log(floor);
     console.log(dataEdges);
+    const temp: Array<MapNode> = [];
     for (let i = 0; i < dataNodes.length; i++) {
-      //let x = dataNodes[i].xCoord * (canvasX / 5000) - 3;
+      if (dataNodes[i].floor === floor) {
+        const x = dataNodes[i].xCoord * (canvasX / 5000) - 3;
+        const y = dataNodes[i].yCoord * (canvasY / 3400) - 3;
+        const mn = createMapNode(x, y);
+        temp.push(mn);
+      }
     }
+    setMapNodes(temp);
+    console.log(mapNodes);
   }
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -160,7 +167,7 @@ function MapEditor() {
     if (mode === "Node") {
       setMapNodes((prevState) => [
         ...prevState,
-        createMapNode(clientX, clientY),
+        createMapNode(clientX - 514, clientY - 115),
       ]);
     } else if (mode === "Move") {
       setMovingIndex(findNode(clientX, clientY));
@@ -237,7 +244,7 @@ function MapEditor() {
     const y1 = y - 115;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const n: MapNode = { x1, y1, null: Node };
+    const n: MapNode = { x1, y1 };
     const temp = [...mapNodes];
     temp[index] = n;
     setMapNodes(temp);
@@ -284,28 +291,27 @@ function MapEditor() {
   const [floor, setfloor] = useState("mapEditorCanvas L1");
   function groundFloor() {
     setfloor("mapEditorCanvas ground");
-    buildMap("asdf");
     clearCanvas();
   }
   function FloorL1() {
     setfloor("mapEditorCanvas L1");
-    clearCanvas();
+    buildMap("L1");
   }
   function FloorL2() {
     setfloor("mapEditorCanvas L2");
-    clearCanvas();
+    buildMap("L2");
   }
   function Floor1() {
     setfloor("mapEditorCanvas one");
-    clearCanvas();
+    buildMap("1");
   }
   function Floor2() {
     setfloor("mapEditorCanvas two");
-    clearCanvas();
+    buildMap("2");
   }
   function Floor3() {
     setfloor("mapEditorCanvas three");
-    clearCanvas();
+    buildMap("3");
   }
   function clearCanvas() {
     setMapNodes([]);
