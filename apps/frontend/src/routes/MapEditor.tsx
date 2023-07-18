@@ -14,16 +14,23 @@ import { useAuth0 } from "@auth0/auth0-react";
 function createMapNode(x: number, y: number) {
   const x1 = x;
   const y1 = y;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const n: MapNode = { x1, y1 };
+  const node: Node = {
+    building: "",
+    floor: "",
+    location: null,
+    nodeID: "",
+    xCoord: 0,
+    yCoord: 0,
+  };
+  const n: MapNode = { x1, y1, node };
   return n;
 }
 
 function createMapEdge(i1: number, i2: number) {
   const index1 = i1;
   const index2 = i2;
-  const e: MapEdge = { index1, index2 };
+  const edge: Edge = { edgeID: "", endNodeId: "", startNodeId: "" };
+  const e: MapEdge = { index1, index2, edge };
   return e;
 }
 
@@ -62,18 +69,16 @@ function MapEditor() {
           },
         })
         .then((response) => {
-          console.log(response.data.length);
           setDataNodes(response.data as Array<Node>);
         });
 
       axios
-        .get<Edge[]>(`/api/node/${""}`, {
+        .get<Edge[]>(`/api/edge/${""}`, {
           headers: {
             Authorization: `Bearer ${await getAccessTokenSilently()}`,
           },
         })
         .then((response) => {
-          console.log(response.data.length);
           setDataEdges(response.data as Array<Edge>);
         });
     };
@@ -145,19 +150,44 @@ function MapEditor() {
   ]);
 
   function buildMap(floor: string) {
-    console.log(dataEdges);
-    const temp: Array<MapNode> = [];
+    clearCanvas();
+    const tempNodes: Array<MapNode> = [];
     for (let i = 0; i < dataNodes.length; i++) {
-      if (dataNodes[i].floor === floor) {
-        const x = dataNodes[i].xCoord * (canvasX / 5000) - 3;
-        const y = dataNodes[i].yCoord * (canvasY / 3400) - 3;
-        const mn = createMapNode(x, y);
-        temp.push(mn);
+      const node: Node = dataNodes[i];
+      if (node.floor === floor) {
+        const x1: number = node.xCoord * (canvasX / 5000) - 3;
+        const y1: number = node.yCoord * (canvasY / 3400) - 3;
+        const mn: MapNode = { x1, y1, node };
+        tempNodes.push(mn);
       }
     }
-    setMapNodes(temp);
-    console.log(mapNodes);
+    setMapNodes(tempNodes);
+
+    const tempEdges: Array<MapEdge> = [];
+    for (let i = 0; i < dataEdges.length; i++) {
+      const edge: Edge = dataEdges[i];
+      if (
+        edge.endNodeId.slice(0, floor.length) === floor &&
+        edge.startNodeId.slice(0, floor.length) === floor
+      ) {
+        const index1: number = getMapNodeIntex(edge.startNodeId, tempNodes);
+        const index2: number = getMapNodeIntex(edge.endNodeId, tempNodes);
+        const me: MapEdge = { index1, index2, edge };
+        tempEdges.push(me);
+      }
+    }
+    setMapEdges(tempEdges);
   }
+
+  function getMapNodeIntex(nodeID: string, nodes: Array<MapNode>): number {
+    for (let i = 0; i < nodes.length; i++) {
+      if (nodes[i].node.nodeID === nodeID) {
+        return i;
+      }
+    }
+    return 0;
+  }
+
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const handleMouseDown = (event) => {
@@ -242,9 +272,9 @@ function MapEditor() {
   function updateNode(index: number, x: number, y: number) {
     const x1 = x - 514;
     const y1 = y - 115;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const n: MapNode = { x1, y1 };
+    const n: MapNode = mapNodes[index];
+    n.x1 = x1;
+    n.y1 = y1;
     const temp = [...mapNodes];
     temp[index] = n;
     setMapNodes(temp);
