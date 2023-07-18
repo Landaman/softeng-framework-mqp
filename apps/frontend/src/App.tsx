@@ -18,6 +18,7 @@ import { Auth0Provider } from "@auth0/auth0-react";
 import ErrorPage from "./routes/ErrorPage.tsx";
 import Pathfinding from "./routes/Pathfinding.tsx";
 import MapEditor from "./routes/MapEditor.tsx";
+import { AuthenticationGuard } from "./AuthenticationGuard.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -41,11 +42,15 @@ function App() {
                   children: [
                     {
                       path: "create",
-                      element: <ComputerService />,
+                      element: (
+                        <AuthenticationGuard component={ComputerService} />
+                      ),
                     },
                     {
                       path: "view",
-                      element: <ComputerRequestTable />,
+                      element: (
+                        <AuthenticationGuard component={ComputerRequestTable} />
+                      ),
                     },
                     {
                       path: "",
@@ -55,7 +60,9 @@ function App() {
                 },
                 {
                   path: "sanitation",
-                  element: <SanitationService />,
+                  element: (
+                    <AuthenticationGuard component={SanitationService} />
+                  ),
                 },
                 {
                   path: "",
@@ -65,15 +72,15 @@ function App() {
             },
             {
               path: "high-score",
-              element: <TestPage />,
+              element: <AuthenticationGuard component={TestPage} />,
             },
             {
               path: "pathfinding",
-              element: <Pathfinding />,
+              element: <AuthenticationGuard component={Pathfinding} />,
             },
             {
               path: "MapEditor",
-              element: <MapEditor />,
+              element: <AuthenticationGuard component={MapEditor} />,
             },
             {
               path: "*",

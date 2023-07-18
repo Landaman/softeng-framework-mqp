@@ -83,7 +83,7 @@ function NavBar() {
               });
             }}
           >
-            Login
+            Log In
           </Dropdown.Item>
           <Dropdown.Item
             as="button"
