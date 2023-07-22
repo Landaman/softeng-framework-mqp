@@ -1,43 +1,56 @@
 import express, { Router, Request, Response } from "express";
-import { Prisma, SanitationRequest } from "database";
+import { Prisma, Edge } from "database";
 import PrismaClient from "../bin/database-connection.ts";
 
 const router: Router = express.Router();
 
-// Handler to create new sanitation requests
+// Handler to create new edges
 router.post("/", async function (req: Request, res: Response) {
-  const requestAttempt: Prisma.SanitationRequestCreateInput = req.body;
+  const requestAttempt: Prisma.EdgeCreateInput = req.body;
 
-  // Attempt to save the request
+  // Attempt to save the edge
   try {
     // Attempt to create in the database
-    const newRequest = await PrismaClient.sanitationRequest.create({
+    const newRequest = await PrismaClient.edge.create({
       data: requestAttempt,
+      include: {
+        startNode: true,
+        endNode: true,
+      },
     });
-    console.info("Successfully saved sanitation service request"); // Log that it was successful
+    console.info("Successfully saved edge"); // Log that it was successful
 
     res.send(newRequest); // Send the created content, so the client has the ID
   } catch (error) {
     // Log any failures
-    console.error(`Unable to save sanitation service request: ${error}`);
+    console.error(`Unable to save edge: ${error}`);
     res.sendStatus(400); // Send error
   }
 });
 
-// Handler to get all sanitation requests
+// Handler to get all edges
 router.get("/", async function (req: Request, res: Response) {
-  const result = await PrismaClient.sanitationRequest.findMany();
+  const result = await PrismaClient.edge.findMany({
+    include: {
+      startNode: true,
+      endNode: true,
+    },
+  });
 
   res.send(result);
 });
 
-// Route to get an individual service request
+// Route to get an individual edge
 router.get("/:id", async function (req: Request, res: Response) {
   try {
     // Try getting the request being talked about
-    const request = await PrismaClient.sanitationRequest.findFirst({
+    const request = await PrismaClient.edge.findFirst({
       where: {
         id: parseInt(req.params["id"]),
+      },
+      include: {
+        startNode: true,
+        endNode: true,
       },
     });
 
@@ -50,20 +63,24 @@ router.get("/:id", async function (req: Request, res: Response) {
     // Catch any errors (presumably in parsing)
   } catch (error) {
     // Print the error
-    console.error(`Unable to find service request ${error}`);
+    console.error(`Unable to find edge ${error}`);
 
     // Output the error
     res.sendStatus(400);
   }
 });
 
-// Route to handle deleting an individual service request
+// Route to handle deleting an individual edge
 router.delete(":/id", async function (req: Request, res: Response) {
   try {
-    // Try deleting the service request
-    await PrismaClient.sanitationRequest.delete({
+    // Try deleting the edge
+    await PrismaClient.edge.delete({
       where: {
         id: parseInt(req.params["id"]),
+      },
+      include: {
+        startNode: true,
+        endNode: true,
       },
     });
 
@@ -80,26 +97,30 @@ router.delete(":/id", async function (req: Request, res: Response) {
     }
 
     // Print any errors (at this point, we don't know what)
-    console.error(`Unable to delete service request ${error}`);
+    console.error(`Unable to delete edge ${error}`);
 
     // Send an error response
     res.sendStatus(400);
   }
 });
 
-// Handler to handle updating an individual service request
+// Handler to handle updating an individual edge
 router.patch("/:id", async function (req: Request, res: Response) {
-  const updateInput = req.body as Prisma.SanitationRequestUpdateInput;
+  const updateInput = req.body as Prisma.EdgeUpdateInput;
 
-  // We need the request
-  let newRequest: SanitationRequest | null = null;
+  // We need the edge
+  let newRequest: Edge | null = null;
 
   try {
     // Try doing the patch
-    newRequest = await PrismaClient.sanitationRequest.update({
+    newRequest = await PrismaClient.edge.update({
       data: updateInput,
       where: {
         id: parseInt(req.params["id"]),
+      },
+      include: {
+        startNode: true,
+        endNode: true,
       },
     });
   } catch (error) {
@@ -111,7 +132,7 @@ router.patch("/:id", async function (req: Request, res: Response) {
       return;
     }
     // Catch any errors (generic)
-    console.error(`Unable to patch sanitation service request: ${error}`);
+    console.error(`Unable to patch edge: ${error}`);
 
     res.sendStatus(400); // Send error
 

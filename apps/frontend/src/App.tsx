@@ -11,7 +11,6 @@ import {
   SanitationService,
 } from "./routes/ServiceRequest.tsx";
 import ComputerRequestTable from "./routes/ComputerRequestTable.tsx";
-import Login from "./routes/Login.tsx";
 import TestPage from "./routes/HighScore.tsx";
 import NavBar from "./NavBar.tsx";
 import { Auth0Provider } from "@auth0/auth0-react";
@@ -89,10 +88,6 @@ function App() {
           ],
         },
       ],
-    },
-    {
-      path: "login",
-      element: <Login />,
     },
   ]);
 

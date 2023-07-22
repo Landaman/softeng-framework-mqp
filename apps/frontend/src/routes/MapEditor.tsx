@@ -7,7 +7,7 @@ import {
   useEffect,
 } from "react";
 import { MapNode, MapEdge } from "../MapComponents.ts";
-import { Edge, Node } from "database";
+import { Edge, Node, Floor } from "database";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 
@@ -15,10 +15,10 @@ function createMapNode(x: number, y: number) {
   const x1 = x;
   const y1 = y;
   const node: Node = {
+    id: 0,
     building: "",
-    floor: "",
+    floor: Floor.L1,
     location: null,
-    nodeID: "",
     xCoord: 0,
     yCoord: 0,
   };
@@ -29,7 +29,7 @@ function createMapNode(x: number, y: number) {
 function createMapEdge(i1: number, i2: number) {
   const index1 = i1;
   const index2 = i2;
-  const edge: Edge = { edgeID: "", endNodeId: "", startNodeId: "" };
+  const edge: Edge = { id: 0, endNodeId: 0, startNodeId: 0 };
   const e: MapEdge = { index1, index2, edge };
   return e;
 }
@@ -52,7 +52,9 @@ function MapEditor() {
   const [hoverEdge, setHoverEdge] = useState(-1);
   const [selectedEdge, setSelectedEdge] = useState(-1);
   const [dataNodes, setDataNodes] = useState<Array<Node>>([]);
-  const [dataEdges, setDataEdges] = useState<Array<Edge>>([]);
+  const [dataEdges, setDataEdges] = useState<
+    Array<Edge & { startNode: Node; endNode: Node }>
+  >([]);
   const { getAccessTokenSilently } = useAuth0();
   const [canvasX, setCanvasX] = useState(0);
   const [canvasY, setCanvasY] = useState(0);
@@ -63,7 +65,7 @@ function MapEditor() {
   useEffect(() => {
     const get = async () => {
       axios
-        .get<Node[]>(`/api/node/${""}`, {
+        .get<Node[]>(`/api/node/`, {
           headers: {
             Authorization: `Bearer ${await getAccessTokenSilently()}`,
           },
@@ -73,13 +75,20 @@ function MapEditor() {
         });
 
       axios
-        .get<Edge[]>(`/api/edge/${""}`, {
+        .get<Edge[]>(`/api/edges/`, {
           headers: {
             Authorization: `Bearer ${await getAccessTokenSilently()}`,
           },
         })
         .then((response) => {
-          setDataEdges(response.data as Array<Edge>);
+          setDataEdges(
+            response.data as Array<
+              Edge & {
+                startNode: Node;
+                endNode: Node;
+              }
+            >
+          );
         });
     };
     get();
@@ -165,11 +174,11 @@ function MapEditor() {
 
     const tempEdges: Array<MapEdge> = [];
     for (let i = 0; i < dataEdges.length; i++) {
-      const edge: Edge = dataEdges[i];
-      if (
-        edge.endNodeId.slice(0, floor.length) === floor &&
-        edge.startNodeId.slice(0, floor.length) === floor
-      ) {
+      const edge: Edge & {
+        startNode: Node;
+        endNode: Node;
+      } = dataEdges[i];
+      if (edge.endNode.floor === floor && edge.startNode.floor === floor) {
         const index1: number = getMapNodeIntex(edge.startNodeId, tempNodes);
         const index2: number = getMapNodeIntex(edge.endNodeId, tempNodes);
         const me: MapEdge = { index1, index2, edge };
@@ -179,9 +188,9 @@ function MapEditor() {
     setMapEdges(tempEdges);
   }
 
-  function getMapNodeIntex(nodeID: string, nodes: Array<MapNode>): number {
+  function getMapNodeIntex(nodeID: number, nodes: Array<MapNode>): number {
     for (let i = 0; i < nodes.length; i++) {
-      if (nodes[i].node.nodeID === nodeID) {
+      if (nodes[i].node.id === nodeID) {
         return i;
       }
     }
