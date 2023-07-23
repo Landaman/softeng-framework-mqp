@@ -7,9 +7,10 @@ import {
   useEffect,
 } from "react";
 import { MapNode, MapEdge } from "../MapComponents.ts";
-import { Edge, Node, Floor } from "database";
+import { Edge, Node } from "database";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Floor } from "../database/node-dao.ts";
 
 function createMapNode(x: number, y: number) {
   const x1 = x;

@@ -1,4 +1,4 @@
-import { ComputerRequest, Prisma } from "database";
+import type { ComputerRequest, Prisma } from "database";
 import { Dao } from "./dao.ts";
 import axios, { AxiosError } from "axios";
 
@@ -27,11 +27,13 @@ export default class ComputerRequestDao
     row: CreateComputerRequest
   ): Promise<ComputerRequest> {
     // Delegate to Axios, return what Axios sends us back
-    return await axios.post("/api/computer-requests", row, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    return (
+      await axios.post("/api/computer-requests", row, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    ).data;
   }
 
   /**
@@ -55,11 +57,13 @@ export default class ComputerRequestDao
    */
   async get(token: string, key: number): Promise<ComputerRequest | null> {
     try {
-      return await axios.get("/api/computer-requests/" + key, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      return (
+        await axios.get("/api/computer-requests/" + key, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      ).data;
     } catch (error) {
       // Cast the error to an axios error
       const axiosError = error as AxiosError;
@@ -79,11 +83,13 @@ export default class ComputerRequestDao
    * @return a list of all computer requests in the table
    */
   async getAll(token: string): Promise<ComputerRequest[]> {
-    return await axios.get("/api/computer-requests", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    return (
+      await axios.get("/api/computer-requests", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    ).data;
   }
 
   /**
@@ -95,10 +101,12 @@ export default class ComputerRequestDao
     token: string,
     row: UpdateComputerRequest
   ): Promise<ComputerRequest> {
-    return await axios.patch("/api/computer-requests/" + row.id, row, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    return (
+      await axios.patch("/api/computer-requests/" + row.id, row, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    ).data;
   }
 }

@@ -1,4 +1,4 @@
-import { Node as PrismaNodeType, LocationName, Floor, Prisma } from "database";
+import type { Node as PrismaNodeType, LocationName, Prisma } from "database";
 import { Dao } from "./dao.ts";
 import axios, { AxiosError } from "axios";
 
@@ -10,7 +10,15 @@ export type CreateNode = Exclude<PrismaNodeType, "id"> & {
 export type UpdateNode = PrismaNodeType & {
   locationName: LocationName | string | null;
 };
-export type { Floor };
+
+// As far as I can tell, this is the only way to do this
+export const Floor: {
+  L1: "L1";
+  L2: "L2";
+  ONE: "ONE";
+  TWO: "TWO";
+  THREE: "THREE";
+} = { L1: "L1", L2: "L2", ONE: "ONE", TWO: "TWO", THREE: "THREE" };
 
 /**
  * DAO for the node table
@@ -77,23 +85,25 @@ export default class NodeDao
    */
   async create(token: string, row: CreateNode): Promise<Node> {
     // Delegate to axios and await the response
-    return await axios.post(
-      "/api/nodes",
-      {
-        xCoord: row.xCoord,
-        yCoord: row.yCoord,
-        floor: row.floor,
-        building: row.building,
-        locationName: NodeDao.locationNameInputToPrismaCreateInput(
-          row.locationName
-        ),
-      } satisfies Prisma.NodeCreateInput,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    return (
+      await axios.post(
+        "/api/nodes",
+        {
+          xCoord: row.xCoord,
+          yCoord: row.yCoord,
+          floor: row.floor,
+          building: row.building,
+          locationName: NodeDao.locationNameInputToPrismaCreateInput(
+            row.locationName
+          ),
+        } satisfies Prisma.NodeCreateInput,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+    ).data;
   }
 
   /**
@@ -117,11 +127,13 @@ export default class NodeDao
    */
   async get(token: string, key: number): Promise<Node | null> {
     try {
-      return await axios.get("/api/nodes/" + key, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      return (
+        await axios.get("/api/nodes/" + key, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      ).data;
     } catch (error) {
       // Cast the error to an axios error
       const axiosError = error as AxiosError;
@@ -141,11 +153,13 @@ export default class NodeDao
    * @return a list of all nodes in the table
    */
   async getAll(token: string): Promise<Node[]> {
-    return await axios.get("/api/nodes", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    return (
+      await axios.get("/api/nodes", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    ).data;
   }
 
   /**
@@ -156,22 +170,24 @@ export default class NodeDao
    */
   async update(token: string, row: UpdateNode): Promise<Node> {
     // Ensure that the location name is set to be that new one
-    return await axios.patch(
-      "/api/nodes/" + row.id,
-      {
-        xCoord: row.xCoord,
-        yCoord: row.yCoord,
-        floor: row.floor,
-        building: row.building,
-        locationName: NodeDao.locationNameInputToPrismaUpdateInput(
-          row.locationName
-        ),
-      } satisfies Prisma.NodeUpdateInput,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    return (
+      await axios.patch(
+        "/api/nodes/" + row.id,
+        {
+          xCoord: row.xCoord,
+          yCoord: row.yCoord,
+          floor: row.floor,
+          building: row.building,
+          locationName: NodeDao.locationNameInputToPrismaUpdateInput(
+            row.locationName
+          ),
+        } satisfies Prisma.NodeUpdateInput,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+    ).data;
   }
 }

@@ -1,4 +1,4 @@
-import { SanitationRequest, Prisma } from "database";
+import type { SanitationRequest, Prisma } from "database";
 import { Dao } from "./dao.ts";
 import axios, { AxiosError } from "axios";
 

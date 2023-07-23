@@ -1,4 +1,4 @@
-import { Edge as PrismaEdgeType, Node, Prisma } from "database";
+import type { Edge as PrismaEdgeType, Node, Prisma } from "database";
 import { Dao } from "./dao.ts";
 import axios, { AxiosError } from "axios";
 import NodeDao, { CreateNode, UpdateNode } from "./node-dao.ts";
@@ -92,18 +92,20 @@ export default class EdgeDao
    */
   async create(token: string, row: CreateEdge): Promise<Edge> {
     // Delegate to axios
-    return await axios.post(
-      "/api/edges",
-      {
-        startNode: EdgeDao.nodeInputToPrismaCreateInput(row.startNode),
-        endNode: EdgeDao.nodeInputToPrismaCreateInput(row.endNode),
-      } satisfies Prisma.EdgeCreateInput,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    return (
+      await axios.post(
+        "/api/edges",
+        {
+          startNode: EdgeDao.nodeInputToPrismaCreateInput(row.startNode),
+          endNode: EdgeDao.nodeInputToPrismaCreateInput(row.endNode),
+        } satisfies Prisma.EdgeCreateInput,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+    ).data;
   }
 
   /**
@@ -127,11 +129,13 @@ export default class EdgeDao
    */
   async get(token: string, key: number): Promise<Edge | null> {
     try {
-      return await axios.get("/api/edges/" + key, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      return (
+        await axios.get("/api/edges/" + key, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      ).data;
     } catch (error) {
       // Cast the error to an axios error
       const axiosError = error as AxiosError;
@@ -151,11 +155,13 @@ export default class EdgeDao
    * @return a list of all edges in the table
    */
   async getAll(token: string): Promise<Edge[]> {
-    return await axios.get("/api/edges", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    return (
+      await axios.get("/api/edges", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    ).data;
   }
 
   /**
@@ -166,17 +172,19 @@ export default class EdgeDao
    */
   async update(token: string, row: UpdateEdge): Promise<Edge> {
     // Delegate to axios and await the result
-    return await axios.patch(
-      "/api/edges/" + row.id,
-      {
-        startNode: EdgeDao.nodeInputToPrismaUpdateInput(row.startNode),
-        endNode: EdgeDao.nodeInputToPrismaUpdateInput(row.endNode),
-      } satisfies Prisma.EdgeUpdateInput,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    return (
+      await axios.patch(
+        "/api/edges/" + row.id,
+        {
+          startNode: EdgeDao.nodeInputToPrismaUpdateInput(row.startNode),
+          endNode: EdgeDao.nodeInputToPrismaUpdateInput(row.endNode),
+        } satisfies Prisma.EdgeUpdateInput,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+    ).data;
   }
 }

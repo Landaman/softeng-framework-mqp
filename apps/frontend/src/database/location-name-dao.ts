@@ -1,4 +1,8 @@
-import { LocationName as PrismaLocationNameType, Node, Prisma } from "database";
+import type {
+  LocationName as PrismaLocationNameType,
+  Node,
+  Prisma,
+} from "database";
 import { Dao } from "./dao.ts";
 import axios, { AxiosError } from "axios";
 import { CreateNode } from "./node-dao.ts";
@@ -76,20 +80,22 @@ export default class LocationNameDao
    */
   async create(token: string, row: CreateLocationName): Promise<LocationName> {
     // Delegate to axios and await the response
-    return await axios.post(
-      "/api/location-names",
-      {
-        longName: row.longName,
-        shortName: row.shortName,
-        locationType: row.locationType,
-        node: LocationNameDao.nodeInputToPrismaCreateInput(row.node),
-      } satisfies Prisma.LocationNameCreateInput,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    return (
+      await axios.post(
+        "/api/location-names",
+        {
+          longName: row.longName,
+          shortName: row.shortName,
+          locationType: row.locationType,
+          node: LocationNameDao.nodeInputToPrismaCreateInput(row.node),
+        } satisfies Prisma.LocationNameCreateInput,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+    ).data;
   }
 
   /**
@@ -113,11 +119,13 @@ export default class LocationNameDao
    */
   async get(token: string, key: number): Promise<LocationName | null> {
     try {
-      return await axios.get("/api/location-names/" + key, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      return (
+        await axios.get("/api/location-names/" + key, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      ).data;
     } catch (error) {
       // Cast the error to an axios error
       const axiosError = error as AxiosError;
@@ -137,11 +145,13 @@ export default class LocationNameDao
    * @return a list of all nodes in the table
    */
   async getAll(token: string): Promise<LocationName[]> {
-    return await axios.get("/api/location-names", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    return (
+      await axios.get("/api/location-names", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    ).data;
   }
 
   /**
@@ -152,19 +162,21 @@ export default class LocationNameDao
    */
   async update(token: string, row: UpdateLocationName): Promise<LocationName> {
     // Ensure that the location name is set to be that new one
-    return await axios.patch(
-      "/api/location-names/" + row.longName,
-      {
-        longName: row.longName,
-        shortName: row.shortName,
-        locationType: row.locationType,
-        node: LocationNameDao.nodeInputToPrismaUpdateInput(row.node),
-      } satisfies Prisma.LocationNameUpdateInput,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    return (
+      await axios.patch(
+        "/api/location-names/" + row.longName,
+        {
+          longName: row.longName,
+          shortName: row.shortName,
+          locationType: row.locationType,
+          node: LocationNameDao.nodeInputToPrismaUpdateInput(row.node),
+        } satisfies Prisma.LocationNameUpdateInput,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+    ).data;
   }
 }
