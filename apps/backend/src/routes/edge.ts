@@ -1,5 +1,5 @@
 import express, { Router, Request, Response } from "express";
-import { Prisma, Edge } from "database";
+import { Prisma, Edge, Node } from "database";
 import PrismaClient from "../bin/database-connection.ts";
 
 const router: Router = express.Router();
@@ -109,7 +109,7 @@ router.patch("/:id", async function (req: Request, res: Response) {
   const updateInput = req.body as Prisma.EdgeUpdateInput;
 
   // We need the edge
-  let newRequest: Edge | null = null;
+  let newRequest: (Edge & { startNode: Node; endNode: Node }) | null = null;
 
   try {
     // Try doing the patch

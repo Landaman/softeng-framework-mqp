@@ -4,10 +4,10 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { NavLink } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import ComputerRequestDao, {
-  ComputerRequest,
+  CreateComputerRequest,
 } from "../database/computer-request-dao.ts";
 import SanitationRequestDao, {
-  SanitationRequest,
+  CreateSanitationRequest,
 } from "../database/sanitaiton-request-dao.ts";
 
 export function ComputerService() {
@@ -83,12 +83,11 @@ export function ComputerService() {
       // Defer to the DAO to create the request
       const dao = new ComputerRequestDao();
       await dao.create(await getAccessTokenSilently(), {
-        id: 0,
         location: locationText,
         staff: staffText,
         reason: reasonText,
         type: deviceType,
-      } satisfies ComputerRequest);
+      } satisfies CreateComputerRequest);
       console.info("Successfully created service request");
     } else {
       console.error("All entries need to be filled");
@@ -211,12 +210,11 @@ export function SanitationService() {
       const dao = new SanitationRequestDao();
 
       await dao.create(await getAccessTokenSilently(), {
-        id: 0,
         location: locationText,
         staff: staffText,
         issue: issueText,
         urgency: urgency,
-      } satisfies SanitationRequest);
+      } satisfies CreateSanitationRequest);
       console.info("Successfully created service request");
     } else {
       console.error("All entries need to be filled");

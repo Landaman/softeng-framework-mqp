@@ -2,12 +2,19 @@ import { ComputerRequest, Prisma } from "database";
 import { Dao } from "./dao.ts";
 import axios, { AxiosError } from "axios";
 
+// Types that stuff using the DAO should use
 export type { ComputerRequest };
+export type CreateComputerRequest = Prisma.ComputerRequestCreateInput;
+export type UpdateComputerRequest = Prisma.ComputerRequestUpdateInput & {
+  id: number;
+};
+
 /**
  * DAO for the computer request table
  */
 export default class ComputerRequestDao
-  implements Dao<ComputerRequest, number>
+  implements
+    Dao<ComputerRequest, number, CreateComputerRequest, UpdateComputerRequest>
 {
   /**
    * Creates a computer request in the database
@@ -15,22 +22,16 @@ export default class ComputerRequestDao
    * @param row the row to use in creating the computer request. The ID should NOT be filled in
    * @return the fully created ComputerRequest object, including the ID
    */
-  async create(token: string, row: ComputerRequest): Promise<ComputerRequest> {
+  async create(
+    token: string,
+    row: CreateComputerRequest
+  ): Promise<ComputerRequest> {
     // Delegate to Axios, return what Axios sends us back
-    return await axios.post(
-      "/api/computer-requests",
-      {
-        location: row.location,
-        staff: row.staff,
-        reason: row.reason,
-        type: row.type,
-      } satisfies Prisma.ComputerRequestCreateInput,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    return await axios.post("/api/computer-requests", row, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
 
   /**
@@ -90,20 +91,14 @@ export default class ComputerRequestDao
    * @param token the token to use for the API calls
    * @param row the row to update
    */
-  async update(token: string, row: ComputerRequest): Promise<void> {
-    await axios.patch(
-      "/api/computer-requests/" + row.id,
-      {
-        location: row.location,
-        staff: row.staff,
-        reason: row.reason,
-        type: row.type,
-      } satisfies Prisma.ComputerRequestUpdateInput,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+  async update(
+    token: string,
+    row: UpdateComputerRequest
+  ): Promise<ComputerRequest> {
+    return await axios.patch("/api/computer-requests/" + row.id, row, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
 }

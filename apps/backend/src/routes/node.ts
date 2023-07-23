@@ -1,5 +1,5 @@
 import express, { Router, Request, Response } from "express";
-import { Prisma, Node } from "database";
+import { Prisma, Node, LocationName } from "database";
 import PrismaClient from "../bin/database-connection.ts";
 
 const router: Router = express.Router();
@@ -105,7 +105,7 @@ router.patch("/:id", async function (req: Request, res: Response) {
   const updateInput = req.body as Prisma.NodeUpdateInput;
 
   // We need the node
-  let newRequest: Node | null = null;
+  let newRequest: (Node & { locationName: LocationName | null }) | null = null;
 
   try {
     // Try doing the patch
