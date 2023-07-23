@@ -2,23 +2,27 @@ import type { Node as PrismaNodeType, LocationName, Prisma } from "database";
 import { Dao } from "./dao.ts";
 import axios, { AxiosError } from "axios";
 
+// Base type, remove location as we have locationName
+type baseType = Omit<PrismaNodeType, "location">;
+
 // Types that stuff using the DAO should use
-export type Node = PrismaNodeType & { locationName: LocationName | null };
-export type CreateNode = Exclude<PrismaNodeType, "id"> & {
+export type Node = baseType & { locationName: LocationName | null };
+export type CreateNode = Omit<baseType, "id"> & {
   locationName: LocationName | string | null;
 };
-export type UpdateNode = PrismaNodeType & {
-  locationName: LocationName | string | null;
+export type UpdateNode = Prisma.NodeUpdateInput & {
+  locationName?: LocationName | string | null;
+  id: number;
 };
 
 // As far as I can tell, this is the only way to do this
-export const Floor: {
-  L1: "L1";
-  L2: "L2";
-  ONE: "ONE";
-  TWO: "TWO";
-  THREE: "THREE";
-} = { L1: "L1", L2: "L2", ONE: "ONE", TWO: "TWO", THREE: "THREE" };
+export enum Floor {
+  L1 = "L1",
+  L2 = "L2",
+  ONE = "ONE",
+  TWO = "TWO",
+  THREE = "THREE",
+}
 
 /**
  * DAO for the node table
@@ -59,8 +63,13 @@ export default class NodeDao
    * @return the Prisma update parameters based on that input
    */
   static locationNameInputToPrismaUpdateInput(
-    input: LocationName | string | null
-  ): Prisma.LocationNameUpdateOneWithoutNodeNestedInput {
+    input: LocationName | string | null | undefined
+  ): Prisma.LocationNameUpdateOneWithoutNodeNestedInput | undefined {
+    // Handle the undefined case by just passing it up to prisma (do nothing)
+    if (input === undefined) {
+      return undefined;
+    }
+
     // Try having the create input crate it
     const createInput = NodeDao.locationNameInputToPrismaCreateInput(input);
 

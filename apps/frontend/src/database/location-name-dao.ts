@@ -7,13 +7,19 @@ import { Dao } from "./dao.ts";
 import axios, { AxiosError } from "axios";
 import { CreateNode } from "./node-dao.ts";
 
+// Base type, remove the Node ID
+type baseType = Omit<PrismaLocationNameType, "nodeId">;
+
 // Types that stuff using the DAO should use
-export type LocationName = PrismaLocationNameType & { node: Node | null };
-export type CreateLocationName = PrismaLocationNameType & {
-  node: Exclude<CreateNode, "locationName"> | number | null;
+export type LocationName = baseType & { node: Node | null };
+export type CreateLocationName = baseType & {
+  node: Omit<CreateNode, "locationName"> | number | null;
 };
-export type UpdateLocationName = PrismaLocationNameType & {
-  node: Exclude<CreateNode, "locationName"> | number | null;
+export type UpdateLocationName = Omit<
+  Prisma.LocationNameUpdateInput,
+  "node"
+> & {
+  node?: Omit<CreateNode, "locationName"> | number | null;
 };
 
 /**
@@ -28,7 +34,7 @@ export default class LocationNameDao
    * @returns either the Prisma create input, or undefined if there's nothing
    */
   static nodeInputToPrismaCreateInput(
-    input: Exclude<CreateNode, "locationName"> | number | null
+    input: Omit<CreateNode, "locationName"> | number | null
   ): Prisma.NodeCreateNestedOneWithoutLocationNameInput | undefined {
     // If we have one
     if (input) {
@@ -55,8 +61,13 @@ export default class LocationNameDao
    * @return the Prisma update parameters based on that input
    */
   static nodeInputToPrismaUpdateInput(
-    input: Exclude<CreateNode, "locationName"> | number | null
-  ): Prisma.NodeUpdateOneWithoutLocationNameNestedInput {
+    input: Omit<CreateNode, "locationName"> | number | null | undefined
+  ): Prisma.NodeUpdateOneWithoutLocationNameNestedInput | undefined {
+    // Handle the undefined case by returning undefined (do nothing)
+    if (input === undefined) {
+      return undefined;
+    }
+
     // Try having the create input crate it
     const createInput = LocationNameDao.nodeInputToPrismaCreateInput(input);
 

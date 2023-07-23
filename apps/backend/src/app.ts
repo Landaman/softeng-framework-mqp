@@ -7,7 +7,7 @@ import highScoreRouter from "./routes/high-score.ts";
 import computerServiceRouter from "./routes/computer-requests.ts";
 import sanitationServiceRouter from "./routes/sanitation-requests.ts";
 import locationNameRouter from "./routes/location-name.ts";
-import nodeRouter from "./routes/node.ts";
+import nodeRouter from "./routes/nodes.ts";
 import edgeRouter from "./routes/edge.ts";
 import { auth } from "express-oauth2-jwt-bearer";
 

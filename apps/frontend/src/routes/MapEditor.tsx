@@ -5,12 +5,12 @@ import {
   MutableRefObject,
   useLayoutEffect,
   useEffect,
+  MouseEvent,
 } from "react";
 import { MapNode, MapEdge } from "../MapComponents.ts";
-import { Edge, Node } from "database";
-import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Floor } from "../database/node-dao.ts";
+import NodeDao, { Floor, Node } from "../database/node-dao.ts";
+import EdgeDao, { Edge } from "../database/edge-dao.ts";
 
 function createMapNode(x: number, y: number) {
   const x1 = x;
@@ -19,19 +19,43 @@ function createMapNode(x: number, y: number) {
     id: 0,
     building: "",
     floor: Floor.L1,
-    location: null,
     xCoord: 0,
     yCoord: 0,
+    locationName: null,
   };
-  const n: MapNode = { x1, y1, node };
+  const n: MapNode = { x1, y1, node, fromDatabase: false, deleted: false };
   return n;
 }
 
 function createMapEdge(i1: number, i2: number) {
   const index1 = i1;
   const index2 = i2;
-  const edge: Edge = { id: 0, endNodeId: 0, startNodeId: 0 };
-  const e: MapEdge = { index1, index2, edge };
+  const edge: Edge = {
+    id: 0,
+    startNode: {
+      id: 0,
+      building: "",
+      floor: Floor.L1,
+      xCoord: 0,
+      yCoord: 0,
+      locationName: null,
+    },
+    endNode: {
+      id: 0,
+      building: "",
+      floor: Floor.L1,
+      xCoord: 0,
+      yCoord: 0,
+      locationName: null,
+    },
+  };
+  const e: MapEdge = {
+    index1,
+    index2,
+    edge,
+    fromDatabase: false,
+    deleted: false,
+  };
   return e;
 }
 
@@ -53,9 +77,7 @@ function MapEditor() {
   const [hoverEdge, setHoverEdge] = useState(-1);
   const [selectedEdge, setSelectedEdge] = useState(-1);
   const [dataNodes, setDataNodes] = useState<Array<Node>>([]);
-  const [dataEdges, setDataEdges] = useState<
-    Array<Edge & { startNode: Node; endNode: Node }>
-  >([]);
+  const [dataEdges, setDataEdges] = useState<Array<Edge>>([]);
   const { getAccessTokenSilently } = useAuth0();
   const [canvasX, setCanvasX] = useState(0);
   const [canvasY, setCanvasY] = useState(0);
@@ -65,32 +87,11 @@ function MapEditor() {
 
   useEffect(() => {
     const get = async () => {
-      axios
-        .get<Node[]>(`/api/node/`, {
-          headers: {
-            Authorization: `Bearer ${await getAccessTokenSilently()}`,
-          },
-        })
-        .then((response) => {
-          setDataNodes(response.data as Array<Node>);
-        });
+      const nodeDao = new NodeDao();
+      setDataNodes(await nodeDao.getAll(await getAccessTokenSilently()));
 
-      axios
-        .get<Edge[]>(`/api/edges/`, {
-          headers: {
-            Authorization: `Bearer ${await getAccessTokenSilently()}`,
-          },
-        })
-        .then((response) => {
-          setDataEdges(
-            response.data as Array<
-              Edge & {
-                startNode: Node;
-                endNode: Node;
-              }
-            >
-          );
-        });
+      const edgeDao = new EdgeDao();
+      setDataEdges(await edgeDao.getAll(await getAccessTokenSilently()));
     };
     get();
   }, [getAccessTokenSilently]);
@@ -167,7 +168,13 @@ function MapEditor() {
       if (node.floor === floor) {
         const x1: number = node.xCoord * (canvasX / 5000) - 3;
         const y1: number = node.yCoord * (canvasY / 3400) - 3;
-        const mn: MapNode = { x1, y1, node };
+        const mn: MapNode = {
+          x1,
+          y1,
+          node,
+          fromDatabase: true,
+          deleted: false,
+        };
         tempNodes.push(mn);
       }
     }
@@ -175,14 +182,17 @@ function MapEditor() {
 
     const tempEdges: Array<MapEdge> = [];
     for (let i = 0; i < dataEdges.length; i++) {
-      const edge: Edge & {
-        startNode: Node;
-        endNode: Node;
-      } = dataEdges[i];
+      const edge: Edge = dataEdges[i];
       if (edge.endNode.floor === floor && edge.startNode.floor === floor) {
-        const index1: number = getMapNodeIntex(edge.startNodeId, tempNodes);
-        const index2: number = getMapNodeIntex(edge.endNodeId, tempNodes);
-        const me: MapEdge = { index1, index2, edge };
+        const index1: number = getMapNodeIntex(edge.startNode.id, tempNodes);
+        const index2: number = getMapNodeIntex(edge.endNode.id, tempNodes);
+        const me: MapEdge = {
+          index1,
+          index2,
+          edge,
+          fromDatabase: true,
+          deleted: false,
+        };
         tempEdges.push(me);
       }
     }
@@ -198,12 +208,8 @@ function MapEditor() {
     return 0;
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const handleMouseDown = (event) => {
+  const handleMouseDown = (event: MouseEvent) => {
     const { clientX, clientY } = event;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     if (mode === "Node") {
       setMapNodes((prevState) => [
         ...prevState,
@@ -263,9 +269,7 @@ function MapEditor() {
     setMovingIndex(-1);
   };
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const handleMouseMove = (event) => {
+  const handleMouseMove = (event: MouseEvent) => {
     const { clientX, clientY } = event;
     if (movingIndex != -1) {
       updateNode(movingIndex, clientX, clientY);
@@ -291,67 +295,46 @@ function MapEditor() {
   }
 
   function deleteNode(index: number) {
-    const tempNodes = [];
-    for (let i = 0; i < mapNodes.length; i++) {
-      if (i != index) {
-        tempNodes.push(mapNodes[i]);
-      }
-    }
-    setMapNodes(tempNodes);
+    // Mark the node for deletion
+    mapNodes[index].deleted = true;
 
-    const tempEdges = [];
     for (let i = 0; i < mapEdges.length; i++) {
       const e = mapEdges[i];
-      if (!(e.index1 === index || e.index2 === index)) {
-        if (e.index1 > index) {
-          e.index1 -= 1;
-        }
-        if (e.index2 > index) {
-          e.index2 -= 1;
-        }
-        tempEdges.push(e);
+      if (e.index1 === index || e.index2 === index) {
+        e.deleted = true;
       }
     }
-    setMapEdges(tempEdges);
     setSelectedNode(-1);
     setHoverNode(-1);
   }
 
   function deleteEdge(index: number) {
-    const tempEdges = [];
-    for (let i = 0; i < mapEdges.length; i++) {
-      if (i != index) {
-        tempEdges.push(mapEdges[i]);
-      }
-    }
-    setMapEdges(tempEdges);
+    // Mark the edge as deleted
+    mapEdges[index].deleted = true;
+
     setSelectedEdge(-1);
   }
 
-  const [floor, setfloor] = useState("mapEditorCanvas L1");
-  function groundFloor() {
-    setfloor("mapEditorCanvas ground");
-    clearCanvas();
-  }
+  const [floor, setfloor] = useState<Floor>(Floor.L1);
   function FloorL1() {
-    setfloor("mapEditorCanvas L1");
-    buildMap("L1");
+    setfloor(Floor.L1);
+    buildMap(Floor.L1);
   }
   function FloorL2() {
-    setfloor("mapEditorCanvas L2");
-    buildMap("L2");
+    setfloor(Floor.L2);
+    buildMap(Floor.L2);
   }
   function Floor1() {
-    setfloor("mapEditorCanvas one");
-    buildMap("1");
+    setfloor(Floor.ONE);
+    buildMap(Floor.ONE);
   }
   function Floor2() {
-    setfloor("mapEditorCanvas two");
-    buildMap("2");
+    setfloor(Floor.TWO);
+    buildMap(Floor.TWO);
   }
   function Floor3() {
-    setfloor("mapEditorCanvas three");
-    buildMap("3");
+    setfloor(Floor.THREE);
+    buildMap(Floor.THREE);
   }
   function clearCanvas() {
     setMapNodes([]);
@@ -428,6 +411,79 @@ function MapEditor() {
     return -1;
   }
 
+  /**
+   * Command to submit changes on the map page, persisting all map nodes to the database
+   */
+  async function submitChanges() {
+    // Create the DAO we'll use
+    const nodeDao = new NodeDao();
+
+    // For each of the map nodes, commit them to the DB
+    for (const argument of mapNodes) {
+      // If we got this from the database
+      if (argument.fromDatabase) {
+        // Determine what to do based on deletion status
+        if (!argument.deleted) {
+          // Just update the X and Y
+          await nodeDao.update(await getAccessTokenSilently(), {
+            id: argument.node.id,
+            xCoord: argument.x1,
+            yCoord: argument.y1,
+          });
+        } else {
+          // Delete the node, since it's from the database
+          await nodeDao.delete(
+            await getAccessTokenSilently(),
+            argument.node.id
+          );
+        }
+      } else {
+        // Otherwise, create this
+        argument.node = await nodeDao.create(await getAccessTokenSilently(), {
+          xCoord: argument.x1,
+          yCoord: argument.y1,
+          building: "",
+          floor: floor,
+          locationName: null,
+        });
+
+        // Make sure we mark this as coming from the database now (since it is), so we don't create it again
+        argument.fromDatabase = true;
+      }
+    }
+
+    // Create the edge dao
+    const edgeDao = new EdgeDao();
+
+    // For each of the edges, commit them to the DB
+    for (const argument of mapEdges) {
+      // If the edge was from the database
+      if (argument.fromDatabase) {
+        // It can only change if it's deleted
+        if (argument.deleted) {
+          // If that's the case, delete it
+          await edgeDao.delete(
+            await getAccessTokenSilently(),
+            argument.edge.id
+          );
+        }
+      } else {
+        // Update the edge to be the newly created one. We can safely use the IDs
+        // of the nodes, since they were just persisted to the database
+        argument.edge = await edgeDao.create(await getAccessTokenSilently(), {
+          startNode: mapNodes[argument.index1].node.id,
+          endNode: mapNodes[argument.index2].node.id,
+        });
+
+        // make sure we mark this as from the database (since it now is), so we don't create it again
+        argument.fromDatabase = true;
+      }
+    }
+
+    // Force a refresh, to redraw the map elements (some have been deleted)
+    window.location.reload();
+  }
+
   return (
     <div className={"Pathfinding"}>
       <div className={"pathfinding-inputs"}>
@@ -471,9 +527,6 @@ function MapEditor() {
             <label>Delete</label>
           </div>
         </div>
-        <button onClick={groundFloor} className={"floorButton"}>
-          Ground
-        </button>
         <button onClick={FloorL1} className={"floorButton"}>
           L1
         </button>
@@ -489,7 +542,9 @@ function MapEditor() {
         <button onClick={Floor3} className={"floorButton"}>
           3
         </button>
-        <button className={"pathfindingButton"}>Submit changes</button>
+        <button onClick={submitChanges} className={"pathfindingButton"}>
+          Submit changes
+        </button>
       </div>
       <div className={"mapdiv"}>
         <canvas

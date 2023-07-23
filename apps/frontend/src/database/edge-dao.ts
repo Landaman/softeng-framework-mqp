@@ -1,17 +1,21 @@
-import type { Edge as PrismaEdgeType, Node, Prisma } from "database";
+import type { Edge as PrismaEdgeType, Prisma } from "database";
 import { Dao } from "./dao.ts";
 import axios, { AxiosError } from "axios";
-import NodeDao, { CreateNode, UpdateNode } from "./node-dao.ts";
+import NodeDao, { Node, CreateNode } from "./node-dao.ts";
 
-export type Edge = PrismaEdgeType & { startNode: Node; endNode: Node };
-export type CreateEdge = Exclude<PrismaEdgeType, "id"> & {
+// Base type, remove the start and end node IDs
+type edgeBase = Omit<Omit<PrismaEdgeType, "startNodeId">, "endNodeId">;
+
+// Types to use
+export type Edge = edgeBase & { startNode: Node; endNode: Node };
+export type CreateEdge = Omit<edgeBase, "id"> & {
   startNode: CreateNode | number;
   endNode: CreateNode | number;
 };
-export type UpdateEdge = PrismaEdgeType & {
-  startNode: UpdateNode | number;
-  endNode: UpdateNode | number;
-};
+export type UpdateEdge = {
+  startNode?: CreateNode | number;
+  endNode?: CreateNode | number;
+} & { id: number };
 
 /**
  * DAO for the computer request table
@@ -57,8 +61,13 @@ export default class EdgeDao
    * @return the Prisma node update input
    */
   static nodeInputToPrismaUpdateInput(
-    input: CreateNode | number
-  ): Prisma.NodeUpdateOneRequiredWithoutStartEdgesNestedInput {
+    input: CreateNode | number | undefined
+  ): Prisma.NodeUpdateOneRequiredWithoutStartEdgesNestedInput | undefined {
+    // Handle cases where we didn't actually get a node to update
+    if (!input) {
+      return undefined; // Just return undefined
+    }
+
     // If we have a number
     if (typeof input === "number") {
       // Simply do the connection
