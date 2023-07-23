@@ -31,11 +31,13 @@ export default class SanitationRequestDao
     row: CreateSanitationRequest
   ): Promise<SanitationRequest> {
     // Delegate to Axios, return what Axios sends us back
-    return await axios.post("/api/sanitation-requests", row, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    return (
+      await axios.post("/api/sanitation-requests", row, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    ).data;
   }
 
   /**
@@ -83,15 +85,17 @@ export default class SanitationRequestDao
    * @return a list of all sanitation requests in the table
    */
   async getAll(token: string): Promise<SanitationRequest[]> {
-    return await axios.get("/api/sanitation-requests", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    return (
+      await axios.get("/api/sanitation-requests", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    ).data;
   }
 
   /**
-   * Updates the given computer request
+   * Updates the given sanitation request
    * @param token the token to use for the API calls
    * @param row the row to update
    */
@@ -99,19 +103,21 @@ export default class SanitationRequestDao
     token: string,
     row: UpdateSanitationRequest
   ): Promise<SanitationRequest> {
-    return await axios.patch(
-      "/api/computer-requests/" + row.id,
-      {
-        location: row.location,
-        staff: row.staff,
-        issue: row.issue,
-        urgency: row.urgency,
-      } satisfies Prisma.SanitationRequestUpdateInput,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    return (
+      await axios.patch(
+        "/api/sanitation-requests/" + row.id,
+        {
+          location: row.location,
+          staff: row.staff,
+          issue: row.issue,
+          urgency: row.urgency,
+        } satisfies Prisma.SanitationRequestUpdateInput,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+    ).data;
   }
 }

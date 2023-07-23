@@ -8,7 +8,7 @@ import ComputerRequestDao, {
 } from "../database/computer-request-dao.ts";
 import SanitationRequestDao, {
   CreateSanitationRequest,
-} from "../database/sanitaiton-request-dao.ts";
+} from "../database/sanitation-request-dao.ts";
 
 export function ComputerService() {
   const { getAccessTokenSilently } = useAuth0();
@@ -342,6 +342,12 @@ export function SanitationService() {
             <label className="descriptor">Extremely Urgent</label>
           </div>
         </div>
+
+        <NavLink to={"/service-requests/sanitation/view"}>
+          <Button variant="secondary" size="sm" className="align-self-end">
+            View All Requests
+          </Button>
+        </NavLink>
       </div>
     </>
   );

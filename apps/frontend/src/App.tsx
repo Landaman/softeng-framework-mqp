@@ -18,6 +18,7 @@ import ErrorPage from "./routes/ErrorPage.tsx";
 import Pathfinding from "./routes/Pathfinding.tsx";
 import MapEditor from "./routes/MapEditor.tsx";
 import { AuthenticationGuard } from "./AuthenticationGuard.tsx";
+import SanitationRequestTable from "./routes/SanitationRequestTable.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -59,9 +60,26 @@ function App() {
                 },
                 {
                   path: "sanitation",
-                  element: (
-                    <AuthenticationGuard component={SanitationService} />
-                  ),
+                  children: [
+                    {
+                      path: "create",
+                      element: (
+                        <AuthenticationGuard component={SanitationService} />
+                      ),
+                    },
+                    {
+                      path: "view",
+                      element: (
+                        <AuthenticationGuard
+                          component={SanitationRequestTable}
+                        />
+                      ),
+                    },
+                    {
+                      path: "",
+                      element: <ErrorPage />,
+                    },
+                  ],
                 },
                 {
                   path: "",
