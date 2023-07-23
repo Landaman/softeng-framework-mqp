@@ -7,9 +7,9 @@ import {
   MutableRefObject,
   useEffect,
 } from "react";
-import { Edge, Node } from "database";
-import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+import EdgeDao, { Edge } from "../database/edge-dao.ts";
+import NodeDao, { Node } from "../database/node-dao.ts";
 
 function Pathfinding() {
   const [nodes, setNodes] = useState<Array<Node>>([]);
@@ -17,27 +17,13 @@ function Pathfinding() {
   const { getAccessTokenSilently } = useAuth0();
   useEffect(() => {
     const get = async () => {
-      axios
-        .get<Node[]>(`/api/node/${""}`, {
-          headers: {
-            Authorization: `Bearer ${await getAccessTokenSilently()}`,
-          },
-        })
-        .then((response) => {
-          console.log(response.data.length);
-          setNodes(response.data as Array<Node>);
-        });
+      const nodeDao = new NodeDao();
 
-      axios
-        .get<Edge[]>(`/api/node/${""}`, {
-          headers: {
-            Authorization: `Bearer ${await getAccessTokenSilently()}`,
-          },
-        })
-        .then((response) => {
-          console.log(response.data.length);
-          setEdges(response.data as Array<Edge>);
-        });
+      setNodes(await nodeDao.getAll(await getAccessTokenSilently()));
+
+      const edgeDao = new EdgeDao();
+
+      setEdges(await edgeDao.getAll(await getAccessTokenSilently()));
     };
     get();
   }, [getAccessTokenSilently]);

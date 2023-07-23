@@ -81,6 +81,7 @@ function MapEditor() {
   const { getAccessTokenSilently } = useAuth0();
   const [canvasX, setCanvasX] = useState(0);
   const [canvasY, setCanvasY] = useState(0);
+  const [mapFloor, setMapFloor] = useState(Floor.L1);
 
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>;
   const c = useRef() as MutableRefObject<CanvasRenderingContext2D>;
@@ -315,25 +316,36 @@ function MapEditor() {
     setSelectedEdge(-1);
   }
 
-  const [floor, setfloor] = useState<Floor>(Floor.L1);
+  const [floor, setfloor] = useState("pathfindingCanvas L1");
+  function FloorGround() {
+    setfloor("pathfindingCanvas ground");
+    setMapFloor(Floor.L1);
+    buildMap(Floor.L1);
+  }
+
   function FloorL1() {
-    setfloor(Floor.L1);
+    setfloor("pathfindingCanvas L1");
+    setMapFloor(Floor.L1);
     buildMap(Floor.L1);
   }
   function FloorL2() {
-    setfloor(Floor.L2);
+    setfloor("pathfindingCanvas L2");
+    setMapFloor(Floor.L2);
     buildMap(Floor.L2);
   }
   function Floor1() {
-    setfloor(Floor.ONE);
+    setfloor("pathfindingCanvas one");
+    setMapFloor(Floor.ONE);
     buildMap(Floor.ONE);
   }
   function Floor2() {
-    setfloor(Floor.TWO);
+    setfloor("pathfindingCanvas two");
+    setMapFloor(Floor.TWO);
     buildMap(Floor.TWO);
   }
   function Floor3() {
-    setfloor(Floor.THREE);
+    setfloor("pathfindingCanvas three");
+    setMapFloor(Floor.THREE);
     buildMap(Floor.THREE);
   }
   function clearCanvas() {
@@ -443,7 +455,7 @@ function MapEditor() {
           xCoord: argument.x1,
           yCoord: argument.y1,
           building: "",
-          floor: floor,
+          floor: mapFloor,
           locationName: null,
         });
 
@@ -527,6 +539,9 @@ function MapEditor() {
             <label>Delete</label>
           </div>
         </div>
+        <button onClick={FloorGround} className={"floorButton"}>
+          Ground
+        </button>
         <button onClick={FloorL1} className={"floorButton"}>
           L1
         </button>
