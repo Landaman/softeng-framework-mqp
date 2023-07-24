@@ -11,6 +11,8 @@ import {
   SanitationService,
 } from "./routes/ServiceRequest.tsx";
 import ComputerRequestTable from "./routes/ComputerRequestTable.tsx";
+import edgeTable from "./routes/edge-table.tsx";
+import nodeTable from "./routes/node-table.tsx";
 import TestPage from "./routes/HighScore.tsx";
 import NavBar from "./NavBar.tsx";
 import { Auth0Provider } from "@auth0/auth0-react";
@@ -94,6 +96,14 @@ function App() {
             {
               path: "pathfinding",
               element: <AuthenticationGuard component={Pathfinding} />,
+            },
+            {
+              path: "edgeTable",
+              element: <AuthenticationGuard component={edgeTable} />,
+            },
+            {
+              path: "nodeTable",
+              element: <AuthenticationGuard component={nodeTable} />,
             },
             {
               path: "MapEditor",
