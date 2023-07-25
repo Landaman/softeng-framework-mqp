@@ -30,6 +30,30 @@
   margin: 10px;
 }
 
+.nodeSelectorDiv {
+  display: flex;
+  flexdirection: row;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.nodeSelectorButton {
+  width: 120px;
+  background-color: #001575;
+  color: white;
+  margin: 0px 10px 0px 10px;
+  border-radius: 16px;
+}
+
+.nodeSelectorButtonSelected {
+  width: 120px;
+  background-color: #002fff;
+  color: white;
+  margin: 0px 10px 0px 10px;
+  border-radius: 16px;
+}
+
 .pathfindingButton:hover {
   background-color: #2d7adb;
 }

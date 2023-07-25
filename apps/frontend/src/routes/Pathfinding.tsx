@@ -6,10 +6,10 @@ import {
   MutableRefObject,
   useEffect,
 } from "react";
-import { Edge, Node } from "database";
-import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { MapEdge, MapNode } from "../MapComponents.ts";
+import EdgeDao, { Edge } from "../database/edge-dao.ts";
+import NodeDao, { Node } from "../database/node-dao.ts";
 
 function Pathfinding() {
   const [dataNodes, setDataNodes] = useState<Array<Node>>([]);
@@ -26,32 +26,20 @@ function Pathfinding() {
   const [origionalY, setOrigionalY] = useState(0);
   const [scale, setScale] = useState(1);
   const [mapMode, setMapMode] = useState("Pan");
-  const [startNode, setStartNode] = useState("");
-  const [endNode, setEndNode] = useState("");
+  const [startNode, setStartNode] = useState(0);
+  const [endNode, setEndNode] = useState(0);
+  const [startButton, setStartButton] = useState("nodeSelectorButton");
+  const [endButton, setEndButton] = useState("nodeSelectorButton");
   const { getAccessTokenSilently } = useAuth0();
   useEffect(() => {
     const get = async () => {
-      axios
-        .get<Node[]>(`/api/node/${""}`, {
-          headers: {
-            Authorization: `Bearer ${await getAccessTokenSilently()}`,
-          },
-        })
-        .then((response) => {
-          console.log(response.data.length);
-          setDataNodes(response.data as Array<Node>);
-        });
+      const nodeDao = new NodeDao();
 
-      axios
-        .get<Edge[]>(`/api/edge/${""}`, {
-          headers: {
-            Authorization: `Bearer ${await getAccessTokenSilently()}`,
-          },
-        })
-        .then((response) => {
-          console.log(response.data.length);
-          setDataEdges(response.data as Array<Edge>);
-        });
+      setDataNodes(await nodeDao.getAll(await getAccessTokenSilently()));
+
+      const edgeDao = new EdgeDao();
+
+      setDataEdges(await edgeDao.getAll(await getAccessTokenSilently()));
     };
     get();
   }, [getAccessTokenSilently]);
@@ -123,11 +111,11 @@ function Pathfinding() {
           context.fillStyle = "#00FF00";
           context.fillRect(n.x1 - 10, n.y1 - 10, 20, 20);
           context.fillStyle = "black";
-        } else if (n.node.nodeID === startNode) {
+        } else if (n.node.id === startNode) {
           context.fillStyle = "#0000FF";
           context.fillRect(n.x1 - 10, n.y1 - 10, 20, 20);
           context.fillStyle = "black";
-        } else if (n.node.nodeID === endNode) {
+        } else if (n.node.id === endNode) {
           context.fillStyle = "#FF0000";
           context.fillRect(n.x1 - 10, n.y1 - 10, 20, 20);
           context.fillStyle = "black";
@@ -159,7 +147,9 @@ function Pathfinding() {
       if (node.floor === floor) {
         const x1: number = node.xCoord - 3;
         const y1: number = node.yCoord - 3;
-        const mn: MapNode = { x1, y1, node };
+        const fromDatabase = true;
+        const deleted = false;
+        const mn: MapNode = { x1, y1, node, fromDatabase, deleted };
         tempNodes.push(mn);
       }
     }
@@ -168,22 +158,21 @@ function Pathfinding() {
     const tempEdges: Array<MapEdge> = [];
     for (let i = 0; i < dataEdges.length; i++) {
       const edge: Edge = dataEdges[i];
-      if (
-        edge.endNodeId.slice(0, floor.length) === floor &&
-        edge.startNodeId.slice(0, floor.length) === floor
-      ) {
-        const index1: number = getMapNodeIndex(edge.startNodeId, tempNodes);
-        const index2: number = getMapNodeIndex(edge.endNodeId, tempNodes);
-        const me: MapEdge = { index1, index2, edge };
+      if (edge.endNode.floor === floor && edge.startNode.floor === floor) {
+        const index1: number = getMapNodeIndex(edge.startNode.id, tempNodes);
+        const index2: number = getMapNodeIndex(edge.endNode.id, tempNodes);
+        const fromDatabase = true;
+        const deleted = false;
+        const me: MapEdge = { index1, index2, edge, fromDatabase, deleted };
         tempEdges.push(me);
       }
     }
     setMapEdges(tempEdges);
   }
 
-  function getMapNodeIndex(nodeID: string, nodes: Array<MapNode>): number {
+  function getMapNodeIndex(nodeID: number, nodes: Array<MapNode>): number {
     for (let i = 0; i < nodes.length; i++) {
-      if (nodes[i].node.nodeID === nodeID) {
+      if (nodes[i].node.id === nodeID) {
         return i;
       }
     }
@@ -200,13 +189,15 @@ function Pathfinding() {
     } else if (mapMode === "Start") {
       const i = findNode(clientX, clientY);
       if (i >= 0) {
-        setStartNode(mapNodes[i].node.nodeID);
+        setStartNode(mapNodes[i].node.id);
         setMapMode("Pan");
+        setStartButton("nodeSelectorButton");
       }
     } else {
       const i = findNode(clientX, clientY);
       if (i >= 0) {
-        setEndNode(mapNodes[i].node.nodeID);
+        setEndNode(mapNodes[i].node.id);
+        setEndButton("nodeSelectorButton");
         setMapMode("Pan");
       }
     }
@@ -274,17 +265,17 @@ function Pathfinding() {
   function Floor1() {
     setfloor("pathfindingCanvas one");
     setDisplayMode("Map");
-    buildMap("1");
+    buildMap("ONE");
   }
   function Floor2() {
     setfloor("pathfindingCanvas two");
     setDisplayMode("Map");
-    buildMap("2");
+    buildMap("TWO");
   }
   function Floor3() {
     setfloor("pathfindingCanvas three");
     setDisplayMode("Map");
-    buildMap("3");
+    buildMap("THREE");
   }
   function clearCanvas() {
     setMapNodes([]);
@@ -293,26 +284,34 @@ function Pathfinding() {
 
   const selectStartNode = () => {
     setMapMode("Start");
+    setStartButton("nodeSelectorButtonSelected");
+    setEndButton("nodeSelectorButton");
   };
 
   const selectEndNode = () => {
     setMapMode("End");
+    setStartButton("nodeSelectorButton");
+    setEndButton("nodeSelectorButtonSelected");
   };
 
   return (
     <div className={"Pathfinding"}>
       <div className={"pathfinding-inputs"}>
-        <h1>Get Directions</h1>
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <button onClick={selectStartNode}>start Node</button>
+        <h1 style={{ marginBottom: "32px" }}>Get Directions</h1>
+        <div className={"nodeSelectorDiv"}>
+          <button className={startButton} onClick={selectStartNode}>
+            start Node
+          </button>
           <p>{startNode}</p>
         </div>
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <button onClick={selectEndNode}>end Node</button>
+        <div className={"nodeSelectorDiv"}>
+          <button className={endButton} onClick={selectEndNode}>
+            end Node
+          </button>
           <p>{endNode}</p>
         </div>
         <button onClick={drawPath} className={"pathfindingButton"}>
-          Submit
+          Get Directions
         </button>
       </div>
       <div className={"mapdiv"}>

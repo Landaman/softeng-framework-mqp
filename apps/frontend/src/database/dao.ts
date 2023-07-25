@@ -1,8 +1,12 @@
 /**
  * Interface defining what a DAO should look for on a given
  * row and row type
+ * @param Type the type to use for the rows in the database
+ * @param KeyType the type to use for keys
+ * @param CreateType the type to use for creating new rows
+ * @param UpdateType the type to use for updating old rows
  */
-export interface Dao<Type, KeyType> {
+export interface Dao<Type, KeyType, CreateType, UpdateType> {
   /**
    * Gets all rows associated with the table represented
    * by this DAO
@@ -25,7 +29,7 @@ export interface Dao<Type, KeyType> {
    * @param row the row object to create
    * @return the finished row object, in case an ID is required to be generated
    */
-  create(token: string, row: Type): Promise<Type>;
+  create(token: string, row: CreateType): Promise<Type>;
 
   /**
    * Deletes a row object from the table
@@ -34,5 +38,10 @@ export interface Dao<Type, KeyType> {
    */
   delete(token: string, key: KeyType): Promise<void>;
 
-  update(token: string, row: Type): Promise<void>;
+  /**
+   * Updates a row object in the table
+   * @param token the API token to use
+   * @param row the object to update
+   */
+  update(token: string, row: UpdateType): Promise<Type>;
 }

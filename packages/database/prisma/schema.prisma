@@ -27,38 +27,40 @@ model ComputerRequest {
 }
 
 model Node {
-  nodeID       String        @id @unique
+  id           Int           @id @default(autoincrement())
   xCoord       Int
   yCoord       Int
-  floor        String
+  floor        Floor
   building     String
-  locationName locationName? @relation(fields: [location], references: [longName], onDelete: Cascade, onUpdate: Cascade)
+  locationName LocationName? @relation(fields: [location], references: [longName], onDelete: Cascade, onUpdate: Cascade)
   location     String?       @unique
   startEdges   Edge[]        @relation("startNode")
   endEdges     Edge[]        @relation("endNode")
+
+  @@unique([xCoord, yCoord, floor])
+}
+
+enum Floor {
+  L1
+  L2
+  ONE
+  TWO
+  THREE
 }
 
 model Edge {
-  edgeID      String @id @unique
-  startNode   Node   @relation("startNode", fields: [startNodeId], references: [nodeID], onDelete: Cascade, onUpdate: Cascade)
-  startNodeId String
-  endNode     Node   @relation("endNode", fields: [endNodeId], references: [nodeID], onDelete: Cascade, onUpdate: Cascade)
-  endNodeId   String
+  id          Int  @id @default(autoincrement())
+  startNode   Node @relation("startNode", fields: [startNodeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  startNodeId Int
+  endNode     Node @relation("endNode", fields: [endNodeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  endNodeId   Int
 }
 
-model locationName {
+model LocationName {
   shortName    String
   longName     String @id @unique
   locationType String
   node         Node?
-}
-
-model User {
-  id       Int    @id @default(autoincrement())
-  first    String
-  last     String
-  username String
-  password String
 }
 
 model SanitationRequest {

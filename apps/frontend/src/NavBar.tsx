@@ -53,7 +53,10 @@ function NavBar() {
         <a className={"navBarLink"} href={`/service-requests/computer/create`}>
           <p>Computer Service</p>
         </a>
-        <a className={"navBarLink"} href={`/service-requests/sanitation`}>
+        <a
+          className={"navBarLink"}
+          href={`/service-requests/sanitation/create`}
+        >
           <p>Sanitation Service</p>
         </a>
         <a className={"navBarLink"} href={`/high-score`}>

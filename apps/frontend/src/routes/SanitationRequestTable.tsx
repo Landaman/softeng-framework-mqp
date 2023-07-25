@@ -11,10 +11,10 @@ import { useEffect, useMemo, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import Form from "react-bootstrap/Form";
 import { Table } from "react-bootstrap";
-import ComputerRequestDao, {
-  ComputerRequest,
-  UpdateComputerRequest,
-} from "../database/computer-request-dao.ts";
+import SanitationRequestDao, {
+  SanitationRequest,
+  UpdateSanitationRequest,
+} from "../database/sanitation-request-dao.ts";
 
 // Update the table meta and column metas, so that we can provide additional information to the table and columns
 declare module "@tanstack/react-table" {
@@ -38,7 +38,7 @@ declare module "@tanstack/react-table" {
 /**
  * Override the default column renderer, allow it to create cells that are editable text boxes
  */
-const defaultColumn: Partial<ColumnDef<ComputerRequest>> = {
+const defaultColumn: Partial<ColumnDef<SanitationRequest>> = {
   cell: function Cell({ getValue, row: { index }, column: { id }, table }) {
     const initialValue = getValue();
     // We need to keep and update the state of the cell normally
@@ -84,19 +84,19 @@ const defaultColumn: Partial<ColumnDef<ComputerRequest>> = {
 };
 
 /**
- * Component for the computer service request viewing table
+ * Component for the sanitation service request viewing table
  */
-export default function ComputerRequestTable() {
+export default function SanitationRequestTable() {
   const { getAccessTokenSilently } = useAuth0();
 
   // The computer requests list
-  const [requests, setRequests] = useState<ComputerRequest[]>([]);
+  const [requests, setRequests] = useState<SanitationRequest[]>([]);
 
   // This gets the requests from the API
   useEffect(() => {
     // This trick lets us use an async function in useEffect
     const fun = async () => {
-      const requestDao = new ComputerRequestDao();
+      const requestDao = new SanitationRequestDao();
       // Get the requests from the API
       const requests = await requestDao.getAll(await getAccessTokenSilently());
 
@@ -110,7 +110,7 @@ export default function ComputerRequestTable() {
 
   // Set up the columns for the computer request
   const columns = useMemo(() => {
-    const columnHelper = createColumnHelper<ComputerRequest>();
+    const columnHelper = createColumnHelper<SanitationRequest>();
     return [
       columnHelper.accessor("id", {
         header: "ID",
@@ -130,7 +130,7 @@ export default function ComputerRequestTable() {
             return {
               id: id,
               location: value,
-            } satisfies UpdateComputerRequest;
+            } satisfies UpdateSanitationRequest;
           },
         },
       }),
@@ -142,31 +142,31 @@ export default function ComputerRequestTable() {
             return {
               id: id,
               staff: value,
-            } satisfies UpdateComputerRequest;
+            } satisfies UpdateSanitationRequest;
           },
         },
       }),
-      columnHelper.accessor("reason", {
-        header: "Reason",
+      columnHelper.accessor("issue", {
+        header: "Issue",
         meta: {
           isEditable: true,
           createUpdateArgs: (id, value) => {
             return {
               id: id,
-              reason: value,
-            } satisfies UpdateComputerRequest;
+              issue: value,
+            } satisfies UpdateSanitationRequest;
           },
         },
       }),
-      columnHelper.accessor("type", {
-        header: "Type",
+      columnHelper.accessor("urgency", {
+        header: "Urgency",
         meta: {
           isEditable: true,
           createUpdateArgs: (id, value) => {
             return {
               id: id,
-              type: value,
-            } satisfies UpdateComputerRequest;
+              urgency: value,
+            } satisfies UpdateSanitationRequest;
           },
         },
       }),
@@ -191,12 +191,12 @@ export default function ComputerRequestTable() {
     meta: {
       updateData: async (rowIndex: number, updateParams: unknown) => {
         // Get the DAO to do the update with
-        const dao = new ComputerRequestDao();
+        const dao = new SanitationRequestDao();
 
         // Do the update, get the new request
         const newRequest = await dao.update(
           await getAccessTokenSilently(),
-          updateParams as UpdateComputerRequest
+          updateParams as UpdateSanitationRequest
         );
 
         // Go through the requests, replace only the new request to be the data
