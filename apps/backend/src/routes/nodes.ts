@@ -32,8 +32,34 @@ router.get("/", async function (req: Request, res: Response) {
   const result = await PrismaClient.node.findMany({
     include: {
       locationName: true,
-      startEdges: true,
-      endEdges: true,
+      startEdges: {
+        include: {
+          startNode: {
+            include: {
+              locationName: true,
+            },
+          },
+          endNode: {
+            include: {
+              locationName: true,
+            },
+          },
+        },
+      },
+      endEdges: {
+        include: {
+          startNode: {
+            include: {
+              locationName: true,
+            },
+          },
+          endNode: {
+            include: {
+              locationName: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -50,8 +76,34 @@ router.get("/:id", async function (req: Request, res: Response) {
       },
       include: {
         locationName: true,
-        startEdges: true,
-        endEdges: true,
+        startEdges: {
+          include: {
+            startNode: {
+              include: {
+                locationName: true,
+              },
+            },
+            endNode: {
+              include: {
+                locationName: true,
+              },
+            },
+          },
+        },
+        endEdges: {
+          include: {
+            startNode: {
+              include: {
+                locationName: true,
+              },
+            },
+            endNode: {
+              include: {
+                locationName: true,
+              },
+            },
+          },
+        },
       },
     });
 
