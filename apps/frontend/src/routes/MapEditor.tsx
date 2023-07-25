@@ -22,6 +22,8 @@ function createMapNode(x: number, y: number) {
     xCoord: 0,
     yCoord: 0,
     locationName: null,
+    startEdges: [],
+    endEdges: [],
   };
   const n: MapNode = { x1, y1, node, fromDatabase: false, deleted: false };
   return n;
@@ -39,6 +41,8 @@ function createMapEdge(i1: number, i2: number) {
       xCoord: 0,
       yCoord: 0,
       locationName: null,
+      startEdges: [],
+      endEdges: [],
     },
     endNode: {
       id: 0,
@@ -47,6 +51,8 @@ function createMapEdge(i1: number, i2: number) {
       xCoord: 0,
       yCoord: 0,
       locationName: null,
+      startEdges: [],
+      endEdges: [],
     },
   };
   const e: MapEdge = {
