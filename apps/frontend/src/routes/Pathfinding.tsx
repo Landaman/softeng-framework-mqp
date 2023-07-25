@@ -14,7 +14,7 @@ import NodeDao, { Node } from "../database/node-dao.ts";
 function Pathfinding() {
   const [dataNodes, setDataNodes] = useState<Array<Node>>([]);
   const [dataEdges, setDataEdges] = useState<Array<Edge>>([]);
-  const [displayMode, setDisplayMode] = useState<string>("Map");
+  const [displayMode, setDisplayMode] = useState<string>("Find Path");
   const [mapNodes, setMapNodes] = useState<Array<MapNode>>([]);
   const [mapEdges, setMapEdges] = useState<Array<MapEdge>>([]);
   const [hoverNode, setHoverNode] = useState(-1);
@@ -30,6 +30,7 @@ function Pathfinding() {
   const [endNode, setEndNode] = useState(0);
   const [startButton, setStartButton] = useState("nodeSelectorButton");
   const [endButton, setEndButton] = useState("nodeSelectorButton");
+  const [pathNodes, setPathNodes] = useState<Array<Node>>([]);
   const { getAccessTokenSilently } = useAuth0();
   useEffect(() => {
     const get = async () => {
@@ -68,29 +69,24 @@ function Pathfinding() {
     context.imageSmoothingEnabled = false;
     context.lineWidth = 4;
 
-    if (displayMode === "Path") {
+    if (displayMode === "Select a New Path") {
       let oldX = 0;
       let oldY = 0;
-      if (dataNodes.length > 0) {
-        context.fillRect(
-          dataNodes[0].xCoord - 3,
-          dataNodes[0].yCoord - 3,
-          6,
-          6
-        );
-        oldX = dataNodes[0].xCoord - 3;
-        oldY = dataNodes[0].yCoord - 3;
+      if (mapNodes.length > 0) {
+        context.fillRect(mapNodes[0].x1 - 10, mapNodes[0].y1 - 10, 20, 20);
+        oldX = mapNodes[0].x1;
+        oldY = mapNodes[0].y1;
       }
       context.beginPath();
-      for (let i = 1; i < dataNodes.length; i++) {
-        const n = dataNodes[i];
-        const scaleX = n.xCoord - 3;
-        const scaleY = n.yCoord - 3;
+      for (let i = 1; i < mapNodes.length; i++) {
+        const n = mapNodes[i];
+        const scaleX = n.x1 - 10;
+        const scaleY = n.y1 - 10;
         context.moveTo(oldX, oldY);
-        context.fillRect(scaleX, scaleY, 6, 6);
-        context.lineTo(scaleX, scaleY);
-        oldX = scaleX;
-        oldY = scaleY;
+        context.fillRect(scaleX, scaleY, 20, 20);
+        context.lineTo(n.x1, n.y1);
+        oldX = n.x1;
+        oldY = n.y1;
       }
       context.stroke();
     } else {
@@ -135,39 +131,89 @@ function Pathfinding() {
     endNode,
   ]);
 
-  function drawPath() {
-    setDataEdges(dataEdges);
+  function Submit() {
+    if (displayMode === "Find Path") {
+      setDisplayMode("Select a New Path");
+
+      // set pathNodes to the pathfinding result use startNode and endNode
+      setPathNodes([
+        dataNodes[572],
+        dataNodes[575],
+        dataNodes[555],
+        dataNodes[347],
+        dataNodes[360],
+      ]);
+
+      if (pathNodes[0].floor === "L1") {
+        FloorL1();
+        buildMap("L1", "Select a New Path");
+      } else if (pathNodes[0].floor === "L2") {
+        FloorL2();
+        buildMap("L2", "Select a New Path");
+      } else if (pathNodes[0].floor === "ONE") {
+        Floor1();
+        buildMap("ONE", "Select a New Path");
+      } else if (pathNodes[0].floor === "TWO") {
+        Floor2();
+        buildMap("TWO", "Select a New Path");
+      } else if (pathNodes[0].floor === "THREE") {
+        Floor3();
+        buildMap("THREE", "Select a New Path");
+      }
+    } else {
+      setDisplayMode("Find Path");
+      FloorL1();
+      buildMap("L1", "Find Path");
+      setStartNode(0);
+      setEndNode(0);
+    }
   }
 
-  function buildMap(floor: string) {
+  function buildMap(floor: string, m: string) {
     clearCanvas();
-    const tempNodes: Array<MapNode> = [];
-    for (let i = 0; i < dataNodes.length; i++) {
-      const node: Node = dataNodes[i];
-      if (node.floor === floor) {
-        const x1: number = node.xCoord - 3;
-        const y1: number = node.yCoord - 3;
-        const fromDatabase = true;
-        const deleted = false;
-        const mn: MapNode = { x1, y1, node, fromDatabase, deleted };
-        tempNodes.push(mn);
+    if (m === "Find Path") {
+      const tempNodes: Array<MapNode> = [];
+      for (let i = 0; i < dataNodes.length; i++) {
+        const node: Node = dataNodes[i];
+        if (node.floor === floor) {
+          const x1: number = node.xCoord - 3;
+          const y1: number = node.yCoord - 3;
+          const fromDatabase = true;
+          const deleted = false;
+          const mn: MapNode = { x1, y1, node, fromDatabase, deleted };
+          tempNodes.push(mn);
+        }
       }
-    }
-    setMapNodes(tempNodes);
+      setMapNodes(tempNodes);
 
-    const tempEdges: Array<MapEdge> = [];
-    for (let i = 0; i < dataEdges.length; i++) {
-      const edge: Edge = dataEdges[i];
-      if (edge.endNode.floor === floor && edge.startNode.floor === floor) {
-        const index1: number = getMapNodeIndex(edge.startNode.id, tempNodes);
-        const index2: number = getMapNodeIndex(edge.endNode.id, tempNodes);
-        const fromDatabase = true;
-        const deleted = false;
-        const me: MapEdge = { index1, index2, edge, fromDatabase, deleted };
-        tempEdges.push(me);
+      const tempEdges: Array<MapEdge> = [];
+      for (let i = 0; i < dataEdges.length; i++) {
+        const edge: Edge = dataEdges[i];
+        if (edge.endNode.floor === floor && edge.startNode.floor === floor) {
+          const index1: number = getMapNodeIndex(edge.startNode.id, tempNodes);
+          const index2: number = getMapNodeIndex(edge.endNode.id, tempNodes);
+          const fromDatabase = true;
+          const deleted = false;
+          const me: MapEdge = { index1, index2, edge, fromDatabase, deleted };
+          tempEdges.push(me);
+        }
       }
+      setMapEdges(tempEdges);
+    } else {
+      const tempNodes: Array<MapNode> = [];
+      for (let i = 0; i < pathNodes.length; i++) {
+        const node: Node = pathNodes[i];
+        if (node.floor === floor) {
+          const x1: number = node.xCoord - 3;
+          const y1: number = node.yCoord - 3;
+          const fromDatabase = true;
+          const deleted = false;
+          const mn: MapNode = { x1, y1, node, fromDatabase, deleted };
+          tempNodes.push(mn);
+        }
+      }
+      setMapNodes(tempNodes);
     }
-    setMapEdges(tempEdges);
   }
 
   function getMapNodeIndex(nodeID: number, nodes: Array<MapNode>): number {
@@ -231,9 +277,9 @@ function Pathfinding() {
 
   function findNode(x: number, y: number) {
     const adjX =
-      (((x - 510 - translateX) * 5000) / canvasX - 2500) / scale + 2500;
+      (((x - 512 - translateX) * 5000) / canvasX - 2500) / scale + 2500;
     const adjY =
-      (((y - 110 - translateY) * 3400) / canvasY - 1700) / scale + 1700;
+      (((y - 114 - translateY) * 3400) / canvasY - 1700) / scale + 1700;
     for (let i = 0; i < mapNodes.length; i++) {
       if (
         adjX - 12 < mapNodes[i].x1 &&
@@ -254,28 +300,23 @@ function Pathfinding() {
   }
   function FloorL1() {
     setfloor("pathfindingCanvas L1");
-    setDisplayMode("Map");
-    buildMap("L1");
+    buildMap("L1", displayMode);
   }
   function FloorL2() {
     setfloor("pathfindingCanvas L2");
-    setDisplayMode("Map");
-    buildMap("L2");
+    buildMap("L2", displayMode);
   }
   function Floor1() {
     setfloor("pathfindingCanvas one");
-    setDisplayMode("Map");
-    buildMap("ONE");
+    buildMap("ONE", displayMode);
   }
   function Floor2() {
     setfloor("pathfindingCanvas two");
-    setDisplayMode("Map");
-    buildMap("TWO");
+    buildMap("TWO", displayMode);
   }
   function Floor3() {
     setfloor("pathfindingCanvas three");
-    setDisplayMode("Map");
-    buildMap("THREE");
+    buildMap("THREE", displayMode);
   }
   function clearCanvas() {
     setMapNodes([]);
@@ -283,15 +324,25 @@ function Pathfinding() {
   }
 
   const selectStartNode = () => {
-    setMapMode("Start");
-    setStartButton("nodeSelectorButtonSelected");
-    setEndButton("nodeSelectorButton");
+    if (mapMode != "Start") {
+      setMapMode("Start");
+      setStartButton("nodeSelectorButtonSelected");
+      setEndButton("nodeSelectorButton");
+    } else {
+      setMapMode("Pan");
+      setStartButton("nodeSelectorButton");
+    }
   };
 
   const selectEndNode = () => {
-    setMapMode("End");
-    setStartButton("nodeSelectorButton");
-    setEndButton("nodeSelectorButtonSelected");
+    if (mapMode != "End") {
+      setMapMode("End");
+      setStartButton("nodeSelectorButton");
+      setEndButton("nodeSelectorButtonSelected");
+    } else {
+      setMapMode("Pan");
+      setEndButton("nodeSelectorButton");
+    }
   };
 
   return (
@@ -310,8 +361,8 @@ function Pathfinding() {
           </button>
           <p>{endNode}</p>
         </div>
-        <button onClick={drawPath} className={"pathfindingButton"}>
-          Get Directions
+        <button onClick={Submit} className={"pathfindingButton"}>
+          {displayMode}
         </button>
       </div>
       <div className={"mapdiv"}>
