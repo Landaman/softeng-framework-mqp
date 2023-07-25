@@ -1,10 +1,10 @@
 import "./Pathfinding.css";
 import {
-  useLayoutEffect,
-  useState,
-  useRef,
   MutableRefObject,
   useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
 } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import EdgeDao, { Edge } from "../database/edge-dao.ts";
@@ -139,6 +139,7 @@ function Pathfinding() {
 
   async function findPath(startID: number, endID: number): Promise<Node[]> {
     const nodeDao = new NodeDao();
+
     const start: Node | null = await nodeDao.get(
       await getAccessTokenSilently(),
       startID
@@ -154,6 +155,7 @@ function Pathfinding() {
     const indexedArrayG: { [key: string]: number } = {};
     const indexedArrayH: { [key: string]: number } = {};
     const indexedArrayF: { [key: string]: number } = {};
+    const indexedArrayParent: { [key: string]: number } = {};
 
     let openList: Node[] = [start];
     let closedList: Node[] = [];
@@ -161,8 +163,14 @@ function Pathfinding() {
     NODE_CHECK: while (openList.length != 0) {
       // while open list is not empty
       let closed;
-      const q: Node = openList[openList.length - 1];
-      delete openList[openList.length - 1];
+      let q: Node | null = openList[openList.length - 1];
+
+      const deleteList: Node[] = [];
+      for (let i = 0; i < openList.length - 1; i++) {
+        // remove last element
+        deleteList[i] = openList[i];
+      }
+      openList = deleteList;
 
       for (closed of closedList) {
         if (closed === q) {
@@ -170,87 +178,109 @@ function Pathfinding() {
         }
       }
 
-      if (q == end) {
+      if (q === end) {
         // if the current node is the goal
         const path: Node[] = []; // create list of nodes to represent the path
         path[path.length] = q; // add the end node
+
+        while (q != start) {
+          if (q != null) {
+            q = await nodeDao.get(
+              await getAccessTokenSilently(),
+              indexedArrayParent[q.id]
+            );
+            if (q != null) {
+              path[path.length] = q;
+            }
+          }
+        }
+
         return path; // path is backwards xd
       }
 
-      const nodeNeighbors: Node[] = [];
+      const nodeNeighbors: number[] = [];
       const startEdges: Edge[] = q.startEdges;
       const endEdges: Edge[] = q.endEdges;
 
       let edge;
       for (edge of startEdges) {
-        nodeNeighbors[nodeNeighbors.length] = edge.endNode;
+        nodeNeighbors[nodeNeighbors.length] = edge.endNodeId;
       }
       for (edge of endEdges) {
-        nodeNeighbors[nodeNeighbors.length] = edge.startNode;
+        nodeNeighbors[nodeNeighbors.length] = edge.startNodeId;
       }
 
-      NODE_LOOP: for (let i = 0; i < nodeNeighbors.length; i++) {
-        const child = nodeNeighbors[i];
-        if (q.floor != child.floor) {
-          const loc = child.locationName;
-          if (loc != null) {
-            if (loc.locationType == "ELEV") {
-              if (indexedArrayG[q.id] != null) {
-                indexedArrayG[child.id] = indexedArrayG[q.id] + 50;
-              } else indexedArrayG[child.id] = 50;
-            } else if (loc.locationType == "STAI") {
-              if (indexedArrayG[q.id] != null) {
-                indexedArrayG[child.id] = indexedArrayG[q.id] + 100;
-              } else indexedArrayG[child.id] = 100;
+      let childId;
+      NODE_LOOP: for (childId of nodeNeighbors) {
+        indexedArrayParent[childId] = q.id;
+
+        const child: Node | null = await nodeDao.get(
+          await getAccessTokenSilently(),
+          childId
+        );
+
+        if (child != null) {
+          if (q.floor != child.floor) {
+            const loc = child.locationName;
+            if (loc != null) {
+              if (loc.locationType == "ELEV") {
+                if (indexedArrayG[q.id] != null) {
+                  indexedArrayG[childId] = indexedArrayG[q.id] + 50;
+                } else indexedArrayG[childId] = 50;
+              } else if (loc.locationType == "STAI") {
+                if (indexedArrayG[q.id] != null) {
+                  indexedArrayG[childId] = indexedArrayG[q.id] + 100;
+                } else indexedArrayG[childId] = 100;
+              }
+            } else indexedArrayG[childId] = 100; // no location name, assume stairs
+          } else {
+            if (indexedArrayG[q.id] != null) {
+              indexedArrayG[childId] =
+                indexedArrayG[q.id] + euclideanDistance(child, q);
+            } else indexedArrayG[childId] = euclideanDistance(child, q);
+          }
+
+          indexedArrayH[childId] = euclideanDistance(child, end); // calculate the lowest possible distance to end
+          indexedArrayF[childId] =
+            indexedArrayG[childId] + indexedArrayH[childId];
+
+          let openNode;
+          for (openNode of openList) {
+            // check if node is on open list with a lower cost
+            if (
+              openNode === child &&
+              indexedArrayF[openNode.id] < indexedArrayF[childId]
+            ) {
+              continue NODE_LOOP;
             }
-          } else indexedArrayG[child.id] = 100; // no location name, assume stairs
-        } else {
-          if (indexedArrayG[q.id] != null) {
-            indexedArrayG[child.id] =
-              indexedArrayG[q.id] + euclideanDistance(child, q);
-          } else indexedArrayG[child.id] = euclideanDistance(child, q);
-        }
-
-        indexedArrayH[child.id] = euclideanDistance(child, end); // calculate the lowest possible distance to end
-        indexedArrayF[child.id] =
-          indexedArrayG[child.id] + indexedArrayH[child.id];
-
-        let openNode;
-        for (openNode of openList) {
-          // check if node is on open list with a lower cost
-          if (
-            openNode === child &&
-            indexedArrayF[openNode.id] < indexedArrayF[child.id]
-          ) {
-            continue NODE_LOOP;
           }
-        }
 
-        let closedNode;
-        for (closedNode of closedList) {
-          // check is node is on closed list with lower cost
-          if (
-            closedNode === child &&
-            indexedArrayF[closedNode.id] < indexedArrayF[child.id]
-          ) {
-            continue NODE_LOOP;
+          let closedNode;
+          for (closedNode of closedList) {
+            // check is node is on closed list with lower cost
+            if (
+              closedNode === child &&
+              indexedArrayF[closedNode.id] < indexedArrayF[childId]
+            ) {
+              continue NODE_LOOP;
+            }
           }
-        }
+          let element;
+          let inserted = false;
+          const copyList: Node[] = [];
+          for (element of openList) {
+            if (
+              !inserted &&
+              indexedArrayF[element.id] <= indexedArrayF[childId]
+            ) {
+              copyList[copyList.length] = child;
+              inserted = true;
+            }
+            copyList[copyList.length] = element;
+          }
 
-        let element;
-        let inserted = false;
-        const copyList: Node[] = [];
-        for (element of openList) {
-          if (
-            !inserted &&
-            indexedArrayF[element.id] <= indexedArrayF[child.id]
-          ) {
-            copyList[copyList.length] = child;
-            inserted = true;
-          }
-          copyList[copyList.length] = element;
+          openList = copyList;
         }
-        openList = copyList;
       }
 
       let element;
@@ -265,7 +295,7 @@ function Pathfinding() {
       }
       closedList = copyList;
     }
-    return pathNodes;
+    return [];
   }
 
   async function Submit() {
@@ -274,6 +304,8 @@ function Pathfinding() {
 
       // set pathNodes to the pathfinding result use startNode and endNode
       setPathNodes(await findPath(startNode, endNode));
+
+      console.log(pathNodes);
 
       if (pathNodes[0].floor === "L1") {
         FloorL1();
