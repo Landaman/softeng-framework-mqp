@@ -10,6 +10,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { MapEdge, MapNode } from "../MapComponents.ts";
 import EdgeDao, { Edge } from "../database/edge-dao.ts";
 import NodeDao, { Node } from "../database/node-dao.ts";
+import LocationNameDao, {LocationName} from "../database/location-name-dao.ts";
+import { MapEdge, MapNode } from "../MapComponents.ts";
 
 function Pathfinding() {
   const [dataNodes, setDataNodes] = useState<Array<Node>>([]);
@@ -132,113 +134,107 @@ function Pathfinding() {
     endNode,
   ]);
 
-  // function euclideanDistance(node1: Node, node2: Node) {
-  //   const dx = node1.xCoord - node2.xCoord;
-  //   const dy = node1.yCoord - node2.yCoord;
-  //   return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-  // }
+  function euclideanDistance(node1: Node, node2: Node) {
+    const dx = node1.xCoord - node2.xCoord;
+    const dy = node1.yCoord - node2.yCoord;
+    return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+  }
 
-  // function getNeighbors(node: Node) {
-  //   axios
-  //     .get<Edge[]>(`/api/edge/${node.nodeID}`)
-  //     .then(
-  //       (response) => {
-  //         setNeighbors(response.data);
-  //         console.info(`Successfully fetched edges: ${response}`);
-  //       },
-  //       () => {
-  //         console.log("fetch failed");
-  //       }
-  //     )
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // }
+  function getNeighbors(node: Node) {
+    // EEK!
+  }
 
-  // function findPath(start: Node, end: Node, accessible: boolean) {
-  //   if (start.nodeID == null || end.nodeID == null) return;
-  //
-  //   const openList: Node[] = [start]; // TODO: REALISTICALLY NEEDS TO BE EDGES SINCE NO WRAPPER
-  //   const closedList: Node[] = [];
-  //
-  //   // const NodeWrapper = {node:start, parent:null, g:0, h:0, f:0}
-  //
-  //   NODE_CHECK: while (openList.length != 0) {
-  //     // while open list is not empty
-  //     let closed;
-  //     const q: Node = openList[0]; // get node with the lowest estimated cost //TODO: NEEDS TO REMOVE FROM LIST
-  //
-  //     for (closed of closedList) {
-  //       if (closed == q) {
-  //         continue NODE_CHECK;
-  //       }
-  //     }
-  //
-  //     if (q == end) {
-  //       // if the current node is the goal
-  //       const path: Node[] = []; // create list of nodes to represent the path
-  //       path[path.length] = q; // add the end node
-  //       return path; // path is backwards xd
-  //     }
-  //
-  //     let edge;
-  //     const nodeNeighbors: Node[] = [];
-  //     for (edge of neighbors) {
-  //       if (edge.endNodeId == q.nodeID) {
-  //         nodeNeighbors[nodeNeighbors.length] = edge.startNode; //TODO: ???????
-  //       } else {
-  //         nodeNeighbors[nodeNeighbors.length] = edge.endNode; //TODO: ???????
-  //       }
-  //     }
-  //
-  //     let node;
-  //     NODE_LOOP: for (node of nodeNeighbors) {
-  //       // get the neighbors of the current node
-  //       // PathFinder.NodeWrapper child =
-  //       //     new PathFinder.NodeWrapper(node, q); // todo: create node wrapper out of current node
-  //       if (q.floor != node.floor) {
-  //         const loc: locationName = node.locationName; //TODO: ???????
-  //         if (loc.locationType == "ELEV") {
-  //           child.g = q.g + 50; // cost for elevator //TODO: WRAPPER FOR COST
-  //         } else if (loc.locationType == "STAI") {
-  //           if (accessible) continue;
-  //           child.g = q.g + 100; // cost for stairs //TODO: WRAPPER FOR COST
-  //         }
-  //       } else {
-  //         child.g = q.g + euclideanDistance(node, q); // calculate distance from start //TODO: WRAPPER FOR COST
-  //       }
-  //
-  //       child.h = euclideanDistance(child.node, end); // calculate the lowest possible distance to end //TODO: COST!!!!!
-  //       child.f = child.g + child.h;
-  //
-  //       let openNode;
-  //       for (openNode of openList) {
-  //         // check if node is on open list with a lower cost
-  //         if (openNode == node && open.f < child.f) {
-  //           //TODO: COST!!!!!
-  //           continue NODE_LOOP;
-  //         }
-  //       }
-  //
-  //       let closedNode;
-  //       for (closedNode of closedList) {
-  //         // check is node is on closed list with lower cost
-  //         if (closedNode == node) {
-  //           if (closed.f < child.f) {
-  //             //TODO: COST!!!!!
-  //             continue NODE_LOOP;
-  //           }
-  //         }
-  //       }
-  //       openList.add(child); //todo: INSERT IN ORDER
-  //     }
-  //     closedList.add(q); //todo: INSERT IN ORDER
-  //   }
-  //   return null;
-  // }
+  function findPath(start: Node, end: Node, accessible: boolean) {
+    if (start.id === null || end.id === null) return;
+
+    const indexedArray: {[key: string]: number} = {
+      foo: 2118,
+      bar: 2118
+    };
+
+    const openList: Node[] = [start]; // TODO: REALISTICALLY NEEDS TO BE EDGES SINCE NO WRAPPER
+    const closedList: Node[] = [];
+
+    // const NodeWrapper = {node:start, parent:null, g:0, h:0, f:0}
+
+    NODE_CHECK: while (openList.length != 0) {
+      // while open list is not empty
+      let closed;
+      const q: Node = openList[0]; // get node with the lowest estimated cost //TODO: NEEDS TO REMOVE FROM LIST
+
+      for (closed of closedList) {
+        if (closed === q) {
+          continue NODE_CHECK;
+        }
+      }
+
+      if (q == end) {
+        // if the current node is the goal
+        const path: Node[] = []; // create list of nodes to represent the path
+        path[path.length] = q; // add the end node
+        return path; // path is backwards xd
+      }
+
+      let edge;
+      const nodeNeighbors: Node[] = [];
+      for (edge of neighbors) {
+        if (edge.endNodeId == q.id) {
+          nodeNeighbors[nodeNeighbors.length] = edge.startNode;
+        } else {
+          nodeNeighbors[nodeNeighbors.length] = edge.endNode;
+        }
+      }
+
+      let node;
+      NODE_LOOP: for (node of nodeNeighbors) {
+        // get the neighbors of the current node
+        // PathFinder.NodeWrapper child =
+        //     new PathFinder.NodeWrapper(node, q); // todo: create node wrapper out of current node
+        if (q.floor != node.floor) {
+          const loc : LocationName = node.locationName;
+          if (loc.locationType == "ELEV") {
+            child.g = q.g + 50; // cost for elevator //TODO: WRAPPER FOR COST
+          } else if (loc.locationType == "STAI") {
+            if (accessible) continue;
+            child.g = q.g + 100; // cost for stairs //TODO: WRAPPER FOR COST
+          }
+        } else {
+          child.g = q.g + euclideanDistance(node, q); // calculate distance from start //TODO: WRAPPER FOR COST
+        }
+
+        child.h = euclideanDistance(child.node, end); // calculate the lowest possible distance to end //TODO: COST!!!!!
+        child.f = child.g + child.h;
+
+        let openNode;
+        for (openNode of openList) {
+          // check if node is on open list with a lower cost
+          if (openNode == node && open.f < child.f) {
+            //TODO: COST!!!!!
+            continue NODE_LOOP;
+          }
+        }
+
+        let closedNode;
+        for (closedNode of closedList) {
+          // check is node is on closed list with lower cost
+          if (closedNode == node) {
+            if (closed.f < child.f) {
+              //TODO: COST!!!!!
+              continue NODE_LOOP;
+            }
+          }
+        }
+        openList.add(child); //todo: INSERT IN ORDER
+      }
+      closedList.add(q); //todo: INSERT IN ORDER
+    }
+    return null;
+  }
 
   function drawPath() {
     setDataEdges(dataEdges);
+  }
+
   function Submit() {
     if (displayMode === "Find Path") {
       setDisplayMode("Select a New Path");
