@@ -7,10 +7,8 @@ import {
   useEffect,
 } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { MapEdge, MapNode } from "../MapComponents.ts";
 import EdgeDao, { Edge } from "../database/edge-dao.ts";
 import NodeDao, { Node } from "../database/node-dao.ts";
-import LocationNameDao, {LocationName} from "../database/location-name-dao.ts";
 import { MapEdge, MapNode } from "../MapComponents.ts";
 
 function Pathfinding() {
@@ -33,7 +31,6 @@ function Pathfinding() {
   const [startButton, setStartButton] = useState("nodeSelectorButton");
   const [endButton, setEndButton] = useState("nodeSelectorButton");
   const [pathNodes, setPathNodes] = useState<Array<Node>>([]);
-  // const [neighbors, setNeighbors] = useState<Array<Edge>>([]);
   const { getAccessTokenSilently } = useAuth0();
   useEffect(() => {
     const get = async () => {
@@ -140,27 +137,32 @@ function Pathfinding() {
     return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
   }
 
-  function getNeighbors(node: Node) {
-    // EEK!
-  }
+  async function findPath(startID: number, endID: number): Promise<Node[]> {
+    const nodeDao = new NodeDao();
+    const start: Node | null = await nodeDao.get(
+      await getAccessTokenSilently(),
+      startID
+    );
+    const end: Node | null = await nodeDao.get(
+      await getAccessTokenSilently(),
+      endID
+    );
 
-  function findPath(start: Node, end: Node, accessible: boolean) {
-    if (start.id === null || end.id === null) return;
+    if (start === null || end === null) return [];
+    if (start.id === null || end.id === null) return [];
 
-    const indexedArray: {[key: string]: number} = {
-      foo: 2118,
-      bar: 2118
-    };
+    const indexedArrayG: { [key: string]: number } = {};
+    const indexedArrayH: { [key: string]: number } = {};
+    const indexedArrayF: { [key: string]: number } = {};
 
-    const openList: Node[] = [start]; // TODO: REALISTICALLY NEEDS TO BE EDGES SINCE NO WRAPPER
-    const closedList: Node[] = [];
-
-    // const NodeWrapper = {node:start, parent:null, g:0, h:0, f:0}
+    let openList: Node[] = [start];
+    let closedList: Node[] = [];
 
     NODE_CHECK: while (openList.length != 0) {
       // while open list is not empty
       let closed;
-      const q: Node = openList[0]; // get node with the lowest estimated cost //TODO: NEEDS TO REMOVE FROM LIST
+      const q: Node = openList[openList.length - 1];
+      delete openList[openList.length - 1];
 
       for (closed of closedList) {
         if (closed === q) {
@@ -175,41 +177,51 @@ function Pathfinding() {
         return path; // path is backwards xd
       }
 
-      let edge;
       const nodeNeighbors: Node[] = [];
-      for (edge of neighbors) {
-        if (edge.endNodeId == q.id) {
-          nodeNeighbors[nodeNeighbors.length] = edge.startNode;
-        } else {
-          nodeNeighbors[nodeNeighbors.length] = edge.endNode;
-        }
+      const startEdges: Edge[] = q.startEdges;
+      const endEdges: Edge[] = q.endEdges;
+
+      let edge;
+      for (edge of startEdges) {
+        nodeNeighbors[nodeNeighbors.length] = edge.endNode;
+      }
+      for (edge of endEdges) {
+        nodeNeighbors[nodeNeighbors.length] = edge.startNode;
       }
 
-      let node;
-      NODE_LOOP: for (node of nodeNeighbors) {
-        // get the neighbors of the current node
-        // PathFinder.NodeWrapper child =
-        //     new PathFinder.NodeWrapper(node, q); // todo: create node wrapper out of current node
-        if (q.floor != node.floor) {
-          const loc : LocationName = node.locationName;
-          if (loc.locationType == "ELEV") {
-            child.g = q.g + 50; // cost for elevator //TODO: WRAPPER FOR COST
-          } else if (loc.locationType == "STAI") {
-            if (accessible) continue;
-            child.g = q.g + 100; // cost for stairs //TODO: WRAPPER FOR COST
-          }
+      NODE_LOOP: for (let i = 0; i < nodeNeighbors.length; i++) {
+        const child = nodeNeighbors[i];
+        if (q.floor != child.floor) {
+          const loc = child.locationName;
+          if (loc != null) {
+            if (loc.locationType == "ELEV") {
+              if (indexedArrayG[q.id] != null) {
+                indexedArrayG[child.id] = indexedArrayG[q.id] + 50;
+              } else indexedArrayG[child.id] = 50;
+            } else if (loc.locationType == "STAI") {
+              if (indexedArrayG[q.id] != null) {
+                indexedArrayG[child.id] = indexedArrayG[q.id] + 100;
+              } else indexedArrayG[child.id] = 100;
+            }
+          } else indexedArrayG[child.id] = 100; // no location name, assume stairs
         } else {
-          child.g = q.g + euclideanDistance(node, q); // calculate distance from start //TODO: WRAPPER FOR COST
+          if (indexedArrayG[q.id] != null) {
+            indexedArrayG[child.id] =
+              indexedArrayG[q.id] + euclideanDistance(child, q);
+          } else indexedArrayG[child.id] = euclideanDistance(child, q);
         }
 
-        child.h = euclideanDistance(child.node, end); // calculate the lowest possible distance to end //TODO: COST!!!!!
-        child.f = child.g + child.h;
+        indexedArrayH[child.id] = euclideanDistance(child, end); // calculate the lowest possible distance to end
+        indexedArrayF[child.id] =
+          indexedArrayG[child.id] + indexedArrayH[child.id];
 
         let openNode;
         for (openNode of openList) {
           // check if node is on open list with a lower cost
-          if (openNode == node && open.f < child.f) {
-            //TODO: COST!!!!!
+          if (
+            openNode === child &&
+            indexedArrayF[openNode.id] < indexedArrayF[child.id]
+          ) {
             continue NODE_LOOP;
           }
         }
@@ -217,36 +229,51 @@ function Pathfinding() {
         let closedNode;
         for (closedNode of closedList) {
           // check is node is on closed list with lower cost
-          if (closedNode == node) {
-            if (closed.f < child.f) {
-              //TODO: COST!!!!!
-              continue NODE_LOOP;
-            }
+          if (
+            closedNode === child &&
+            indexedArrayF[closedNode.id] < indexedArrayF[child.id]
+          ) {
+            continue NODE_LOOP;
           }
         }
-        openList.add(child); //todo: INSERT IN ORDER
+
+        let element;
+        let inserted = false;
+        const copyList: Node[] = [];
+        for (element of openList) {
+          if (
+            !inserted &&
+            indexedArrayF[element.id] <= indexedArrayF[child.id]
+          ) {
+            copyList[copyList.length] = child;
+            inserted = true;
+          }
+          copyList[copyList.length] = element;
+        }
+        openList = copyList;
       }
-      closedList.add(q); //todo: INSERT IN ORDER
+
+      let element;
+      let inserted = false;
+      const copyList: Node[] = [];
+      for (element of closedList) {
+        if (!inserted && indexedArrayF[element.id] <= indexedArrayF[q.id]) {
+          copyList[copyList.length] = q;
+          inserted = true;
+        }
+        copyList[copyList.length] = element;
+      }
+      closedList = copyList;
     }
-    return null;
+    return pathNodes;
   }
 
-  function drawPath() {
-    setDataEdges(dataEdges);
-  }
-
-  function Submit() {
+  async function Submit() {
     if (displayMode === "Find Path") {
       setDisplayMode("Select a New Path");
 
       // set pathNodes to the pathfinding result use startNode and endNode
-      setPathNodes([
-        dataNodes[572],
-        dataNodes[575],
-        dataNodes[555],
-        dataNodes[347],
-        dataNodes[360],
-      ]);
+      setPathNodes(await findPath(startNode, endNode));
 
       if (pathNodes[0].floor === "L1") {
         FloorL1();
