@@ -2,14 +2,13 @@ import createError, { HttpError } from "http-errors";
 import express, { Express, NextFunction, Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
-import usersRouter from "./routes/users.ts";
 import numbersRouter from "./routes/numbers.ts";
 import highScoreRouter from "./routes/high-score.ts";
 import computerServiceRouter from "./routes/computer-requests.ts";
 import sanitationServiceRouter from "./routes/sanitation-requests.ts";
-import loginRouter from "./routes/login.ts";
-import nodeRouter from "./routes/Node.ts";
-import edgeRouter from "./routes/Edge.ts";
+import locationNameRouter from "./routes/location-name.ts";
+import nodeRouter from "./routes/nodes.ts";
+import edgeRouter from "./routes/edge.ts";
 import { auth } from "express-oauth2-jwt-bearer";
 
 const app: Express = express(); // Setup the backend
@@ -47,8 +46,6 @@ app.use(
 
 // Setup routers. ALL ROUTERS MUST use /api as a start point, or they
 // won't be reached by the default proxy and prod setup
-app.use("/api/users", usersRouter);
-
 app.use("/api/numbers", numbersRouter);
 
 app.use("/api/high-score", highScoreRouter);
@@ -57,11 +54,11 @@ app.use("/api/computer-requests", computerServiceRouter);
 
 app.use("/api/sanitation-requests", sanitationServiceRouter);
 
-app.use("/api/user", loginRouter);
+app.use("/api/location-names", locationNameRouter);
 
-app.use("/api/node", nodeRouter);
+app.use("/api/nodes", nodeRouter);
 
-app.use("/api/edge", edgeRouter);
+app.use("/api/edges", edgeRouter);
 /**
  * Catch all 404 errors, and forward them to the error handler
  */

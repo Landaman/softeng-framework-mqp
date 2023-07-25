@@ -12,7 +12,7 @@ import NodeDao, { Node } from "../database/node-dao.ts";
 import { MapEdge, MapNode } from "../MapComponents.ts";
 
 function Pathfinding() {
-  // const [dataNodes, setDataNodes] = useState<Array<Node>>([]);
+  const [dataNodes, setDataNodes] = useState<Array<Node>>([]);
   const [dataEdges, setDataEdges] = useState<Array<Edge>>([]);
   const [displayMode, setDisplayMode] = useState<string>("Map");
   const [mapNodes, setMapNodes] = useState<Array<MapNode>>([]);
@@ -34,11 +34,11 @@ function Pathfinding() {
     const get = async () => {
       const nodeDao = new NodeDao();
 
-      setNodes(await nodeDao.getAll(await getAccessTokenSilently()));
+      setDataNodes(await nodeDao.getAll(await getAccessTokenSilently()));
 
       const edgeDao = new EdgeDao();
 
-      setEdges(await edgeDao.getAll(await getAccessTokenSilently()));
+      setDataEdges(await edgeDao.getAll(await getAccessTokenSilently()));
     };
     get();
   }, [getAccessTokenSilently]);
@@ -126,7 +126,7 @@ function Pathfinding() {
     c.current = context;
   }, [
     displayMode,
-    // dataNodes,
+    dataNodes,
     mapEdges,
     mapNodes,
     hoverNode,

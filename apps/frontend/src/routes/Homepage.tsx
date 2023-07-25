@@ -18,6 +18,12 @@ function Homepage() {
       <a href={`/pathfinding`}>
         <button className={"homepageButton"}>Pathfinding</button>
       </a>
+      <a href={`/nodeTable`}>
+        <button className={"homepageButton"}>nodeTable</button>
+      </a>
+      <a href={`/edgeTable`}>
+        <button className={"homepageButton"}>edgeTable</button>
+      </a>
     </div>
   );
 }

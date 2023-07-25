@@ -11,10 +11,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import Form from "react-bootstrap/Form";
 import { Table } from "react-bootstrap";
-import ComputerRequestDao, {
-  ComputerRequest,
-  UpdateComputerRequest,
-} from "../database/computer-request-dao.ts";
+import NodeDao, { Node, UpdateNode } from "../database/node-dao.ts";
 
 // Update the table meta and column metas, so that we can provide additional information to the table and columns
 declare module "@tanstack/react-table" {
@@ -38,7 +35,7 @@ declare module "@tanstack/react-table" {
 /**
  * Override the default column renderer, allow it to create cells that are editable text boxes
  */
-const defaultColumn: Partial<ColumnDef<ComputerRequest>> = {
+const defaultColumn: Partial<ColumnDef<Node>> = {
   cell: function Cell({ getValue, row: { index }, column: { id }, table }) {
     const initialValue = getValue();
     // We need to keep and update the state of the cell normally
@@ -90,13 +87,13 @@ export default function ComputerRequestTable() {
   const { getAccessTokenSilently } = useAuth0();
 
   // The computer requests list
-  const [requests, setRequests] = useState<ComputerRequest[]>([]);
+  const [requests, setRequests] = useState<Node[]>([]);
 
   // This gets the requests from the API
   useEffect(() => {
     // This trick lets us use an async function in useEffect
     const fun = async () => {
-      const requestDao = new ComputerRequestDao();
+      const requestDao = new NodeDao();
       // Get the requests from the API
       const requests = await requestDao.getAll(await getAccessTokenSilently());
 
@@ -110,7 +107,7 @@ export default function ComputerRequestTable() {
 
   // Set up the columns for the computer request
   const columns = useMemo(() => {
-    const columnHelper = createColumnHelper<ComputerRequest>();
+    const columnHelper = createColumnHelper<Node>();
     return [
       columnHelper.accessor("id", {
         header: "ID",
@@ -122,51 +119,60 @@ export default function ComputerRequestTable() {
           },
         },
       }),
-      columnHelper.accessor("location", {
-        header: "Location",
+      columnHelper.accessor("xCoord", {
+        header: "xCoord",
         meta: {
           isEditable: true,
           createUpdateArgs: (id, value) => {
             return {
               id: id,
-              location: value,
-            } satisfies UpdateComputerRequest;
+              xCoord: value,
+            } satisfies UpdateNode;
           },
         },
       }),
-      columnHelper.accessor("staff", {
-        header: "Staff",
+      columnHelper.accessor("yCoord", {
+        header: "yCoord",
         meta: {
           isEditable: true,
           createUpdateArgs: (id, value) => {
             return {
               id: id,
-              staff: value,
-            } satisfies UpdateComputerRequest;
+              yCoord: value,
+            } satisfies UpdateNode;
           },
         },
       }),
-      columnHelper.accessor("reason", {
-        header: "Reason",
+      columnHelper.accessor("floor", {
+        header: "floor",
         meta: {
           isEditable: true,
           createUpdateArgs: (id, value) => {
             return {
               id: id,
-              reason: value,
-            } satisfies UpdateComputerRequest;
+              floor: value,
+            } satisfies UpdateNode;
           },
         },
       }),
-      columnHelper.accessor("type", {
-        header: "Type",
+      columnHelper.accessor("building", {
+        header: "building",
         meta: {
           isEditable: true,
           createUpdateArgs: (id, value) => {
             return {
               id: id,
-              type: value,
-            } satisfies UpdateComputerRequest;
+              building: value,
+            } satisfies UpdateNode;
+          },
+        },
+      }),
+      columnHelper.accessor("locationName.longName", {
+        header: "Related Locations",
+        meta: {
+          isEditable: false,
+          createUpdateArgs: () => {
+            throw "Changing Locations is not supported";
           },
         },
       }),
@@ -191,12 +197,12 @@ export default function ComputerRequestTable() {
     meta: {
       updateData: async (rowIndex: number, updateParams: unknown) => {
         // Get the DAO to do the update with
-        const dao = new ComputerRequestDao();
+        const dao = new NodeDao();
 
         // Do the update, get the new request
         const newRequest = await dao.update(
           await getAccessTokenSilently(),
-          updateParams as UpdateComputerRequest
+          updateParams as UpdateNode
         );
 
         // Go through the requests, replace only the new request to be the data
