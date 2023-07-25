@@ -373,7 +373,12 @@ function Pathfinding() {
             flexGrow: "1",
             width: "100%",
             height: "100px",
+            outline: "#012d5a solid 3px",
           }}
+          onMouseMove={handleMouseMove}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onWheel={handleWheel}
         >
           <div
             style={{
@@ -381,14 +386,7 @@ function Pathfinding() {
               display: "flex",
             }}
           >
-            <canvas
-              className={floor}
-              ref={canvasRef}
-              onMouseMove={handleMouseMove}
-              onMouseDown={handleMouseDown}
-              onMouseUp={handleMouseUp}
-              onWheel={handleWheel}
-            ></canvas>
+            <canvas className={floor} ref={canvasRef}></canvas>
           </div>
         </div>
         <div className={"buttondiv"}>
