@@ -32,6 +32,8 @@ router.get("/", async function (req: Request, res: Response) {
   const result = await PrismaClient.node.findMany({
     include: {
       locationName: true,
+      startEdges: true,
+      endEdges: true,
     },
   });
 
@@ -48,6 +50,8 @@ router.get("/:id", async function (req: Request, res: Response) {
       },
       include: {
         locationName: true,
+        startEdges: true,
+        endEdges: true,
       },
     });
 
@@ -84,7 +88,10 @@ router.delete("/:id", async function (req: Request, res: Response) {
     res.sendStatus(200);
   } catch (error) {
     // If it's a not found error
-    if (error instanceof Prisma.NotFoundError) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "2025"
+    ) {
       // Send 404
       res.sendStatus(404);
 
@@ -120,7 +127,10 @@ router.patch("/:id", async function (req: Request, res: Response) {
     });
   } catch (error) {
     // Handle any not found errors
-    if (error instanceof Prisma.NotFoundError) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "2025"
+    ) {
       res.sendStatus(404);
 
       // Short circuit

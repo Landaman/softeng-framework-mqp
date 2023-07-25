@@ -1,16 +1,23 @@
 import type { Node as PrismaNodeType, LocationName, Prisma } from "database";
 import { Dao } from "./dao.ts";
 import axios, { AxiosError } from "axios";
+import { Edge } from "./edge-dao.ts";
 
 // Base type, remove location as we have locationName
 type baseType = Omit<PrismaNodeType, "location">;
 
 // Types that stuff using the DAO should use
-export type Node = baseType & { locationName: LocationName | null };
+export type Node = baseType & { locationName: LocationName | null } & {
+  startEdges: Edge[];
+  endEdges: Edge[];
+};
 export type CreateNode = Omit<baseType, "id"> & {
   locationName: LocationName | string | null;
 };
-export type UpdateNode = Prisma.NodeUpdateInput & {
+export type UpdateNode = Omit<
+  Omit<Prisma.NodeUpdateInput, "startEdges">,
+  "endEdges"
+> & {
   locationName?: LocationName | string | null;
   id: number;
 };

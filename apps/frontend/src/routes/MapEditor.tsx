@@ -12,21 +12,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 import NodeDao, { Floor, Node } from "../database/node-dao.ts";
 import EdgeDao, { Edge } from "../database/edge-dao.ts";
 
-function createMapNode(x: number, y: number) {
-  const x1 = x;
-  const y1 = y;
-  const node: Node = {
-    id: 0,
-    building: "",
-    floor: Floor.L1,
-    xCoord: 0,
-    yCoord: 0,
-    locationName: null,
-  };
-  const n: MapNode = { x1, y1, node, fromDatabase: false, deleted: false };
-  return n;
-}
-
 function createMapEdge(i1: number, i2: number) {
   const index1 = i1;
   const index2 = i2;
@@ -39,6 +24,8 @@ function createMapEdge(i1: number, i2: number) {
       xCoord: 0,
       yCoord: 0,
       locationName: null,
+      startEdges: [],
+      endEdges: [],
     },
     endNode: {
       id: 0,
@@ -47,6 +34,8 @@ function createMapEdge(i1: number, i2: number) {
       xCoord: 0,
       yCoord: 0,
       locationName: null,
+      startEdges: [],
+      endEdges: [],
     },
   };
   const e: MapEdge = {
@@ -70,7 +59,8 @@ function MapEditor() {
   const [edgeChecked, setEdge] = useState(false);
   const [moveChecked, setMove] = useState(false);
   const [deleteChecked, setDelete] = useState(false);
-  const [mode, setMode] = useState("");
+  const [panChecked, setPan] = useState(true);
+  const [mode, setMode] = useState("Pan");
   const [movingIndex, setMovingIndex] = useState(-1);
   const [hoverNode, setHoverNode] = useState(-1);
   const [selectedNode, setSelectedNode] = useState(-1);
@@ -82,6 +72,11 @@ function MapEditor() {
   const [canvasX, setCanvasX] = useState(0);
   const [canvasY, setCanvasY] = useState(0);
   const [mapFloor, setMapFloor] = useState(Floor.L1);
+  const [translateX, setTranslateX] = useState(0);
+  const [translateY, setTranslateY] = useState(0);
+  const [origionalX, setOrigionalX] = useState(0);
+  const [origionalY, setOrigionalY] = useState(0);
+  const [scale, setScale] = useState(1);
 
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>;
   const c = useRef() as MutableRefObject<CanvasRenderingContext2D>;
@@ -113,53 +108,44 @@ function MapEditor() {
     //scale the canvas
     setCanvasY(style_height * dpi);
     setCanvasX(style_width * dpi);
-    canvas.setAttribute("height", String(canvasY));
-    canvas.setAttribute("width", String(canvasX));
+    canvas.setAttribute("height", String(3400));
+    canvas.setAttribute("width", String(5000));
 
     context.imageSmoothingEnabled = false;
 
     // draw edges
+    context.lineWidth = 4;
     for (let i = 0; i < mapEdges.length; i++) {
-      if (i === hoverEdge || i === selectedEdge) {
-        context.strokeStyle = "#00FF00";
-      }
-      context.beginPath();
       const edge = mapEdges[i];
-      context.moveTo(
-        mapNodes[edge.index1].x1 + 3,
-        mapNodes[edge.index1].y1 + 3
-      );
-      context.lineTo(
-        mapNodes[edge.index2].x1 + 3,
-        mapNodes[edge.index2].y1 + 3
-      );
-      context.stroke();
-      context.strokeStyle = "black";
+      if (!edge.deleted) {
+        if (i === hoverEdge || i === selectedEdge) {
+          context.strokeStyle = "#00FF00";
+        }
+        context.beginPath();
+
+        context.moveTo(mapNodes[edge.index1].x1, mapNodes[edge.index1].y1);
+        context.lineTo(mapNodes[edge.index2].x1, mapNodes[edge.index2].y1);
+        context.stroke();
+        context.strokeStyle = "black";
+      }
     }
 
     // draw nodes
     for (let i = 0; i < mapNodes.length; i++) {
       const n = mapNodes[i];
-      if (i === selectedNode || i === hoverNode) {
-        context.fillStyle = "#00FF00";
-        context.fillRect(n.x1, n.y1, 6, 6);
-        context.fillStyle = "black";
-      } else {
-        context.fillRect(n.x1, n.y1, 6, 6);
+      if (!n.deleted) {
+        if (i === selectedNode || i === hoverNode) {
+          context.fillStyle = "#00FF00";
+          context.fillRect(n.x1 - 10, n.y1 - 10, 20, 20);
+          context.fillStyle = "black";
+        } else {
+          context.fillRect(n.x1 - 10, n.y1 - 10, 20, 20);
+        }
       }
     }
 
     c.current = context;
-  }, [
-    canvasX,
-    canvasY,
-    hoverEdge,
-    hoverNode,
-    mapEdges,
-    mapNodes,
-    selectedEdge,
-    selectedNode,
-  ]);
+  }, [hoverEdge, hoverNode, mapEdges, mapNodes, selectedEdge, selectedNode]);
 
   function buildMap(floor: string) {
     clearCanvas();
@@ -167,8 +153,8 @@ function MapEditor() {
     for (let i = 0; i < dataNodes.length; i++) {
       const node: Node = dataNodes[i];
       if (node.floor === floor) {
-        const x1: number = node.xCoord * (canvasX / 5000) - 3;
-        const y1: number = node.yCoord * (canvasY / 3400) - 3;
+        const x1: number = node.xCoord;
+        const y1: number = node.yCoord;
         const mn: MapNode = {
           x1,
           y1,
@@ -214,7 +200,7 @@ function MapEditor() {
     if (mode === "Node") {
       setMapNodes((prevState) => [
         ...prevState,
-        createMapNode(clientX - 514, clientY - 115),
+        createMapNode(clientX, clientY),
       ]);
     } else if (mode === "Move") {
       setMovingIndex(findNode(clientX, clientY));
@@ -263,11 +249,16 @@ function MapEditor() {
           setSelectedEdge(findEdge(clientX, clientY));
         }
       }
+    } else if (mode === "Pan") {
+      setOrigionalX(clientX - translateX);
+      setOrigionalY(clientY - translateY);
     }
   };
 
   const handleMouseUp = () => {
     setMovingIndex(-1);
+    setOrigionalX(0);
+    setOrigionalY(0);
   };
 
   const handleMouseMove = (event: MouseEvent) => {
@@ -281,18 +272,53 @@ function MapEditor() {
       } else {
         setHoverEdge(-1);
       }
+      if (origionalX != 0) {
+        setTranslateX(clientX - origionalX);
+        setTranslateY(clientY - origionalY);
+      }
+    }
+  };
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const handleWheel = (event) => {
+    if (event.deltaY > 0) {
+      setScale(scale / 1.1);
+    } else {
+      setScale(scale * 1.1);
     }
   };
 
   function updateNode(index: number, x: number, y: number) {
-    const x1 = x - 514;
-    const y1 = y - 115;
+    const x1 =
+      (((x - 512 - translateX) * 5000) / canvasX - 2500) / scale + 2500;
+    const y1 =
+      (((y - 114 - translateY) * 3400) / canvasY - 1700) / scale + 1700;
     const n: MapNode = mapNodes[index];
     n.x1 = x1;
     n.y1 = y1;
     const temp = [...mapNodes];
     temp[index] = n;
     setMapNodes(temp);
+  }
+
+  function createMapNode(x: number, y: number) {
+    const x1 =
+      (((x - 512 - translateX) * 5000) / canvasX - 2500) / scale + 2500;
+    const y1 =
+      (((y - 114 - translateY) * 3400) / canvasY - 1700) / scale + 1700;
+    const node: Node = {
+      id: 0,
+      building: "",
+      floor: Floor.L1,
+      xCoord: 0,
+      yCoord: 0,
+      locationName: null,
+      startEdges: [],
+      endEdges: [],
+    };
+    const n: MapNode = { x1, y1, node, fromDatabase: false, deleted: false };
+    return n;
   }
 
   function deleteNode(index: number) {
@@ -359,6 +385,7 @@ function MapEditor() {
     setEdge(false);
     setMove(false);
     setDelete(false);
+    setPan(false);
     setMode("Node");
     setSelectedNode(-1);
   }
@@ -368,6 +395,7 @@ function MapEditor() {
     setEdge(true);
     setMove(false);
     setDelete(false);
+    setPan(false);
     setMode("Edge");
     setSelectedNode(-1);
   }
@@ -377,6 +405,7 @@ function MapEditor() {
     setEdge(false);
     setMove(true);
     setDelete(false);
+    setPan(false);
     setMode("Move");
     setSelectedNode(-1);
   }
@@ -386,19 +415,32 @@ function MapEditor() {
     setEdge(false);
     setMove(false);
     setDelete(true);
+    setPan(false);
     setMode("Delete");
     setSelectedNode(-1);
   }
 
+  function handlePan() {
+    setNode(false);
+    setEdge(false);
+    setMove(false);
+    setDelete(false);
+    setPan(true);
+    setMode("Pan");
+    setSelectedNode(-1);
+  }
+
   function findNode(x: number, y: number) {
-    const adjX = x - 514;
-    const adjY = y - 115;
+    const adjX =
+      (((x - 512 - translateX) * 5000) / canvasX - 2500) / scale + 2500;
+    const adjY =
+      (((y - 114 - translateY) * 3400) / canvasY - 1700) / scale + 1700;
     for (let i = 0; i < mapNodes.length; i++) {
       if (
-        adjX - 6 < mapNodes[i].x1 &&
-        mapNodes[i].x1 < adjX + 6 &&
-        adjY - 6 < mapNodes[i].y1 &&
-        mapNodes[i].y1 < adjY + 6
+        adjX - 12 < mapNodes[i].x1 &&
+        mapNodes[i].x1 < adjX + 12 &&
+        adjY - 12 < mapNodes[i].y1 &&
+        mapNodes[i].y1 < adjY + 12
       ) {
         return i;
       }
@@ -407,8 +449,10 @@ function MapEditor() {
   }
 
   function findEdge(x: number, y: number) {
-    const x1 = x - 514;
-    const y1 = y - 115;
+    const x1 =
+      (((x - 512 - translateX) * 5000) / canvasX - 2500) / scale + 2500;
+    const y1 =
+      (((y - 114 - translateY) * 3400) / canvasY - 1700) / scale + 1700;
     for (let i = 0; i < mapEdges.length; i++) {
       const n1 = mapNodes[mapEdges[i].index1];
       const n2 = mapNodes[mapEdges[i].index2];
@@ -502,6 +546,15 @@ function MapEditor() {
         <h1>Map Editor</h1>
         <div className={"modesDiv"}>
           <label className="selection-label">Mode</label>
+          <div className="mode-container" onClick={handlePan}>
+            <input
+              className="checkbox"
+              type="checkbox"
+              checked={panChecked}
+              onChange={handlePan}
+            ></input>
+            <label>Pan and Zoom</label>
+          </div>
           <div className="mode-container" onClick={handleNode}>
             <input
               className="checkbox"
@@ -562,13 +615,29 @@ function MapEditor() {
         </button>
       </div>
       <div className={"mapdiv"}>
-        <canvas
-          className={floor}
-          ref={canvasRef}
+        <div
+          style={{
+            overflow: "hidden",
+            display: "flex",
+            flexGrow: "1",
+            width: "100%",
+            height: "100px",
+            outline: "#012d5a solid 3px",
+          }}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
-        ></canvas>
+          onWheel={handleWheel}
+        >
+          <div
+            style={{
+              transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`,
+              display: "flex",
+            }}
+          >
+            <canvas className={floor} ref={canvasRef}></canvas>
+          </div>
+        </div>
       </div>
     </div>
   );
