@@ -137,6 +137,15 @@ function Pathfinding() {
     return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
   }
 
+  function removeNode(list: Node[], node: Node) {
+    const copy: Node[] = [];
+    let element;
+    for (element of list) {
+      if (element.id != node.id) copy.push(element);
+    }
+    return copy;
+  }
+
   async function findPath(startID: number, endID: number): Promise<Node[]> {
     const nodeDao = new NodeDao();
 
@@ -165,6 +174,25 @@ function Pathfinding() {
       let closed;
       let q: Node | null = openList[openList.length - 1];
 
+      if (q.id === end.id) {
+        // if the current node is the goal
+        const path: Node[] = []; // create list of nodes to represent the path
+        path[path.length] = q; // add the end node
+
+        while (q.id != start.id) {
+          const w = await nodeDao.get(
+            await getAccessTokenSilently(),
+            indexedArrayParent[q.id]
+          );
+          if (w != null) q = w;
+          if (q != null) {
+            path[path.length] = q;
+          }
+        }
+
+        return path; // path is backwards xd
+      }
+
       const deleteList: Node[] = [];
       for (let i = 0; i < openList.length - 1; i++) {
         // remove last element
@@ -173,30 +201,23 @@ function Pathfinding() {
       openList = deleteList;
 
       for (closed of closedList) {
-        if (closed === q) {
+        if (closed.id === q.id) {
           continue NODE_CHECK;
         }
       }
 
-      if (q === end) {
-        // if the current node is the goal
-        const path: Node[] = []; // create list of nodes to represent the path
-        path[path.length] = q; // add the end node
-
-        while (q != start) {
-          if (q != null) {
-            q = await nodeDao.get(
-              await getAccessTokenSilently(),
-              indexedArrayParent[q.id]
-            );
-            if (q != null) {
-              path[path.length] = q;
-            }
-          }
+      let element;
+      let inserted = false;
+      const copyList: Node[] = [];
+      for (element of closedList) {
+        if (!inserted && indexedArrayF[element.id] <= indexedArrayF[q.id]) {
+          copyList[copyList.length] = q;
+          inserted = true;
         }
-
-        return path; // path is backwards xd
+        copyList[copyList.length] = element;
       }
+      if (!inserted) copyList[copyList.length] = q;
+      closedList = copyList;
 
       const nodeNeighbors: number[] = [];
       const startEdges: Edge[] = q.startEdges;
@@ -212,8 +233,6 @@ function Pathfinding() {
 
       let childId;
       NODE_LOOP: for (childId of nodeNeighbors) {
-        indexedArrayParent[childId] = q.id;
-
         const child: Node | null = await nodeDao.get(
           await getAccessTokenSilently(),
           childId
@@ -240,31 +259,51 @@ function Pathfinding() {
             } else indexedArrayG[childId] = euclideanDistance(child, q);
           }
 
-          indexedArrayH[childId] = euclideanDistance(child, end); // calculate the lowest possible distance to end
-          indexedArrayF[childId] =
-            indexedArrayG[childId] + indexedArrayH[childId];
+          indexedArrayH[childId] = euclideanDistance(child, end);
 
+          let found = false;
           let openNode;
           for (openNode of openList) {
             // check if node is on open list with a lower cost
-            if (
-              openNode === child &&
-              indexedArrayF[openNode.id] < indexedArrayF[childId]
-            ) {
-              continue NODE_LOOP;
+            if (openNode.id === child.id) {
+              found = true;
+              if (
+                indexedArrayF[openNode.id] >
+                indexedArrayG[childId] + indexedArrayH[childId]
+              ) {
+                openList = removeNode(openList, openNode);
+                indexedArrayParent[childId] = q.id;
+                indexedArrayF[childId] =
+                  indexedArrayG[childId] + indexedArrayH[childId]; // calculate the lowest possible distance to end
+                break;
+              } else continue NODE_LOOP;
             }
           }
 
           let closedNode;
           for (closedNode of closedList) {
             // check is node is on closed list with lower cost
-            if (
-              closedNode === child &&
-              indexedArrayF[closedNode.id] < indexedArrayF[childId]
-            ) {
-              continue NODE_LOOP;
+            if (closedNode.id === child.id) {
+              found = true;
+              if (
+                indexedArrayF[closedNode.id] >
+                indexedArrayG[childId] + indexedArrayH[childId]
+              ) {
+                openList = removeNode(openList, closedNode);
+                indexedArrayParent[childId] = q.id;
+                indexedArrayF[childId] =
+                  indexedArrayG[childId] + indexedArrayH[childId]; // calculate the lowest possible distance to end
+                break;
+              } else continue NODE_LOOP;
             }
           }
+
+          if (!found) {
+            indexedArrayParent[childId] = q.id;
+            indexedArrayF[childId] =
+              indexedArrayG[childId] + indexedArrayH[childId]; // calculate the lowest possible distance to end
+          }
+
           let element;
           let inserted = false;
           const copyList: Node[] = [];
@@ -278,22 +317,11 @@ function Pathfinding() {
             }
             copyList[copyList.length] = element;
           }
+          if (!inserted) copyList[copyList.length] = child;
 
           openList = copyList;
         }
       }
-
-      let element;
-      let inserted = false;
-      const copyList: Node[] = [];
-      for (element of closedList) {
-        if (!inserted && indexedArrayF[element.id] <= indexedArrayF[q.id]) {
-          copyList[copyList.length] = q;
-          inserted = true;
-        }
-        copyList[copyList.length] = element;
-      }
-      closedList = copyList;
     }
     return [];
   }
@@ -303,9 +331,16 @@ function Pathfinding() {
       setDisplayMode("Select a New Path");
 
       // set pathNodes to the pathfinding result use startNode and endNode
-      setPathNodes(await findPath(startNode, endNode));
-
+      await setPathNodes(await findPath(startNode, endNode));
       console.log(pathNodes);
+
+      // setPathNodes([
+      //   dataNodes[572],
+      //   dataNodes[575],
+      //   dataNodes[555],
+      //   dataNodes[347],
+      //   dataNodes[360],
+      // ]);
 
       if (pathNodes[0].floor === "L1") {
         FloorL1();
@@ -329,6 +364,7 @@ function Pathfinding() {
       buildMap("L1", "Find Path");
       setStartNode(0);
       setEndNode(0);
+      await setPathNodes([]);
     }
   }
 
