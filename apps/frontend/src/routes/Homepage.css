@@ -1,23 +1,68 @@
 .homepage {
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #dce2e8;
 }
 
-.homepageHeader {
-  margin: 48px;
+.homepage-header {
+  margin-top: 32px;
+  margin-bottom: 48px;
 }
 
-.homepageButton {
-  width: 300px;
-  height: 50px;
-  background-color: #012d5a;
+.data-points {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  background-color: var(--secondary);
+  gap: 16px;
+}
+
+@media only screen and (max-width: 760px) {
+  .data-points {
+    flex-direction: column;
+  }
+}
+
+.data-points-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1 0 0;
+}
+
+.data-text-bold {
+  margin-top: 16px;
+  margin-bottom: 0;
+  font-weight: bold;
+  color: var(--brigham-teal);
+}
+
+.services {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.service-request-hub {
   color: white;
-  margin: 10px;
+  text-align: start;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  align-items: start;
+  background-color: var(--primary);
+  width: 50vw;
 }
 
-.homepageButton:hover {
-  background-color: #2d7adb;
+.pathfinding {
+  text-align: start;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  align-items: start;
+  width: 50vw;
+}
+
+.homepage-btn {
+  margin-top: 16px;
 }

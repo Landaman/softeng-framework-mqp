@@ -1,45 +1,18 @@
-.navBar {
-  background-color: #012d5a;
-  text-align: center;
-  padding: 0px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  height: 50px;
+.navbar {
+  background-color: var(--secondary) !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+  margin-bottom: 16px;
+}
+
+.navbar-link:hover {
+  /*text-decoration: var(--primary) underline;*/
+  /*text-decoration-thickness: 2px;*/
+  color: var(--primary) !important;
 }
 
 .hospitalLogo {
   width: 250px;
-  margin: 5px 30px 5px 30px;
-}
-
-.navBarText {
-  flex-grow: 1;
-  color: white;
-  margin: 0px 30px 0px 30px;
-  text-align: start;
-}
-
-.navBarLogin {
-  flex-grow: 1;
-  color: white;
-  width: 250px;
-  margin: 0px 30px 0px 30px;
-  text-align: end;
-}
-
-.navBarLink {
-  color: white;
-  margin: 0px 7px 0px 7px;
-}
-.linkdiv {
-  flex-grow: 1;
-  background-color: #012d5a;
-  text-align: center;
-  padding: 0px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+  height: auto;
+  margin-bottom: 8px;
 }
