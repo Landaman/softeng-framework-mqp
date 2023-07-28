@@ -31,17 +31,51 @@ function Pathfinding() {
   const [startButton, setStartButton] = useState("nodeSelectorButton");
   const [endButton, setEndButton] = useState("nodeSelectorButton");
   const [pathNodes, setPathNodes] = useState<Array<Node>>([]);
+  const [pathBreaks, setPathBreaks] = useState<Array<number>>([]);
   const { getAccessTokenSilently } = useAuth0();
   useEffect(() => {
     const get = async () => {
       const nodeDao = new NodeDao();
-
-      setDataNodes(await nodeDao.getAll(await getAccessTokenSilently()));
+      const nodes: Node[] = await nodeDao.getAll(
+        await getAccessTokenSilently()
+      );
+      setDataNodes(nodes);
 
       const edgeDao = new EdgeDao();
+      const edges: Edge[] = await edgeDao.getAll(
+        await getAccessTokenSilently()
+      );
+      setDataEdges(edges);
 
-      setDataEdges(await edgeDao.getAll(await getAccessTokenSilently()));
+      const tempNodes: Array<MapNode> = [];
+      for (let i = 0; i < nodes.length; i++) {
+        const node: Node = nodes[i];
+        if (node.floor === "L1") {
+          const x1: number = node.xCoord - 3;
+          const y1: number = node.yCoord - 3;
+          const fromDatabase = true;
+          const deleted = false;
+          const mn: MapNode = { x1, y1, node, fromDatabase, deleted };
+          tempNodes.push(mn);
+        }
+      }
+      setMapNodes(tempNodes);
+
+      const tempEdges: Array<MapEdge> = [];
+      for (let i = 0; i < edges.length; i++) {
+        const edge: Edge = edges[i];
+        if (edge.endNode.floor === "L1" && edge.startNode.floor === "L1") {
+          const index1: number = getMapNodeIndex(edge.startNode.id, tempNodes);
+          const index2: number = getMapNodeIndex(edge.endNode.id, tempNodes);
+          const fromDatabase = true;
+          const deleted = false;
+          const me: MapEdge = { index1, index2, edge, fromDatabase, deleted };
+          tempEdges.push(me);
+        }
+      }
+      setMapEdges(tempEdges);
     };
+
     get();
   }, [getAccessTokenSilently]);
 
@@ -72,23 +106,26 @@ function Pathfinding() {
     if (displayMode === "Select a New Path") {
       let oldX = 0;
       let oldY = 0;
-      if (mapNodes.length > 0) {
-        context.fillRect(mapNodes[0].x1 - 10, mapNodes[0].y1 - 10, 20, 20);
-        oldX = mapNodes[0].x1;
-        oldY = mapNodes[0].y1;
-      }
-      context.beginPath();
-      for (let i = 1; i < mapNodes.length; i++) {
+      const breaks = pathBreaks;
+      let b = breaks.shift();
+
+      for (let i = 0; i < mapNodes.length; i++) {
         const n = mapNodes[i];
         const scaleX = n.x1 - 10;
         const scaleY = n.y1 - 10;
-        context.moveTo(oldX, oldY);
         context.fillRect(scaleX, scaleY, 20, 20);
-        context.lineTo(n.x1, n.y1);
+        if (i === b) {
+          b = breaks.shift();
+          console.log("here");
+        } else {
+          context.beginPath();
+          context.moveTo(oldX, oldY);
+          context.lineTo(n.x1, n.y1);
+          context.stroke();
+        }
         oldX = n.x1;
         oldY = n.y1;
       }
-      context.stroke();
     } else {
       // draw edges
       for (let i = 0; i < mapEdges.length; i++) {
@@ -129,6 +166,7 @@ function Pathfinding() {
     hoverNode,
     startNode,
     endNode,
+    pathBreaks,
   ]);
 
   function euclideanDistance(node1: Node, node2: Node) {
@@ -225,9 +263,13 @@ function Pathfinding() {
 
       let edge;
       for (edge of startEdges) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         nodeNeighbors[nodeNeighbors.length] = edge.endNodeId;
       }
       for (edge of endEdges) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         nodeNeighbors[nodeNeighbors.length] = edge.startNodeId;
       }
 
@@ -328,11 +370,9 @@ function Pathfinding() {
 
   async function Submit() {
     if (displayMode === "Find Path") {
-      setDisplayMode("Select a New Path");
-
       // set pathNodes to the pathfinding result use startNode and endNode
-      await setPathNodes(await findPath(startNode, endNode));
-      console.log(pathNodes);
+      const temp = await findPath(startNode, endNode);
+      setPathNodes(temp);
 
       // setPathNodes([
       //   dataNodes[572],
@@ -342,33 +382,34 @@ function Pathfinding() {
       //   dataNodes[360],
       // ]);
 
-      if (pathNodes[0].floor === "L1") {
+      if (temp[0].floor === "L1") {
         FloorL1();
-        buildMap("L1", "Select a New Path");
-      } else if (pathNodes[0].floor === "L2") {
+        buildMap("L1", "Select a New Path", temp);
+      } else if (temp[0].floor === "L2") {
         FloorL2();
-        buildMap("L2", "Select a New Path");
-      } else if (pathNodes[0].floor === "ONE") {
+        buildMap("L2", "Select a New Path", temp);
+      } else if (temp[0].floor === "ONE") {
         Floor1();
-        buildMap("ONE", "Select a New Path");
-      } else if (pathNodes[0].floor === "TWO") {
+        buildMap("ONE", "Select a New Path", temp);
+      } else if (temp[0].floor === "TWO") {
         Floor2();
-        buildMap("TWO", "Select a New Path");
-      } else if (pathNodes[0].floor === "THREE") {
+        buildMap("TWO", "Select a New Path", temp);
+      } else if (temp[0].floor === "THREE") {
         Floor3();
-        buildMap("THREE", "Select a New Path");
+        buildMap("THREE", "Select a New Path", temp);
       }
+      setDisplayMode("Select a New Path");
     } else {
       setDisplayMode("Find Path");
       FloorL1();
-      buildMap("L1", "Find Path");
+      buildMap("L1", "Find Path", pathNodes);
       setStartNode(0);
       setEndNode(0);
       await setPathNodes([]);
     }
   }
 
-  function buildMap(floor: string, m: string) {
+  function buildMap(floor: string, m: string, nodes: Node[]) {
     clearCanvas();
     if (m === "Find Path") {
       const tempNodes: Array<MapNode> = [];
@@ -400,17 +441,26 @@ function Pathfinding() {
       setMapEdges(tempEdges);
     } else {
       const tempNodes: Array<MapNode> = [];
-      for (let i = 0; i < pathNodes.length; i++) {
-        const node: Node = pathNodes[i];
+      const tempBreaks: Array<number> = [];
+      let start = true;
+      for (let i = 0; i < nodes.length; i++) {
+        const node: Node = nodes[i];
         if (node.floor === floor) {
+          if (start) {
+            tempBreaks.push(tempNodes.length);
+            start = false;
+          }
           const x1: number = node.xCoord - 3;
           const y1: number = node.yCoord - 3;
           const fromDatabase = true;
           const deleted = false;
           const mn: MapNode = { x1, y1, node, fromDatabase, deleted };
           tempNodes.push(mn);
+        } else {
+          start = true;
         }
       }
+      setPathBreaks(tempBreaks);
       setMapNodes(tempNodes);
     }
   }
@@ -457,7 +507,9 @@ function Pathfinding() {
   // @ts-ignore
   const handleMouseMove = (event) => {
     const { clientX, clientY } = event;
-    setHoverNode(findNode(clientX, clientY));
+    if (displayMode === "Find Path") {
+      setHoverNode(findNode(clientX, clientY));
+    }
     if (originalX != 0) {
       setTranslateX(clientX - originalX);
       setTranslateY(clientY - originalY);
@@ -499,23 +551,23 @@ function Pathfinding() {
   }
   function FloorL1() {
     setfloor("pathfindingCanvas L1");
-    buildMap("L1", displayMode);
+    buildMap("L1", displayMode, pathNodes);
   }
   function FloorL2() {
     setfloor("pathfindingCanvas L2");
-    buildMap("L2", displayMode);
+    buildMap("L2", displayMode, pathNodes);
   }
   function Floor1() {
     setfloor("pathfindingCanvas one");
-    buildMap("ONE", displayMode);
+    buildMap("ONE", displayMode, pathNodes);
   }
   function Floor2() {
     setfloor("pathfindingCanvas two");
-    buildMap("TWO", displayMode);
+    buildMap("TWO", displayMode, pathNodes);
   }
   function Floor3() {
     setfloor("pathfindingCanvas three");
-    buildMap("THREE", displayMode);
+    buildMap("THREE", displayMode, pathNodes);
   }
   function clearCanvas() {
     setMapNodes([]);
