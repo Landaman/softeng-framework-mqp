@@ -82,7 +82,6 @@ function Pathfinding() {
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>;
   const c = useRef() as MutableRefObject<CanvasRenderingContext2D>;
   useLayoutEffect(() => {
-    const dpi = window.devicePixelRatio;
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d") as CanvasRenderingContext2D;
     const style_height = +getComputedStyle(canvas)
@@ -95,8 +94,8 @@ function Pathfinding() {
       .slice(0, -2);
 
     //scale the canvas
-    setCanvasY(style_height * dpi);
-    setCanvasX(style_width * dpi);
+    setCanvasY(style_height);
+    setCanvasX(style_width);
     canvas.setAttribute("height", String(3400));
     canvas.setAttribute("width", String(5000));
 
