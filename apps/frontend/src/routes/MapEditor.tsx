@@ -316,9 +316,17 @@ function MapEditor() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const handleWheel = (event) => {
+    const { clientX, clientY } = event;
+    const adjX = clientX - canvasX / 2 - 512;
+    const adjY = clientY - canvasY / 2 - 114;
+
     if (event.deltaY > 0) {
+      setTranslateX(adjX - (adjX - translateX) / 1.1);
+      setTranslateY(adjY - (adjY - translateY) / 1.1);
       setScale(scale / 1.1);
     } else {
+      setTranslateX(adjX - (adjX - translateX) * 1.1);
+      setTranslateY(adjY - (adjY - translateY) * 1.1);
       setScale(scale * 1.1);
     }
   };
