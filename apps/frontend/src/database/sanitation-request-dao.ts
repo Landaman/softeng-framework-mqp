@@ -1,13 +1,24 @@
-import { SanitationRequest, Prisma } from "database";
+import type { SanitationRequest, Prisma } from "database";
 import { Dao } from "./dao.ts";
 import axios, { AxiosError } from "axios";
 
 export type { SanitationRequest };
+export type CreateSanitationRequest = Prisma.SanitationRequestCreateInput;
+export type UpdateSanitationRequest = Prisma.SanitationRequestUpdateInput & {
+  id: number;
+};
+
 /**
  * DAO for the sanitation request table
  */
 export default class SanitationRequestDao
-  implements Dao<SanitationRequest, number>
+  implements
+    Dao<
+      SanitationRequest,
+      number,
+      CreateSanitationRequest,
+      UpdateSanitationRequest
+    >
 {
   /**
    * Creates a sanitation request in the database
@@ -17,23 +28,16 @@ export default class SanitationRequestDao
    */
   async create(
     token: string,
-    row: SanitationRequest
+    row: CreateSanitationRequest
   ): Promise<SanitationRequest> {
     // Delegate to Axios, return what Axios sends us back
-    return await axios.post(
-      "/api/sanitation-requests",
-      {
-        location: row.location,
-        staff: row.staff,
-        issue: row.issue,
-        urgency: row.urgency,
-      } satisfies Prisma.SanitationRequestCreateInput,
-      {
+    return (
+      await axios.post("/api/sanitation-requests", row, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
-    );
+      })
+    ).data;
   }
 
   /**
@@ -81,32 +85,39 @@ export default class SanitationRequestDao
    * @return a list of all sanitation requests in the table
    */
   async getAll(token: string): Promise<SanitationRequest[]> {
-    return await axios.get("/api/sanitation-requests", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  }
-
-  /**
-   * Updates the given computer request
-   * @param token the token to use for the API calls
-   * @param row the row to update
-   */
-  async update(token: string, row: SanitationRequest): Promise<void> {
-    await axios.patch(
-      "/api/computer-requests/" + row.id,
-      {
-        location: row.location,
-        staff: row.staff,
-        issue: row.issue,
-        urgency: row.urgency,
-      } satisfies Prisma.SanitationRequestUpdateInput,
-      {
+    return (
+      await axios.get("/api/sanitation-requests", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
-    );
+      })
+    ).data;
+  }
+
+  /**
+   * Updates the given sanitation request
+   * @param token the token to use for the API calls
+   * @param row the row to update
+   */
+  async update(
+    token: string,
+    row: UpdateSanitationRequest
+  ): Promise<SanitationRequest> {
+    return (
+      await axios.patch(
+        "/api/sanitation-requests/" + row.id,
+        {
+          location: row.location,
+          staff: row.staff,
+          issue: row.issue,
+          urgency: row.urgency,
+        } satisfies Prisma.SanitationRequestUpdateInput,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+    ).data;
   }
 }

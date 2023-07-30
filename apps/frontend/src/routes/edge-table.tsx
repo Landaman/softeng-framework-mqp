@@ -11,10 +11,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import Form from "react-bootstrap/Form";
 import { Table } from "react-bootstrap";
-import ComputerRequestDao, {
-  ComputerRequest,
-  UpdateComputerRequest,
-} from "../database/computer-request-dao.ts";
+import EdgeDao, { Edge, UpdateEdge } from "../database/edge-dao.ts";
 
 // Update the table meta and column metas, so that we can provide additional information to the table and columns
 declare module "@tanstack/react-table" {
@@ -38,7 +35,7 @@ declare module "@tanstack/react-table" {
 /**
  * Override the default column renderer, allow it to create cells that are editable text boxes
  */
-const defaultColumn: Partial<ColumnDef<ComputerRequest>> = {
+const defaultColumn: Partial<ColumnDef<Edge>> = {
   cell: function Cell({ getValue, row: { index }, column: { id }, table }) {
     const initialValue = getValue();
     // We need to keep and update the state of the cell normally
@@ -86,17 +83,17 @@ const defaultColumn: Partial<ColumnDef<ComputerRequest>> = {
 /**
  * Component for the computer service request viewing table
  */
-export default function ComputerRequestTable() {
+export default function EdgeTable() {
   const { getAccessTokenSilently } = useAuth0();
 
   // The computer requests list
-  const [requests, setRequests] = useState<ComputerRequest[]>([]);
+  const [requests, setRequests] = useState<Edge[]>([]);
 
   // This gets the requests from the API
   useEffect(() => {
     // This trick lets us use an async function in useEffect
     const fun = async () => {
-      const requestDao = new ComputerRequestDao();
+      const requestDao = new EdgeDao();
       // Get the requests from the API
       const requests = await requestDao.getAll(await getAccessTokenSilently());
 
@@ -110,7 +107,7 @@ export default function ComputerRequestTable() {
 
   // Set up the columns for the computer request
   const columns = useMemo(() => {
-    const columnHelper = createColumnHelper<ComputerRequest>();
+    const columnHelper = createColumnHelper<Edge>();
     return [
       columnHelper.accessor("id", {
         header: "ID",
@@ -122,51 +119,57 @@ export default function ComputerRequestTable() {
           },
         },
       }),
-      columnHelper.accessor("location", {
-        header: "Location",
+      columnHelper.accessor("startNode.id", {
+        header: "node1ID",
         meta: {
-          isEditable: true,
-          createUpdateArgs: (id, value) => {
-            return {
-              id: id,
-              location: value,
-            } satisfies UpdateComputerRequest;
+          isEditable: false,
+          createUpdateArgs: () => {
+            throw "Changing nodeValues is not supported, please use the node table";
           },
         },
       }),
-      columnHelper.accessor("staff", {
-        header: "Staff",
+      columnHelper.accessor("startNode.xCoord", {
+        header: "node1XCoord",
         meta: {
-          isEditable: true,
-          createUpdateArgs: (id, value) => {
-            return {
-              id: id,
-              staff: value,
-            } satisfies UpdateComputerRequest;
+          isEditable: false,
+          createUpdateArgs: () => {
+            throw "Changing nodeValues is not supported, please use the node table";
           },
         },
       }),
-      columnHelper.accessor("reason", {
-        header: "Reason",
+      columnHelper.accessor("startNode.yCoord", {
+        header: "node1YCoord",
         meta: {
-          isEditable: true,
-          createUpdateArgs: (id, value) => {
-            return {
-              id: id,
-              reason: value,
-            } satisfies UpdateComputerRequest;
+          isEditable: false,
+          createUpdateArgs: () => {
+            throw "Changing nodeValues is not supported, please use the node table";
           },
         },
       }),
-      columnHelper.accessor("type", {
-        header: "Type",
+      columnHelper.accessor("endNode.id", {
+        header: "node2ID",
         meta: {
-          isEditable: true,
-          createUpdateArgs: (id, value) => {
-            return {
-              id: id,
-              type: value,
-            } satisfies UpdateComputerRequest;
+          isEditable: false,
+          createUpdateArgs: () => {
+            throw "Changing nodeValues is not supported, please use the node table";
+          },
+        },
+      }),
+      columnHelper.accessor("endNode.xCoord", {
+        header: "node2XCoord",
+        meta: {
+          isEditable: false,
+          createUpdateArgs: () => {
+            throw "Changing nodeValues is not supported, please use the node table";
+          },
+        },
+      }),
+      columnHelper.accessor("endNode.yCoord", {
+        header: "node2YCoord",
+        meta: {
+          isEditable: false,
+          createUpdateArgs: () => {
+            throw "Changing nodeValues is not supported, please use the node table";
           },
         },
       }),
@@ -191,12 +194,12 @@ export default function ComputerRequestTable() {
     meta: {
       updateData: async (rowIndex: number, updateParams: unknown) => {
         // Get the DAO to do the update with
-        const dao = new ComputerRequestDao();
+        const dao = new EdgeDao();
 
         // Do the update, get the new request
         const newRequest = await dao.update(
           await getAccessTokenSilently(),
-          updateParams as UpdateComputerRequest
+          updateParams as UpdateEdge
         );
 
         // Go through the requests, replace only the new request to be the data

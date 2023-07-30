@@ -26,12 +26,41 @@ model ComputerRequest {
   type     String
 }
 
-model User {
-  id       Int    @id @default(autoincrement())
-  first    String
-  last     String
-  username String
-  password String
+model Node {
+  id           Int           @id @default(autoincrement())
+  xCoord       Int
+  yCoord       Int
+  floor        Floor
+  building     String
+  locationName LocationName? @relation(fields: [location], references: [longName], onDelete: Cascade, onUpdate: Cascade)
+  location     String?       @unique
+  startEdges   Edge[]        @relation("startNode")
+  endEdges     Edge[]        @relation("endNode")
+
+  @@unique([xCoord, yCoord, floor])
+}
+
+enum Floor {
+  L1
+  L2
+  ONE
+  TWO
+  THREE
+}
+
+model Edge {
+  id          Int  @id @default(autoincrement())
+  startNode   Node @relation("startNode", fields: [startNodeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  startNodeId Int
+  endNode     Node @relation("endNode", fields: [endNodeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  endNodeId   Int
+}
+
+model LocationName {
+  shortName    String
+  longName     String @id @unique
+  locationType String
+  node         Node?
 }
 
 model SanitationRequest {
