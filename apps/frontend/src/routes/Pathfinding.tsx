@@ -150,7 +150,7 @@ function Pathfinding() {
     const nodeDao = new NodeDao();
 
     const nodeArray = await nodeDao.getAll(await getAccessTokenSilently());
-    const indexedNodeArray: {[key: string]: Node} = {};
+    const indexedNodeArray: { [key: string]: Node } = {};
 
     let allNode;
     for (allNode of nodeArray) {
