@@ -491,7 +491,7 @@ function Pathfinding() {
     return -1;
   }
 
-  const [floor, setfloor] = useState("pathfindingCanvas L1");
+  const [floor, setfloor] = useState("pathfindingCanvas ground");
   function groundFloor() {
     setfloor("pathfindingCanvas ground");
     clearCanvas();

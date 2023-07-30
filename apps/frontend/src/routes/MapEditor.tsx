@@ -11,6 +11,7 @@ import { MapNode, MapEdge } from "../MapComponents.ts";
 import { useAuth0 } from "@auth0/auth0-react";
 import NodeDao, { Floor, Node } from "../database/node-dao.ts";
 import EdgeDao, { Edge } from "../database/edge-dao.ts";
+import { round } from "@popperjs/core/lib/utils/math";
 
 function createMapEdge(i1: number, i2: number) {
   const index1 = i1;
@@ -290,10 +291,12 @@ function MapEditor() {
   };
 
   function updateNode(index: number, x: number, y: number) {
-    const x1 =
-      (((x - 512 - translateX) * 5000) / canvasX - 2500) / scale + 2500;
-    const y1 =
-      (((y - 114 - translateY) * 3400) / canvasY - 1700) / scale + 1700;
+    const x1 = round(
+      (((x - 512 - translateX) * 5000) / canvasX - 2500) / scale + 2500
+    );
+    const y1 = round(
+      (((y - 114 - translateY) * 3400) / canvasY - 1700) / scale + 1700
+    );
     const n: MapNode = mapNodes[index];
     n.x1 = x1;
     n.y1 = y1;
@@ -303,10 +306,12 @@ function MapEditor() {
   }
 
   function createMapNode(x: number, y: number) {
-    const x1 =
-      (((x - 512 - translateX) * 5000) / canvasX - 2500) / scale + 2500;
-    const y1 =
-      (((y - 114 - translateY) * 3400) / canvasY - 1700) / scale + 1700;
+    const x1 = round(
+      (((x - 512 - translateX) * 5000) / canvasX - 2500) / scale + 2500
+    );
+    const y1 = round(
+      (((y - 114 - translateY) * 3400) / canvasY - 1700) / scale + 1700
+    );
     const node: Node = {
       id: 0,
       building: "",
@@ -342,11 +347,10 @@ function MapEditor() {
     setSelectedEdge(-1);
   }
 
-  const [floor, setfloor] = useState("pathfindingCanvas L1");
+  const [floor, setfloor] = useState("pathfindingCanvas ground");
   function FloorGround() {
     setfloor("pathfindingCanvas ground");
-    setMapFloor(Floor.L1);
-    buildMap(Floor.L1);
+    clearCanvas();
   }
 
   function FloorL1() {
