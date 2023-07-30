@@ -70,7 +70,6 @@ function NavBar() {
           <Nav.Link href={`/mapeditor`} className={"navbar-link"}>
             Map Editor
           </Nav.Link>
-          <div style={{ width: "450px" }}></div>
           <NavDropdown
             title="Login"
             id="basic-nav-dropdown"

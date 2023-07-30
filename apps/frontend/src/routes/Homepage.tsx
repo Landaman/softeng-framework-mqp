@@ -9,7 +9,7 @@ function Homepage() {
     <div className={"homepage"}>
       <p className={"heading-text homepage-header"}>
         Welcome{" "}
-        <span style={{ color: "var(--primary)" }}>{user && user.name}</span>
+        <span style={{ color: "var(--highlight)" }}>{user && user.name}</span>
       </p>
       <div className={"data-points"}>
         <div className={"data-points-data"}>
@@ -40,12 +40,9 @@ function Homepage() {
             Check out our service requests including Sanitation requests and
             Computer requests
           </p>
-          <Button variant="outline-light" className={"homepage-btn"}>
-            Computer Service Request
-          </Button>
-          <Button variant="outline-light" className={"homepage-btn"}>
-            Sanitation Service Request
-          </Button>
+          <Button variant="primary">Computer Service Request</Button>
+          <div style={{ height: "16px" }}></div>
+          <Button variant="primary">Sanitation Service Request</Button>
         </div>
         <div className={"pathfinding"}>
           <p className={"heading-text"}>Pathfinding</p>
@@ -53,6 +50,14 @@ function Homepage() {
             Visit our Pathfinding page to get directions around the hospital
           </p>
           <Button variant="primary">Pathfinding</Button>
+        </div>
+        <div className={"map-editor"}>
+          <p className={"heading-text"}>Map Editor</p>
+          <p className={"text-block"}>
+            Administrators can use the Map Editor to graphically make changes to
+            the hospital database
+          </p>
+          <Button variant="primary">Map Editor</Button>
         </div>
       </div>
     </div>

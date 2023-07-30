@@ -2,10 +2,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 90vh;
 }
 
 .homepage-header {
-  margin-top: 32px;
+  margin-top: 48px;
   margin-bottom: 48px;
 }
 
@@ -13,13 +14,16 @@
   display: flex;
   flex-direction: row;
   width: 100%;
-  background-color: var(--secondary);
+  background-color: var(--primary);
   gap: 16px;
+  height: 15vh;
+  color: white;
 }
 
 @media only screen and (max-width: 760px) {
   .data-points {
     flex-direction: column;
+    height: auto;
   }
 }
 
@@ -35,32 +39,37 @@
   margin-top: 16px;
   margin-bottom: 0;
   font-weight: bold;
-  color: var(--brigham-teal);
 }
 
 .services {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  height: 55vh;
+  width: 100vw;
+  text-align: start;
 }
 
 .service-request-hub {
-  color: white;
-  text-align: start;
   display: flex;
   flex-direction: column;
   padding: 16px;
   align-items: start;
-  background-color: var(--primary);
-  width: 50vw;
 }
 
 .pathfinding {
-  text-align: start;
   display: flex;
   flex-direction: column;
   padding: 16px;
   align-items: start;
-  width: 50vw;
+  background-color: var(--secondary);
+}
+
+.map-editor {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  align-items: start;
+  background-color: var(--bs-secondary);
 }
 
 .homepage-btn {

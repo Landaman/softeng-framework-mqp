@@ -2,13 +2,14 @@
   background-color: var(--secondary) !important;
   padding-left: 16px !important;
   padding-right: 16px !important;
-  margin-bottom: 16px;
+  height: 10vh !important;
+  min-height: 80px !important;
 }
 
 .navbar-link:hover {
   /*text-decoration: var(--primary) underline;*/
   /*text-decoration-thickness: 2px;*/
-  color: var(--primary) !important;
+  color: var(--highlight) !important;
 }
 
 .hospitalLogo {
