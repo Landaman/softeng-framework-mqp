@@ -107,62 +107,6 @@ function NavBar() {
         </Nav>
       </Navbar.Collapse>
     </Navbar>
-    // <div className={"navBar"}>
-    //   <img src={hospital} className={"hospitalLogo"} />
-    //   <div className={"linkdiv"}>
-    //     <a className={"navBarLink"} href={`/`}>
-    //       <p>Home</p>
-    //     </a>
-    //     <a className={"navBarLink"} href={`/service-requests/computer/create`}>
-    //       <p>Computer Service</p>
-    //     </a>
-    //     <a className={"navBarLink"} href={`/service-requests/sanitation`}>
-    //       <p>Sanitation Service</p>
-    //     </a>
-    //     <a className={"navBarLink"} href={`/high-score`}>
-    //       <p>Test Page</p>
-    //     </a>
-    //     <a className={"navBarLink"} href={`/pathfinding`}>
-    //       <p>Pathfinding</p>
-    //     </a>
-    //     <a className={"navBarLink"} href={`/MapEditor`}>
-    //       <p>Map Editor</p>
-    //     </a>
-    //   </div>
-    //   <Dropdown id="loginDropdown" className="navBarLink">
-    //     <Dropdown.Toggle variant="secondary" size="sm">
-    //       {!isLoading && isAuthenticated && user !== undefined
-    //         ? user.name
-    //         : "Log In"}
-    //     </Dropdown.Toggle>
-    //     <Dropdown.Menu>
-    //       <Dropdown.Item
-    //         as="button"
-    //         onClick={async () => {
-    //           await loginWithRedirect({
-    //             appState: {
-    //               returnTo: location.pathname,
-    //             },
-    //           });
-    //         }}
-    //       >
-    //         Login
-    //       </Dropdown.Item>
-    //       <Dropdown.Item
-    //         as="button"
-    //         onClick={() => {
-    //           logout({
-    //             logoutParams: {
-    //               returnTo: window.location.origin,
-    //             },
-    //           });
-    //         }}
-    //       >
-    //         Logout
-    //       </Dropdown.Item>
-    //     </Dropdown.Menu>
-    //   </Dropdown>
-    // </div>
   );
 }
 
