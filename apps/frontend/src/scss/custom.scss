@@ -32,3 +32,7 @@ $secondary: #d6d6d6;
 
 // Import any remaining bootstrap defaults
 @import "bootstrap/scss/bootstrap";
+
+.btn {
+  min-width: 100px;
+}

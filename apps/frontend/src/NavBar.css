@@ -9,7 +9,7 @@
 .navbar-link:hover {
   /*text-decoration: var(--primary) underline;*/
   /*text-decoration-thickness: 2px;*/
-  color: var(--highlight) !important;
+  color: var(--brigham-teal) !important;
 }
 
 .hospitalLogo {

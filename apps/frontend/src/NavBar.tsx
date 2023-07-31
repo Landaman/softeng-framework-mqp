@@ -13,6 +13,8 @@ function NavBar() {
     isAuthenticated,
     isLoading,
     getAccessTokenSilently,
+    user,
+    logout,
   } = useAuth0();
 
   // This ensures the access token we have is actually valid. Tries to get the access token, and if that fails requires
@@ -59,7 +61,7 @@ function NavBar() {
             Computer Service
           </Nav.Link>
           <Nav.Link
-            href={`/service-requests/sanitation`}
+            href={`/service-requests/sanitation/create`}
             className={"navbar-link"}
           >
             Sanitation Service
@@ -70,21 +72,38 @@ function NavBar() {
           <Nav.Link href={`/mapeditor`} className={"navbar-link"}>
             Map Editor
           </Nav.Link>
-          <NavDropdown
-            title="Login"
-            id="basic-nav-dropdown"
-            className={"navbar-link"}
-          >
-            <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.2">
-              Another action
-            </NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item href="#action/3.4">
-              Separated link
-            </NavDropdown.Item>
-          </NavDropdown>
+          {!isAuthenticated && user === undefined ? (
+            <Nav.Link
+              className={"navbar-link"}
+              onClick={async () => {
+                await loginWithRedirect({
+                  appState: {
+                    returnTo: location.pathname,
+                  },
+                });
+              }}
+            >
+              Log in
+            </Nav.Link>
+          ) : (
+            <NavDropdown
+              title={user?.name}
+              id="basic-nav-dropdown"
+              className={"navbar-link"}
+            >
+              <NavDropdown.Item
+                onClick={() => {
+                  logout({
+                    logoutParams: {
+                      returnTo: window.location.origin,
+                    },
+                  });
+                }}
+              >
+                Log out
+              </NavDropdown.Item>
+            </NavDropdown>
+          )}
         </Nav>
       </Navbar.Collapse>
     </Navbar>
