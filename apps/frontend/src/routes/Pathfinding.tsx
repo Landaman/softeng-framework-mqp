@@ -93,8 +93,6 @@ function Pathfinding() {
       .getPropertyValue("width")
       .slice(0, -2);
 
-    console.log(style_width);
-    console.log(style_height);
     //scale the canvas
     setCanvasY(style_height);
     setCanvasX(style_width);
@@ -117,7 +115,6 @@ function Pathfinding() {
         context.fillRect(scaleX, scaleY, 20, 20);
         if (i === b) {
           b = breaks.shift();
-          console.log("here");
         } else {
           context.beginPath();
           context.moveTo(oldX, oldY);
@@ -512,8 +509,9 @@ function Pathfinding() {
       setHoverNode(findNode(clientX, clientY));
     }
     if (originalX != 0) {
-      setTranslateX(clientX - originalX);
-      setTranslateY(clientY - originalY);
+      const x = clientX - originalX;
+      const y = clientY - originalY;
+      adjMap(x, y, scale);
     }
   };
 
@@ -524,16 +522,54 @@ function Pathfinding() {
     const adjX = clientX - canvasX / 2 - 512;
     const adjY = clientY - canvasY / 2 - 114;
 
-    if (event.deltaY > 0) {
-      setTranslateX(adjX - (adjX - translateX) / 1.1);
-      setTranslateY(adjY - (adjY - translateY) / 1.1);
-      setScale(scale / 1.1);
-    } else {
-      setTranslateX(adjX - (adjX - translateX) * 1.1);
-      setTranslateY(adjY - (adjY - translateY) * 1.1);
-      setScale(scale * 1.1);
+    if (event.deltaY > 0 && scale > 1) {
+      const x = adjX - (adjX - translateX) / 1.1;
+      const y = adjY - (adjY - translateY) / 1.1;
+      const s = scale / 1.1;
+      adjMap(x, y, s);
+      setScale(s);
+    } else if (scale < 5 && event.deltaY < 0) {
+      const x = adjX - (adjX - translateX) * 1.1;
+      const y = adjY - (adjY - translateY) * 1.1;
+      const s = scale * 1.1;
+      adjMap(x, y, s);
+      setScale(s);
     }
   };
+
+  function adjMap(x: number, y: number, s: number) {
+    let correct = true;
+    const highX = canvasX / -2 - (canvasX / -2) * s;
+    const lowX = canvasX / 2 - (canvasX / 2) * s;
+    const highY = canvasY / -2 - (canvasY / -2) * s;
+    const lowY = canvasY / 2 - (canvasY / 2) * s;
+    console.log(highX);
+    console.log(x);
+    if (highX < x) {
+      console.log("HighX");
+      setTranslateX(highX);
+      correct = false;
+    } else if (lowX > x) {
+      console.log("LowX");
+      setTranslateX(lowX);
+      correct = false;
+    } else {
+      setTranslateX(x);
+    }
+    if (highY < y) {
+      setTranslateY(highY);
+      console.log("HighY");
+      correct = false;
+    } else if (lowY > y) {
+      console.log("LowY");
+      setTranslateY(lowY);
+      correct = false;
+    } else {
+      setTranslateY(y);
+    }
+
+    return correct;
+  }
 
   function findNode(x: number, y: number) {
     const adjX =
@@ -553,7 +589,7 @@ function Pathfinding() {
     return -1;
   }
 
-  const [floor, setfloor] = useState("pathfindingCanvas ground");
+  const [floor, setfloor] = useState("pathfindingCanvas L1");
   function groundFloor() {
     setfloor("pathfindingCanvas ground");
     clearCanvas();

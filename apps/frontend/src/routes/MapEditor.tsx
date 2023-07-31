@@ -308,8 +308,9 @@ function MapEditor() {
         setHoverEdge(-1);
       }
       if (origionalX != 0) {
-        setTranslateX(clientX - origionalX);
-        setTranslateY(clientY - origionalY);
+        const x = clientX - origionalX;
+        const y = clientY - origionalY;
+        adjMap(x, y, scale);
       }
     }
   };
@@ -321,14 +322,18 @@ function MapEditor() {
     const adjX = clientX - canvasX / 2 - 512;
     const adjY = clientY - canvasY / 2 - 114;
 
-    if (event.deltaY > 0) {
-      setTranslateX(adjX - (adjX - translateX) / 1.1);
-      setTranslateY(adjY - (adjY - translateY) / 1.1);
-      setScale(scale / 1.1);
-    } else {
-      setTranslateX(adjX - (adjX - translateX) * 1.1);
-      setTranslateY(adjY - (adjY - translateY) * 1.1);
-      setScale(scale * 1.1);
+    if (event.deltaY > 0 && scale > 1) {
+      const x = adjX - (adjX - translateX) / 1.1;
+      const y = adjY - (adjY - translateY) / 1.1;
+      const s = scale / 1.1;
+      adjMap(x, y, s);
+      setScale(s);
+    } else if (scale < 5 && event.deltaY < 0) {
+      const x = adjX - (adjX - translateX) * 1.1;
+      const y = adjY - (adjY - translateY) * 1.1;
+      const s = scale * 1.1;
+      adjMap(x, y, s);
+      setScale(s);
     }
   };
 
@@ -345,6 +350,40 @@ function MapEditor() {
     const temp = [...mapNodes];
     temp[index] = n;
     setMapNodes(temp);
+  }
+
+  function adjMap(x: number, y: number, s: number) {
+    let correct = true;
+    const highX = canvasX / -2 - (canvasX / -2) * s;
+    const lowX = canvasX / 2 - (canvasX / 2) * s;
+    const highY = canvasY / -2 - (canvasY / -2) * s;
+    const lowY = canvasY / 2 - (canvasY / 2) * s;
+    console.log(highX);
+    console.log(x);
+    if (highX < x) {
+      console.log("HighX");
+      setTranslateX(highX);
+      correct = false;
+    } else if (lowX > x) {
+      console.log("LowX");
+      setTranslateX(lowX);
+      correct = false;
+    } else {
+      setTranslateX(x);
+    }
+    if (highY < y) {
+      setTranslateY(highY);
+      console.log("HighY");
+      correct = false;
+    } else if (lowY > y) {
+      console.log("LowY");
+      setTranslateY(lowY);
+      correct = false;
+    } else {
+      setTranslateY(y);
+    }
+
+    return correct;
   }
 
   function createMapNode(x: number, y: number) {
@@ -389,7 +428,7 @@ function MapEditor() {
     setSelectedEdge(-1);
   }
 
-  const [floor, setfloor] = useState("pathfindingCanvas ground");
+  const [floor, setfloor] = useState("pathfindingCanvas L1");
   function FloorGround() {
     setfloor("pathfindingCanvas ground");
     clearCanvas();
