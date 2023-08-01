@@ -1,0 +1,61 @@
+# Port bindings for various things
+x-port-bindings:
+  # Exposed port for the test runner UI
+  TEST_RUNNER_UI: &test-ui 51204:51204
+
+# This may seem insecure, but the DB container isn't exposed outside of docker, so it doesn't
+# matter since NOBODY except for other containers has access ot it
+x-db-info: &db-args
+  POSTGRES_USER: test
+  POSTGRES_PASSWORD: test
+  POSTGRES_DB: test
+
+# Port and container name (URL) for the DB
+x-db-loc: &db-loc
+  POSTGRES_CONTAINER: &pg-container database
+  POSTGRES_PORT: &pg-port "5432"
+
+# Arguments used by the test runner
+x-arguments: &test-args
+  TEST_PORT: 51204 # Port for the backend
+
+services:
+  # Backend PSQL database
+  database:
+    image: postgres
+    # Expose the PG port
+    expose:
+      - *pg-port
+    # Use the DB args defined above
+    environment:
+      *db-args
+  # The test runner is the backend, but with a different command
+  test-runner:
+    # Expose ONLY THE DEBUGGER to the host
+    ports:
+      - *test-ui
+    # Use the standard Dockerfile
+    build:
+      # Taken from root
+      context: .
+      # Leave DB info accessible
+      args:
+        <<: [ *db-loc, *db-args, *test-args ]
+      # This time, build the test runner
+      target: test-runner
+    depends_on:
+      - database
+    # Mount the test runner on the host, ignore node_modules (the turbo cache)
+    volumes:
+      - ./:/app
+      - /app/apps/backend/node_modules/
+      - /app/apps/backend/.turbo/
+      - /app/apps/frontend/node_modules/
+      - /app/apps/frontend/.turbo/
+      - /app/node_modules/
+      - /app/packages/common/.turbo/
+      - /app/packages/common/node_modules/
+      - /app/packages/database/.turbo
+      - /app/packages/database/node_modules
+      - /app/packages/database/.prisma
+

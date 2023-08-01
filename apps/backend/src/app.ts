@@ -34,15 +34,18 @@ app.use("/healthcheck", function (req: Request, res: Response): void {
   res.sendStatus(200);
 });
 
-// JWT checker to ensure that routes are authorized
-// Enforce on all endpoints
-app.use(
-  auth({
-    audience: "/api",
-    issuerBaseURL: "https://dev-k32g5z85431gyr5t.us.auth0.com/",
-    tokenSigningAlg: "RS256",
-  })
-);
+// If we're not in test mode, enable the auth0 enforcement
+if (!process.env["VITETEST"]) {
+  // JWT checker to ensure that routes are authorized
+  // Enforce on all endpoints
+  app.use(
+    auth({
+      audience: "/api",
+      issuerBaseURL: "https://dev-k32g5z85431gyr5t.us.auth0.com/",
+      tokenSigningAlg: "RS256",
+    })
+  );
+}
 
 // Setup routers. ALL ROUTERS MUST use /api as a start point, or they
 // won't be reached by the default proxy and prod setup

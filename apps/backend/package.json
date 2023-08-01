@@ -38,6 +38,7 @@
     "eslint-config-custom": "workspace:*",
     "nodemon": "latest",
     "prettier": "latest",
-    "prettier-config-custom": "workspace:*"
+    "prettier-config-custom": "workspace:*",
+    "vitest": "^0.33.0"
   }
 }

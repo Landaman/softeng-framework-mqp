@@ -1,4 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "tsconfig-custom/tsconfig.base.json"
+  "extends": "tsconfig-custom/tsconfig.base.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true
+  }
 }

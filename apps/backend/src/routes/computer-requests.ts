@@ -25,7 +25,7 @@ router.post("/", async function (req: Request, res: Response) {
 });
 
 // Handler to get all computer requests
-router.get("/", async function (req: Request, res: Response) {
+router.get("/", async function (_req: Request, res: Response) {
   const result = await PrismaClient.computerRequest.findMany();
 
   res.send(result);
@@ -71,7 +71,10 @@ router.delete(":/id", async function (req: Request, res: Response) {
     res.sendStatus(200);
   } catch (error) {
     // If it's a not found error
-    if (error instanceof Prisma.NotFoundError) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
       // Send 404
       res.sendStatus(404);
 
@@ -104,7 +107,10 @@ router.patch("/:id", async function (req: Request, res: Response) {
     });
   } catch (error) {
     // Handle any not found errors
-    if (error instanceof Prisma.NotFoundError) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
       res.sendStatus(404);
 
       // Short circuit

@@ -27,6 +27,7 @@ and the reasoning for the tooling it has.
     * [Docker](#docker)
     * [PostgreSQL](#postgresql)
     * [Traefik](#traefik)
+    * [Vitest](#vitest)
   * [Miscellaneous](#miscellaneous)
     * [.run](#run)
     * [deploy.sh](#deploysh)
@@ -36,6 +37,8 @@ and the reasoning for the tooling it has.
     * [Configs](#configs)
     * [node_modules](#nodemodules)
     * [Packages](#packages)
+    * [install.sh](#installsh)
+    * [deploy.sh](#deploysh-1)
 <!-- TOC -->
 
 ## WebStorm Run Configurations
@@ -180,7 +183,7 @@ each time.
 See https://yarnpkg.com/features/pnp and https://yarnpkg.com/features/zero-installs for details
 on Yarn Plug'n'Play.
 
-A Yarn configuration is defined by a few files/folders:
+A few files/folders define a Yarn configuration:
 - `package.json`: This defines the project, as Yarn sees it. It includes dependencies,
 development dependencies (dependencies that are not needed for the final build image, but are needed
 for development. This can include testing tools, code quality tools, or deployment tools). It also defines
@@ -270,6 +273,8 @@ be automatically fixed, and if something needs manual intervention, it will stop
 the commit from proceeding. If you have an issue that prevents you from committing,
 run `yarn run lint:fix` and examine the output to find the issue.
 
+If you absolutely need to skip the autochecks, you can run ``git commit --no-verify``
+
 Husky's config is in `.husky`, with an auto-install script in `package.json`.
 
 You probably won't need to touch your Husky config.
@@ -297,12 +302,13 @@ and development virtual machine images from the repository state
 - `.dockerignore` which defines files that the `Dockerfile` should ignore
 - `docker-compose.dev.yaml` which provides instructions to Docker to run the images (and a PostgreSQL database) in
 a re-usable way, and a way that enables your code edits to move to the VM in real-time
-- `docker-compose.prod.yaml` which provides instructions to Docker to run the images (and a PostgreSQL database) in a
-re-usable way that saves the production database and creates the smallest possible images
+- `docker-compose.prod.yaml` which provides instructions to Docker to run the images in a
+re-usable way that creates the smallest possible images
+- `docker-compose.test.yaml` which provides instructions to Docker to run images (and a PostgreSQL database) for testing
 
-It is recommended that the Yarn `dev`, `prod` and their associated `dev:stop` and `prod:stop` configurations
-be used to start the containers, or the WebStorm run configurations `Start Prod` and
-`Start Dev` be used to start the containers.
+It is recommended that the Yarn `dev`, `prod`, `test` and their associated `dev:stop`, `prod:stop`, and `test:stop` configurations
+be used to start the containers, or the WebStorm run configurations `Start Prod`,
+`Start Dev`, and `Start Tests` be used to start the containers.
 
 You should not modify or move any of the Docker files unless you are absolutely sure
 you know what you are doing. 
@@ -334,6 +340,19 @@ Traefik can be configured in `docker-compose.prod.yaml`. You probably
 shouldn't need to change its configuration.
 
 Details on Traefik can be found here: https://doc.traefik.io/traefik/
+
+### Vitest
+Vitest is a JavaScript test-runner. It is extremely fast, and includes
+a web-portal to view and manipulate test results. It also can listen for file changes,
+and automatically re-run tests based on file changes. Once the test configuration has
+started, you can find the test results here: http://localhost:51204/__vitest__/
+
+Vitetest is configured by the following files:
+- `vitest.workspace.ts`, which defines where vitest can look for projects that
+will have test files
+- `vitest.config.ts` which is the configuration file for vitest.
+  Similar to vite in the
+frontend, this requires special file watching options to work in Docker
 
 ## Miscellaneous
 The following details the remaining files that can be found in the top-level of the repo
@@ -370,3 +389,10 @@ slowing things down temporarily.
 ### Packages
 Packages contains packages that the front/back end rely on, including code
 they share. Changes to `Packages` will automatically be reflected in both the front and back ends
+
+### install.sh
+This is a script that helps you install only the necessary files
+on EC2, thus saving space
+
+### deploy.sh
+This is a utility script, to aid in deploying new versions of your app to EC2
