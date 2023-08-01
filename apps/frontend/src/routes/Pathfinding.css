@@ -6,7 +6,7 @@
   justify-content: flex-start;
   padding: 64px;
   max-width: 100vw;
-  max-height: 95%;
+  height: 90vh;
 }
 
 .pathfinding-inputs {
