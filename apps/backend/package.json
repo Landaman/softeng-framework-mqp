@@ -34,11 +34,13 @@
     "@types/morgan": "^1.9.4",
     "@types/node": "^20.2.3",
     "@types/pg": "^8.10.1",
+    "@types/supertest": "^2.0.12",
     "eslint": "latest",
     "eslint-config-custom": "workspace:*",
     "nodemon": "latest",
     "prettier": "latest",
     "prettier-config-custom": "workspace:*",
+    "supertest": "^6.3.3",
     "vitest": "^0.33.0"
   }
 }

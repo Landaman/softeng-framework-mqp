@@ -30,6 +30,9 @@ app.set("port", port);
 console.info("Starting server...");
 const server: http.Server = http.createServer(app);
 
+// Export the server, so that testing client can use it
+export default server;
+
 // Setup graceful exit logic
 // Exit conditions
 [

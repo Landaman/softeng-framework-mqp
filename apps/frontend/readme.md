@@ -120,6 +120,12 @@ and overrides.
 
 See https://react-bootstrap.netlify.app for details
 
+### auth0-react
+
+Auth0-React is a library built by Auth0 to facilitate using the Auth0 OIDC provider.
+It provides easy ways
+to fetch account details, and easy ways to authenticate https://github.com/auth0/auth0-react/
+
 ### Miscellaneous
 
 All other files are the same as their counterparts in the root. See

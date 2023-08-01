@@ -106,6 +106,18 @@ is not recommended.
 
 See https://www.npmjs.com/package/nodemon for details on Nodemon
 
+### express-oauth2-jwt-bearer
+
+This is a library built by Auth0 that provides bearer token authentication
+using an Open-ID Connect (OIDC) provider (such as Auth0). It facilitates
+a quick setup and excellent security. See https://github.com/auth0/express-oauth2-bearer for more information
+
+### Supertest
+
+Supertest is a Node library to aid in writing unit and integration
+tests built around RESTful APIs (such as the one integrated here).
+See https://www.npmjs.com/package/supertest for details on how to use this package
+
 ### Miscellaneous
 
 All other files are the same as their counterparts in the root. See

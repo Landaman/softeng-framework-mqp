@@ -6,7 +6,6 @@
         <option name="removeImagesOnComposeDown" value="LOCAL" />
         <option name="commandLineOptions" value="--build" />
         <option name="sourceFilePath" value="docker-compose.test.yaml" />
-        <option name="upAttachDependencies" value="true" />
         <option name="upDetach" value="false" />
       </settings>
     </deployment>
