@@ -85,16 +85,50 @@ function MapEditor() {
   useEffect(() => {
     const get = async () => {
       const nodeDao = new NodeDao();
-      setDataNodes(await nodeDao.getAll(await getAccessTokenSilently()));
+      const nodes: Node[] = await nodeDao.getAll(
+        await getAccessTokenSilently()
+      );
+      setDataNodes(nodes);
 
       const edgeDao = new EdgeDao();
-      setDataEdges(await edgeDao.getAll(await getAccessTokenSilently()));
+      const edges: Edge[] = await edgeDao.getAll(
+        await getAccessTokenSilently()
+      );
+      setDataEdges(edges);
+
+      const tempNodes: Array<MapNode> = [];
+      for (let i = 0; i < nodes.length; i++) {
+        const node: Node = nodes[i];
+        if (node.floor === "L1") {
+          const x1: number = node.xCoord - 3;
+          const y1: number = node.yCoord - 3;
+          const fromDatabase = true;
+          const deleted = false;
+          const mn: MapNode = { x1, y1, node, fromDatabase, deleted };
+          tempNodes.push(mn);
+        }
+      }
+      setMapNodes(tempNodes);
+
+      const tempEdges: Array<MapEdge> = [];
+      for (let i = 0; i < edges.length; i++) {
+        const edge: Edge = edges[i];
+        if (edge.endNode.floor === "L1" && edge.startNode.floor === "L1") {
+          const index1: number = getMapNodeIndex(edge.startNode.id, tempNodes);
+          const index2: number = getMapNodeIndex(edge.endNode.id, tempNodes);
+          const fromDatabase = true;
+          const deleted = false;
+          const me: MapEdge = { index1, index2, edge, fromDatabase, deleted };
+          tempEdges.push(me);
+        }
+      }
+      setMapEdges(tempEdges);
     };
+
     get();
   }, [getAccessTokenSilently]);
 
   useLayoutEffect(() => {
-    const dpi = window.devicePixelRatio;
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d") as CanvasRenderingContext2D;
     const style_height = +getComputedStyle(canvas)
@@ -107,8 +141,8 @@ function MapEditor() {
       .slice(0, -2);
 
     //scale the canvas
-    setCanvasY(style_height * dpi);
-    setCanvasX(style_width * dpi);
+    setCanvasY(style_height);
+    setCanvasX(style_width);
     canvas.setAttribute("height", String(3400));
     canvas.setAttribute("width", String(5000));
 
@@ -172,8 +206,8 @@ function MapEditor() {
     for (let i = 0; i < dataEdges.length; i++) {
       const edge: Edge = dataEdges[i];
       if (edge.endNode.floor === floor && edge.startNode.floor === floor) {
-        const index1: number = getMapNodeIntex(edge.startNode.id, tempNodes);
-        const index2: number = getMapNodeIntex(edge.endNode.id, tempNodes);
+        const index1: number = getMapNodeIndex(edge.startNode.id, tempNodes);
+        const index2: number = getMapNodeIndex(edge.endNode.id, tempNodes);
         const me: MapEdge = {
           index1,
           index2,
@@ -187,7 +221,7 @@ function MapEditor() {
     setMapEdges(tempEdges);
   }
 
-  function getMapNodeIntex(nodeID: number, nodes: Array<MapNode>): number {
+  function getMapNodeIndex(nodeID: number, nodes: Array<MapNode>): number {
     for (let i = 0; i < nodes.length; i++) {
       if (nodes[i].node.id === nodeID) {
         return i;
@@ -274,8 +308,9 @@ function MapEditor() {
         setHoverEdge(-1);
       }
       if (origionalX != 0) {
-        setTranslateX(clientX - origionalX);
-        setTranslateY(clientY - origionalY);
+        const x = clientX - origionalX;
+        const y = clientY - origionalY;
+        adjMap(x, y, scale);
       }
     }
   };
@@ -283,10 +318,22 @@ function MapEditor() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const handleWheel = (event) => {
-    if (event.deltaY > 0) {
-      setScale(scale / 1.1);
-    } else {
-      setScale(scale * 1.1);
+    const { clientX, clientY } = event;
+    const adjX = clientX - canvasX / 2 - 512;
+    const adjY = clientY - canvasY / 2 - 114;
+
+    if (event.deltaY > 0 && scale > 1) {
+      const x = adjX - (adjX - translateX) / 1.1;
+      const y = adjY - (adjY - translateY) / 1.1;
+      const s = scale / 1.1;
+      adjMap(x, y, s);
+      setScale(s);
+    } else if (scale < 5 && event.deltaY < 0) {
+      const x = adjX - (adjX - translateX) * 1.1;
+      const y = adjY - (adjY - translateY) * 1.1;
+      const s = scale * 1.1;
+      adjMap(x, y, s);
+      setScale(s);
     }
   };
 
@@ -303,6 +350,40 @@ function MapEditor() {
     const temp = [...mapNodes];
     temp[index] = n;
     setMapNodes(temp);
+  }
+
+  function adjMap(x: number, y: number, s: number) {
+    let correct = true;
+    const highX = canvasX / -2 - (canvasX / -2) * s;
+    const lowX = canvasX / 2 - (canvasX / 2) * s;
+    const highY = canvasY / -2 - (canvasY / -2) * s;
+    const lowY = canvasY / 2 - (canvasY / 2) * s;
+    console.log(highX);
+    console.log(x);
+    if (highX < x) {
+      console.log("HighX");
+      setTranslateX(highX);
+      correct = false;
+    } else if (lowX > x) {
+      console.log("LowX");
+      setTranslateX(lowX);
+      correct = false;
+    } else {
+      setTranslateX(x);
+    }
+    if (highY < y) {
+      setTranslateY(highY);
+      console.log("HighY");
+      correct = false;
+    } else if (lowY > y) {
+      console.log("LowY");
+      setTranslateY(lowY);
+      correct = false;
+    } else {
+      setTranslateY(y);
+    }
+
+    return correct;
   }
 
   function createMapNode(x: number, y: number) {
@@ -347,7 +428,7 @@ function MapEditor() {
     setSelectedEdge(-1);
   }
 
-  const [floor, setfloor] = useState("pathfindingCanvas ground");
+  const [floor, setfloor] = useState("pathfindingCanvas L1");
   function FloorGround() {
     setfloor("pathfindingCanvas ground");
     clearCanvas();
