@@ -185,14 +185,16 @@ function Pathfinding() {
   async function findPath(startID: number, endID: number): Promise<Node[]> {
     const nodeDao = new NodeDao();
 
-    const start: Node | null = await nodeDao.get(
-      await getAccessTokenSilently(),
-      startID
-    );
-    const end: Node | null = await nodeDao.get(
-      await getAccessTokenSilently(),
-      endID
-    );
+    const nodeArray = await nodeDao.getAll(await getAccessTokenSilently());
+    const indexedNodeArray: { [key: string]: Node } = {};
+
+    let allNode;
+    for (allNode of nodeArray) {
+      indexedNodeArray[allNode.id] = allNode;
+    }
+
+    const start: Node = indexedNodeArray[startID];
+    const end: Node = indexedNodeArray[endID];
 
     if (start === null || end === null) return [];
     if (start.id === null || end.id === null) return [];
@@ -271,12 +273,9 @@ function Pathfinding() {
         nodeNeighbors[nodeNeighbors.length] = edge.startNodeId;
       }
 
-      let childId;
-      NODE_LOOP: for (childId of nodeNeighbors) {
-        const child: Node | null = await nodeDao.get(
-          await getAccessTokenSilently(),
-          childId
-        );
+      let childID;
+      NODE_LOOP: for (childID of nodeNeighbors) {
+        const child: Node = indexedNodeArray[childID];
 
         if (child != null) {
           if (q.floor != child.floor) {
@@ -284,22 +283,22 @@ function Pathfinding() {
             if (loc != null) {
               if (loc.locationType == "ELEV") {
                 if (indexedArrayG[q.id] != null) {
-                  indexedArrayG[childId] = indexedArrayG[q.id] + 50;
-                } else indexedArrayG[childId] = 50;
+                  indexedArrayG[childID] = indexedArrayG[q.id] + 50;
+                } else indexedArrayG[childID] = 50;
               } else if (loc.locationType == "STAI") {
                 if (indexedArrayG[q.id] != null) {
-                  indexedArrayG[childId] = indexedArrayG[q.id] + 100;
-                } else indexedArrayG[childId] = 100;
+                  indexedArrayG[childID] = indexedArrayG[q.id] + 100;
+                } else indexedArrayG[childID] = 100;
               }
-            } else indexedArrayG[childId] = 100; // no location name, assume stairs
+            } else indexedArrayG[childID] = 100; // no location name, assume stairs
           } else {
             if (indexedArrayG[q.id] != null) {
-              indexedArrayG[childId] =
+              indexedArrayG[childID] =
                 indexedArrayG[q.id] + euclideanDistance(child, q);
-            } else indexedArrayG[childId] = euclideanDistance(child, q);
+            } else indexedArrayG[childID] = euclideanDistance(child, q);
           }
 
-          indexedArrayH[childId] = euclideanDistance(child, end);
+          indexedArrayH[childID] = euclideanDistance(child, end);
 
           let found = false;
           let openNode;
@@ -309,12 +308,12 @@ function Pathfinding() {
               found = true;
               if (
                 indexedArrayF[openNode.id] >
-                indexedArrayG[childId] + indexedArrayH[childId]
+                indexedArrayG[childID] + indexedArrayH[childID]
               ) {
                 openList = removeNode(openList, openNode);
-                indexedArrayParent[childId] = q.id;
-                indexedArrayF[childId] =
-                  indexedArrayG[childId] + indexedArrayH[childId]; // calculate the lowest possible distance to end
+                indexedArrayParent[childID] = q.id;
+                indexedArrayF[childID] =
+                  indexedArrayG[childID] + indexedArrayH[childID]; // calculate the lowest possible distance to end
                 break;
               } else continue NODE_LOOP;
             }
@@ -327,21 +326,21 @@ function Pathfinding() {
               found = true;
               if (
                 indexedArrayF[closedNode.id] >
-                indexedArrayG[childId] + indexedArrayH[childId]
+                indexedArrayG[childID] + indexedArrayH[childID]
               ) {
                 openList = removeNode(openList, closedNode);
-                indexedArrayParent[childId] = q.id;
-                indexedArrayF[childId] =
-                  indexedArrayG[childId] + indexedArrayH[childId]; // calculate the lowest possible distance to end
+                indexedArrayParent[childID] = q.id;
+                indexedArrayF[childID] =
+                  indexedArrayG[childID] + indexedArrayH[childID]; // calculate the lowest possible distance to end
                 break;
               } else continue NODE_LOOP;
             }
           }
 
           if (!found) {
-            indexedArrayParent[childId] = q.id;
-            indexedArrayF[childId] =
-              indexedArrayG[childId] + indexedArrayH[childId]; // calculate the lowest possible distance to end
+            indexedArrayParent[childID] = q.id;
+            indexedArrayF[childID] =
+              indexedArrayG[childID] + indexedArrayH[childID]; // calculate the lowest possible distance to end
           }
 
           let element;
@@ -350,7 +349,7 @@ function Pathfinding() {
           for (element of openList) {
             if (
               !inserted &&
-              indexedArrayF[element.id] <= indexedArrayF[childId]
+              indexedArrayF[element.id] <= indexedArrayF[childID]
             ) {
               copyList[copyList.length] = child;
               inserted = true;
