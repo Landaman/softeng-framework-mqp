@@ -1,7 +1,7 @@
 # Port bindings for various things
 x-port-bindings:
   # Exposed port for the test runner UI
-  TEST_RUNNER_UI: &test-ui 51204:51204
+  TEST_RUNNER_UI: &test-ui 51205:51205
 
 # This may seem insecure, but the DB container isn't exposed outside of docker, so it doesn't
 # matter since NOBODY except for other containers has access ot it

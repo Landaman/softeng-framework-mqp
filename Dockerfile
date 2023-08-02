@@ -199,9 +199,6 @@ ENV BACKEND_PORT=$BACKEND_PORT
 ARG BACKEND_SOURCE
 ENV BACKEND_SOURCE=$BACKEND_SOURCE
 
-# We need to use polling
-ENV CHOKIDAR_USEPOLLING=true
-
 # Build everything, for types we need
 RUN yarn run build
 

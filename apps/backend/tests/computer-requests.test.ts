@@ -1,5 +1,6 @@
 import { it, beforeEach, describe, assert } from "vitest";
 import { Prisma, PrismaClient } from "database";
+import app from "../src/app.ts";
 
 const prisma = new PrismaClient();
 
@@ -21,7 +22,7 @@ beforeEach(async () => {
 describe("/api/computer-requests", async () => {
   describe("[POST] /api/computer-requests/", () => {
     it("should respond with a `200` status code and request details", async () => {
-      assert(2 == 2);
+      console.log(app);
     });
   });
 
