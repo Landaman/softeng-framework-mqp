@@ -75,22 +75,22 @@
   object-fit: contain;
 }
 .ground {
-  background-image: url("../assets/floorMaps/00_thegroundfloor.png");
+  background-image: url("../assets/floorMaps/00_thegroundfloor.webp");
 }
 .L1 {
-  background-image: url("../assets/floorMaps/00_thelowerlevel1.png");
+  background-image: url("../assets/floorMaps/00_thelowerlevel1.webp");
 }
 .L2 {
-  background-image: url("../assets/floorMaps/00_thelowerlevel2.png");
+  background-image: url("../assets/floorMaps/00_thelowerlevel2.webp");
 }
 .one {
-  background-image: url("../assets/floorMaps/01_thefirstfloor.png");
+  background-image: url("../assets/floorMaps/01_thefirstfloor.webp");
 }
 .two {
-  background-image: url("../assets/floorMaps/02_thesecondfloor.png");
+  background-image: url("../assets/floorMaps/02_thesecondfloor.webp");
 }
 .three {
-  background-image: url("../assets/floorMaps/03_thethirdfloor.png");
+  background-image: url("../assets/floorMaps/03_thethirdfloor.webp");
 }
 
 .react-transform-component {

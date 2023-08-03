@@ -10,12 +10,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 import EdgeDao, { Edge } from "../database/edge-dao.ts";
 import NodeDao, { Node } from "../database/node-dao.ts";
 import { MapEdge, MapNode } from "../MapComponents.ts";
-import firstFloorImage from "../assets/floorMaps/01_thefirstfloor.png";
-import secondFloorImage from "../assets/floorMaps/02_thesecondfloor.png";
-import thirdFloorImage from "../assets/floorMaps/03_thethirdfloor.png";
-import lowerOneFloorImage from "../assets/floorMaps/00_thelowerlevel1.png";
-import lowerTwoFloorImage from "../assets/floorMaps/00_thelowerlevel2.png";
-import groundFloorImage from "../assets/floorMaps/00_thegroundfloor.png";
 
 function Pathfinding() {
   const [dataNodes, setDataNodes] = useState<Array<Node>>([]);
@@ -40,13 +34,6 @@ function Pathfinding() {
   const [pathBreaks, setPathBreaks] = useState<Array<number>>([]);
   const { getAccessTokenSilently } = useAuth0();
   useEffect(() => {
-    new Image().src = firstFloorImage;
-    new Image().src = secondFloorImage;
-    new Image().src = thirdFloorImage;
-    new Image().src = lowerOneFloorImage;
-    new Image().src = lowerTwoFloorImage;
-    new Image().src = groundFloorImage;
-
     const get = async () => {
       const nodeDao = new NodeDao();
       const nodes: Node[] = await nodeDao.getAll(

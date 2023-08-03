@@ -1,7 +1,7 @@
 import "./NavBar.css";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import hospital from "./assets/mgb-logo-color.png";
 import { LinkContainer } from "react-router-bootstrap";
@@ -46,9 +46,11 @@ function NavBar() {
 
   return (
     <Navbar expand="lg" className={"navbar"}>
-      <Navbar.Brand href="/">
-        <img alt="" src={hospital} className={"hospitalLogo"} />
-      </Navbar.Brand>
+      <NavLink to={"/"}>
+        <Navbar.Brand>
+          <img alt="Hospital Logo" src={hospital} className={"hospitalLogo"} />
+        </Navbar.Brand>
+      </NavLink>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
