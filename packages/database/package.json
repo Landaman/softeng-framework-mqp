@@ -12,7 +12,8 @@
     "prettier": "latest",
     "prettier-config-custom": "workspace:*",
     "tsconfig-custom": "workspace:*",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "vitest": "^0.34.1"
   },
   "scripts": {
     "lint": "yarn shared:prettierlint && prisma validate && yarn shared:eslint && yarn shared:tslint",

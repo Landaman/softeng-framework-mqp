@@ -5,7 +5,6 @@ export default defineConfig({
     preserveSymlinks: true,
   },
   server: {
-    host: "0.0.0.0",
     watch: {
       usePolling: true
     }
