@@ -4,6 +4,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import hospital from "./assets/mgb-logo-color.png";
+import { LinkContainer } from "react-router-bootstrap";
 
 function NavBar() {
   const location = useLocation();
@@ -51,27 +52,21 @@ function NavBar() {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
-          <Nav.Link href="/" className={"navbar-link"}>
-            Home
-          </Nav.Link>
-          <Nav.Link
-            href={`/service-requests/computer/create`}
-            className={"navbar-link"}
-          >
-            Computer Service
-          </Nav.Link>
-          <Nav.Link
-            href={`/service-requests/sanitation/create`}
-            className={"navbar-link"}
-          >
-            Sanitation Service
-          </Nav.Link>
-          <Nav.Link href={`/pathfinding`} className={"navbar-link"}>
-            Pathfinding
-          </Nav.Link>
-          <Nav.Link href={`/mapeditor`} className={"navbar-link"}>
-            Map Editor
-          </Nav.Link>
+          <LinkContainer to={"/"}>
+            <Nav.Link className={"navbar-link"}>Home</Nav.Link>
+          </LinkContainer>
+          <LinkContainer to={`/service-requests/computer/create`}>
+            <Nav.Link className={"navbar-link"}>Computer Service</Nav.Link>
+          </LinkContainer>
+          <LinkContainer to={`/service-requests/sanitation/create`}>
+            <Nav.Link className={"navbar-link"}>Sanitation Service</Nav.Link>
+          </LinkContainer>
+          <LinkContainer to={`/pathfinding`}>
+            <Nav.Link className={"navbar-link"}>Pathfinding</Nav.Link>
+          </LinkContainer>
+          <LinkContainer to={`/mapeditor`}>
+            <Nav.Link className={"navbar-link"}>Map Editor</Nav.Link>
+          </LinkContainer>
           {!isAuthenticated && user === undefined ? (
             <Nav.Link
               className={"navbar-link"}
