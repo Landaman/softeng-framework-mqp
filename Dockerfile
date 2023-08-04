@@ -60,6 +60,9 @@ RUN yarn turbo prune --scope=frontend --docker
 FROM installer AS prod-backend-builder
 WORKDIR /$WORKDIR
 
+# Remove the tests root, no need in prod
+RUN rm -r apps/backend/tests
+
 # Build the unplugged files and cache stuff for this specific OS
 RUN yarn install --immutable --immutable-cache --check-cache
 
@@ -177,3 +180,27 @@ ENV BACKEND_SOURCE=$BACKEND_SOURCE
 CMD ["yarn", "turbo", "run", "dev", "--filter=frontend"]
 
 # No need for a healthcheck (this is dev, so why bother)
+
+# Test-runner
+FROM installer as test-runner
+WORKDIR /$WORKDIR
+
+# Port
+ARG TEST_PORT
+
+# Expose the port
+ENV PORT=$TEST_PORT
+
+# Expose the port
+EXPOSE $PORT
+
+# backend information
+ENV BACKEND_PORT=$BACKEND_PORT
+ARG BACKEND_SOURCE
+ENV BACKEND_SOURCE=$BACKEND_SOURCE
+
+# Build everything, for types we need
+RUN yarn run build
+
+# Run with CMD, since dev may want to use other commands
+CMD ["yarn", "run", "vitest", "--ui", "--open=false"]

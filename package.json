@@ -18,22 +18,27 @@
     "dev:stop": "docker-compose -f docker-compose.dev.yaml down --volumes --rmi local",
     "deploy": "docker-compose -f docker-compose.prod.yaml up --build -d",
     "deploy:stop": "docker-compose -f docker-compose.prod.yaml down",
+    "test": "docker-compose -f docker-compose.test.yaml up --build --renew-anon-volumes -d",
+    "test:stop": "docker-compose -f docker-compose.dev.yaml down --volumes --rmi local",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "postinstall": "husky install || exit 0",
-    "build": "turbo run lint:fix && yarn run build:frontend && yarn run build:backend",
+    "build": "turbo run build",
     "docker:upload": "turbo run docker:upload --concurrency=1"
   },
   "packageManager": "yarn@3.5.1",
   "devDependencies": {
+    "@vitest/ui": "^0.33.0",
     "eslint": "latest",
     "eslint-config-custom": "workspace:*",
+    "happy-dom": "^10.6.3",
     "husky": "^8.0.0",
     "prettier": "latest",
     "prettier-config-custom": "workspace:*",
     "tsconfig-custom": "workspace:*",
     "turbo": "latest",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "vitest": "^0.33.0"
   },
   "dependencies": {
     "@yarnpkg/pnpify": "^4.0.0-rc.45"

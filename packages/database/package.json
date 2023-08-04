@@ -4,17 +4,20 @@
   "version": "1.0.0",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
+  "browser": "./src/index.ts",
+  "module": "true",
   "devDependencies": {
     "eslint": "latest",
     "eslint-config-custom": "workspace:*",
     "prettier": "latest",
     "prettier-config-custom": "workspace:*",
     "tsconfig-custom": "workspace:*",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "vitest": "^0.34.1"
   },
   "scripts": {
-    "lint": "yarn shared:prettierlint && yarn shared:eslint && yarn shared:tslint && prisma validate",
-    "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint && prisma format",
+    "lint": "yarn shared:prettierlint && prisma validate && yarn shared:eslint && yarn shared:tslint",
+    "lint:fix": "yarn shared:prettierlint:fix && prisma format && yarn shared:eslint:fix && yarn shared:tslint",
     "build": "yarn -T run pnpify prisma generate",
     "build:dev": "yarn -T run pnpify prisma generate",
     "migrate:dev": "prisma migrate dev --skip-generate",

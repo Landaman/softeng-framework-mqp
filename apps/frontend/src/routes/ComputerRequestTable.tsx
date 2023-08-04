@@ -11,9 +11,9 @@ import { useEffect, useMemo, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import Form from "react-bootstrap/Form";
 import { Table } from "react-bootstrap";
-import { Prisma } from "database";
 import ComputerRequestDao, {
   ComputerRequest,
+  UpdateComputerRequest,
 } from "../database/computer-request-dao.ts";
 
 // Update the table meta and column metas, so that we can provide additional information to the table and columns
@@ -31,7 +31,7 @@ declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface ColumnMeta<TData extends RowData, TValue> {
     isEditable: boolean;
-    createUpdateArgs: (value: TValue) => unknown;
+    createUpdateArgs: (originalID: number, value: TValue) => unknown;
   }
 }
 
@@ -48,7 +48,12 @@ const defaultColumn: Partial<ColumnDef<ComputerRequest>> = {
     const onBlur = async () => {
       await table.options.meta?.updateData(
         index,
-        table.getColumn(id)?.columnDef.meta?.createUpdateArgs(value)
+        table
+          .getColumn(id)
+          ?.columnDef.meta?.createUpdateArgs(
+            table.getRow(index.toString()).original.id,
+            value
+          )
       );
     };
 
@@ -121,10 +126,11 @@ export default function ComputerRequestTable() {
         header: "Location",
         meta: {
           isEditable: true,
-          createUpdateArgs: (value) => {
+          createUpdateArgs: (id, value) => {
             return {
+              id: id,
               location: value,
-            } satisfies Prisma.ComputerRequestUpdateInput;
+            } satisfies UpdateComputerRequest;
           },
         },
       }),
@@ -132,10 +138,11 @@ export default function ComputerRequestTable() {
         header: "Staff",
         meta: {
           isEditable: true,
-          createUpdateArgs: (value) => {
+          createUpdateArgs: (id, value) => {
             return {
+              id: id,
               staff: value,
-            } satisfies Prisma.ComputerRequestUpdateInput;
+            } satisfies UpdateComputerRequest;
           },
         },
       }),
@@ -143,10 +150,11 @@ export default function ComputerRequestTable() {
         header: "Reason",
         meta: {
           isEditable: true,
-          createUpdateArgs: (value) => {
+          createUpdateArgs: (id, value) => {
             return {
+              id: id,
               reason: value,
-            } satisfies Prisma.ComputerRequestUpdateInput;
+            } satisfies UpdateComputerRequest;
           },
         },
       }),
@@ -154,10 +162,11 @@ export default function ComputerRequestTable() {
         header: "Type",
         meta: {
           isEditable: true,
-          createUpdateArgs: (value) => {
+          createUpdateArgs: (id, value) => {
             return {
+              id: id,
               type: value,
-            } satisfies Prisma.ComputerRequestUpdateInput;
+            } satisfies UpdateComputerRequest;
           },
         },
       }),
@@ -180,42 +189,15 @@ export default function ComputerRequestTable() {
       ],
     },
     meta: {
-      updateData: async (rowIndex, updateParams: unknown) => {
-        // We need to cast the update params to be the computer request create input, as that
-        // is what we actually want to send to the API via axios
-        const updateInput = updateParams as Prisma.ComputerRequestCreateInput;
-
-        // Get the original service request
-        const originalRequest = table.getRow(rowIndex.toString())?.original;
-
+      updateData: async (rowIndex: number, updateParams: unknown) => {
         // Get the DAO to do the update with
         const dao = new ComputerRequestDao();
 
-        const newRequest = {
-          id: originalRequest.id,
-          location: originalRequest.location,
-          staff: originalRequest.staff,
-          reason: originalRequest.reason,
-          type: originalRequest.type,
-        } satisfies ComputerRequest;
-
-        if (updateInput.location) {
-          newRequest.type = updateInput.type;
-        }
-
-        if (updateInput.staff) {
-          newRequest.location = updateInput.location;
-        }
-
-        if (updateInput.reason) {
-          newRequest.reason = updateInput.reason;
-        }
-
-        if (updateInput.type) {
-          newRequest.type = updateInput.type;
-        }
-
-        await dao.update(await getAccessTokenSilently(), newRequest);
+        // Do the update, get the new request
+        const newRequest = await dao.update(
+          await getAccessTokenSilently(),
+          updateParams as UpdateComputerRequest
+        );
 
         // Go through the requests, replace only the new request to be the data
         setRequests(
@@ -232,34 +214,42 @@ export default function ComputerRequestTable() {
   });
 
   return (
-    <Table bordered responsive hover>
-      <thead>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <th key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody>
-        {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <td key={cell.id}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </Table>
+    <>
+      <span
+        className={"heading-text"}
+        style={{ marginTop: "32px", marginBottom: "16px" }}
+      >
+        Computer Requests
+      </span>
+      <Table bordered responsive hover>
+        <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </>
   );
 }

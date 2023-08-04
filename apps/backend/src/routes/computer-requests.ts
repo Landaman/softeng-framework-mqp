@@ -11,20 +11,21 @@ router.post("/", async function (req: Request, res: Response) {
   // Attempt to save the request
   try {
     // Attempt to create in the database
-    await PrismaClient.computerRequest.create({ data: requestAttempt });
+    const newRequest = await PrismaClient.computerRequest.create({
+      data: requestAttempt,
+    });
     console.info("Successfully saved computer service request"); // Log that it was successful
+
+    res.send(newRequest); // Send the created content, so the client has the ID
   } catch (error) {
     // Log any failures
     console.error(`Unable to save computer service request: ${error}`);
     res.sendStatus(400); // Send error
-    return;
   }
-
-  res.sendStatus(200); // Otherwise say it's fine
 });
 
 // Handler to get all computer requests
-router.get("/", async function (req: Request, res: Response) {
+router.get("/", async function (_req: Request, res: Response) {
   const result = await PrismaClient.computerRequest.findMany();
 
   res.send(result);
@@ -70,7 +71,10 @@ router.delete(":/id", async function (req: Request, res: Response) {
     res.sendStatus(200);
   } catch (error) {
     // If it's a not found error
-    if (error instanceof Prisma.NotFoundError) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
       // Send 404
       res.sendStatus(404);
 
@@ -88,7 +92,7 @@ router.delete(":/id", async function (req: Request, res: Response) {
 
 // Handler to handle updating an individual service request
 router.patch("/:id", async function (req: Request, res: Response) {
-  const updateInput = req.body as Prisma.ComputerRequestCreateInput;
+  const updateInput = req.body as Prisma.ComputerRequestUpdateInput;
 
   // We need the request
   let newRequest: ComputerRequest | null = null;
@@ -103,7 +107,10 @@ router.patch("/:id", async function (req: Request, res: Response) {
     });
   } catch (error) {
     // Handle any not found errors
-    if (error instanceof Prisma.NotFoundError) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
       res.sendStatus(404);
 
       // Short circuit

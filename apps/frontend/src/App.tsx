@@ -11,7 +11,8 @@ import {
   SanitationService,
 } from "./routes/ServiceRequest.tsx";
 import ComputerRequestTable from "./routes/ComputerRequestTable.tsx";
-import Login from "./routes/Login.tsx";
+import edgeTable from "./routes/edge-table.tsx";
+import nodeTable from "./routes/node-table.tsx";
 import TestPage from "./routes/HighScore.tsx";
 import NavBar from "./NavBar.tsx";
 import { Auth0Provider } from "@auth0/auth0-react";
@@ -19,6 +20,7 @@ import ErrorPage from "./routes/ErrorPage.tsx";
 import Pathfinding from "./routes/Pathfinding.tsx";
 import MapEditor from "./routes/MapEditor.tsx";
 import { AuthenticationGuard } from "./AuthenticationGuard.tsx";
+import SanitationRequestTable from "./routes/SanitationRequestTable.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -60,9 +62,26 @@ function App() {
                 },
                 {
                   path: "sanitation",
-                  element: (
-                    <AuthenticationGuard component={SanitationService} />
-                  ),
+                  children: [
+                    {
+                      path: "create",
+                      element: (
+                        <AuthenticationGuard component={SanitationService} />
+                      ),
+                    },
+                    {
+                      path: "view",
+                      element: (
+                        <AuthenticationGuard
+                          component={SanitationRequestTable}
+                        />
+                      ),
+                    },
+                    {
+                      path: "",
+                      element: <ErrorPage />,
+                    },
+                  ],
                 },
                 {
                   path: "",
@@ -79,6 +98,14 @@ function App() {
               element: <AuthenticationGuard component={Pathfinding} />,
             },
             {
+              path: "edgeTable",
+              element: <AuthenticationGuard component={edgeTable} />,
+            },
+            {
+              path: "nodeTable",
+              element: <AuthenticationGuard component={nodeTable} />,
+            },
+            {
               path: "MapEditor",
               element: <AuthenticationGuard component={MapEditor} />,
             },
@@ -89,10 +116,6 @@ function App() {
           ],
         },
       ],
-    },
-    {
-      path: "login",
-      element: <Login />,
     },
   ]);
 

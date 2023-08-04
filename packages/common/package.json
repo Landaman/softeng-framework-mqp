@@ -2,13 +2,15 @@
   "private": true,
   "name": "common",
   "version": "1.0.0",
+  "module": "true",
   "devDependencies": {
     "eslint": "latest",
     "eslint-config-custom": "workspace:*",
     "prettier": "latest",
     "prettier-config-custom": "workspace:*",
     "tsconfig-custom": "workspace:*",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "vitest": "^0.34.1"
   },
   "scripts": {
     "lint": "yarn shared:prettierlint && yarn shared:eslint && yarn shared:tslint",

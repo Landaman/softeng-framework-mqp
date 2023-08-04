@@ -3,9 +3,10 @@
   display: flex;
   background-color: #dce2e8;
   align-items: stretch;
+  justify-content: flex-start;
   padding: 64px;
   max-width: 100vw;
-  max-height: 100%;
+  height: 90vh;
 }
 
 .pathfinding-inputs {
@@ -13,9 +14,7 @@
   padding: 32px;
   flex: 0 1 auto;
   margin-right: 32px;
-  outline-color: #012d5a;
-  outline-width: 3px;
-  outline-style: solid;
+  outline: #012d5a solid 3px;
   border-radius: 32px;
   display: flex;
   flex-direction: column;
@@ -31,6 +30,30 @@
   margin: 10px;
 }
 
+.nodeSelectorDiv {
+  display: flex;
+  flexdirection: row;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.nodeSelectorButton {
+  width: 120px;
+  background-color: #001575;
+  color: white;
+  margin: 0px 10px 0px 10px;
+  border-radius: 16px;
+}
+
+.nodeSelectorButtonSelected {
+  width: 120px;
+  background-color: #002fff;
+  color: white;
+  margin: 0px 10px 0px 10px;
+  border-radius: 16px;
+}
+
 .pathfindingButton:hover {
   background-color: #2d7adb;
 }
@@ -39,8 +62,7 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  max-height: 100%;
+  align-items: stretch;
 }
 
 .pathfindingCanvas {
@@ -53,22 +75,22 @@
   object-fit: contain;
 }
 .ground {
-  background-image: url("../assets/floorMaps/00_thegroundfloor.png");
+  background-image: url("../assets/floorMaps/00_thegroundfloor.webp");
 }
 .L1 {
-  background-image: url("../assets/floorMaps/00_thelowerlevel1.png");
+  background-image: url("../assets/floorMaps/00_thelowerlevel1.webp");
 }
 .L2 {
-  background-image: url("../assets/floorMaps/00_thelowerlevel2.png");
+  background-image: url("../assets/floorMaps/00_thelowerlevel2.webp");
 }
 .one {
-  background-image: url("../assets/floorMaps/01_thefirstfloor.png");
+  background-image: url("../assets/floorMaps/01_thefirstfloor.webp");
 }
 .two {
-  background-image: url("../assets/floorMaps/02_thesecondfloor.png");
+  background-image: url("../assets/floorMaps/02_thesecondfloor.webp");
 }
 .three {
-  background-image: url("../assets/floorMaps/03_thethirdfloor.png");
+  background-image: url("../assets/floorMaps/03_thethirdfloor.webp");
 }
 
 .react-transform-component {
