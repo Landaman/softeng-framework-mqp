@@ -1,68 +1,45 @@
-.Pathfinding {
-  flex-grow: 1;
-  display: flex;
-  background-color: #dce2e8;
-  align-items: stretch;
-  justify-content: flex-start;
-  padding: 64px;
-  max-width: 100vw;
+.pathfinding-container {
   height: 90vh;
-}
-
-.pathfinding-inputs {
-  align-self: stretch;
-  padding: 32px;
-  flex: 0 1 auto;
-  margin-right: 32px;
-  outline: #012d5a solid 3px;
-  border-radius: 32px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  flex-direction: row;
+  width: 100vw;
+  justify-content: space-between;
+  padding: 32px;
+  gap: 32px;
+  overflow: hidden;
 }
 
-.pathfindingButton {
-  width: 300px;
-  height: 50px;
-  background-color: #012d5a;
-  color: white;
-  margin: 10px;
+.pathfinding-left {
+  flex-grow: 1;
+  height: 100%;
+  max-width: 30vw;
+}
+
+.pathfinding-right {
+  flex-grow: 7;
+  height: 100%;
 }
 
 .nodeSelectorDiv {
   display: flex;
-  flexdirection: row;
+  flex-direction: row;
   align-items: center;
   width: 100%;
   margin-bottom: 16px;
-}
-
-.nodeSelectorButton {
-  width: 120px;
-  background-color: #001575;
-  color: white;
-  margin: 0px 10px 0px 10px;
-  border-radius: 16px;
-}
-
-.nodeSelectorButtonSelected {
-  width: 120px;
-  background-color: #002fff;
-  color: white;
-  margin: 0px 10px 0px 10px;
-  border-radius: 16px;
-}
-
-.pathfindingButton:hover {
-  background-color: #2d7adb;
+  gap: 16px;
 }
 
 .mapdiv {
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  height: 80vh;
+}
+
+.button-div {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 32px;
 }
 
 .pathfindingCanvas {
@@ -110,12 +87,4 @@
   aspect-ratio: 25 / 17;
   height: 100% !important;
   outline: #012d5a solid 3px;
-}
-
-.floorButton {
-  width: 100px;
-  margin: 16px;
-  background-color: #012d5a;
-  color: white;
-  border-radius: 16px;
 }

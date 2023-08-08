@@ -10,6 +10,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import EdgeDao, { Edge } from "../database/edge-dao.ts";
 import NodeDao, { Node } from "../database/node-dao.ts";
 import { MapEdge, MapNode } from "../MapComponents.ts";
+import Card from "react-bootstrap/Card";
+import { Button } from "react-bootstrap";
 
 function Pathfinding() {
   const [dataNodes, setDataNodes] = useState<Array<Node>>([]);
@@ -407,6 +409,8 @@ function Pathfinding() {
   }
 
   function buildMap(floor: string, m: string, nodes: Node[]) {
+    console.log(startButton);
+    console.log(endButton);
     clearCanvas();
     if (m === "Find Path") {
       const tempNodes: Array<MapNode> = [];
@@ -589,30 +593,37 @@ function Pathfinding() {
   }
 
   const [floor, setfloor] = useState("pathfindingCanvas L1");
+
   function groundFloor() {
     setfloor("pathfindingCanvas ground");
     clearCanvas();
   }
+
   function FloorL1() {
     setfloor("pathfindingCanvas L1");
     buildMap("L1", displayMode, pathNodes);
   }
+
   function FloorL2() {
     setfloor("pathfindingCanvas L2");
     buildMap("L2", displayMode, pathNodes);
   }
+
   function Floor1() {
     setfloor("pathfindingCanvas one");
     buildMap("ONE", displayMode, pathNodes);
   }
+
   function Floor2() {
     setfloor("pathfindingCanvas two");
     buildMap("TWO", displayMode, pathNodes);
   }
+
   function Floor3() {
     setfloor("pathfindingCanvas three");
     buildMap("THREE", displayMode, pathNodes);
   }
+
   function clearCanvas() {
     setMapNodes([]);
     setMapEdges([]);
@@ -641,68 +652,124 @@ function Pathfinding() {
   };
 
   return (
-    <div className={"Pathfinding"}>
-      <div className={"pathfinding-inputs"}>
-        <h1 style={{ marginBottom: "32px" }}>Get Directions</h1>
-        <div className={"nodeSelectorDiv"}>
-          <button className={startButton} onClick={selectStartNode}>
-            start Node
-          </button>
-          <p>{startNode}</p>
+    <div className={"pathfinding-container"}>
+      <div className={"pathfinding-left"}>
+        <>
+          <Card style={{ marginBottom: "64px" }}>
+            <Card.Header
+              className={"heading-text"}
+              style={{ textAlign: "start" }}
+            >
+              Get Directions
+            </Card.Header>
+            <Card.Body>
+              <div>
+                <div className={"nodeSelectorDiv"}>
+                  <Button
+                    onClick={selectStartNode}
+                    style={{ minWidth: "120px" }}
+                    variant="outline-dark"
+                  >
+                    Start Node
+                  </Button>
+                  <span style={{ fontWeight: "bold" }}>{startNode}</span>
+                </div>
+                <div
+                  className={"nodeSelectorDiv"}
+                  style={{ marginBottom: "32px" }}
+                >
+                  <Button
+                    onClick={selectEndNode}
+                    style={{ minWidth: "120px" }}
+                    variant="outline-dark"
+                  >
+                    End Node
+                  </Button>
+                  <span style={{ fontWeight: "bold" }}>{endNode}</span>
+                </div>
+                <Button onClick={Submit} style={{ width: "100%" }}>
+                  {displayMode}
+                </Button>
+              </div>
+            </Card.Body>
+          </Card>
+        </>
+        <div className={"button-div"}>
+          <Button
+            onClick={groundFloor}
+            variant={
+              floor == "pathfindingCanvas ground" ? "primary" : "outline-dark"
+            }
+          >
+            Ground
+          </Button>
+          <Button
+            onClick={FloorL1}
+            variant={
+              floor == "pathfindingCanvas L1" ? "primary" : "outline-dark"
+            }
+          >
+            L1
+          </Button>
+          <Button
+            onClick={FloorL2}
+            variant={
+              floor == "pathfindingCanvas L2" ? "primary" : "outline-dark"
+            }
+          >
+            L2
+          </Button>
+          <Button
+            onClick={Floor1}
+            variant={
+              floor == "pathfindingCanvas one" ? "primary" : "outline-dark"
+            }
+          >
+            1
+          </Button>
+          <Button
+            onClick={Floor2}
+            variant={
+              floor == "pathfindingCanvas two" ? "primary" : "outline-dark"
+            }
+          >
+            2
+          </Button>
+          <Button
+            onClick={Floor3}
+            variant={
+              floor == "pathfindingCanvas three" ? "primary" : "outline-dark"
+            }
+          >
+            3
+          </Button>
         </div>
-        <div className={"nodeSelectorDiv"}>
-          <button className={endButton} onClick={selectEndNode}>
-            end Node
-          </button>
-          <p>{endNode}</p>
-        </div>
-        <button onClick={Submit} className={"pathfindingButton"}>
-          {displayMode}
-        </button>
       </div>
-      <div className={"mapdiv"}>
-        <div
-          style={{
-            overflow: "hidden",
-            display: "flex",
-            flexGrow: "1",
-            width: "100%",
-            height: "100px",
-            outline: "#012d5a solid 3px",
-          }}
-          onMouseMove={handleMouseMove}
-          onMouseDown={handleMouseDown}
-          onMouseUp={handleMouseUp}
-          onWheel={handleWheel}
-        >
+      <div className={"pathfinding-right"}>
+        <div className={"mapdiv"}>
           <div
             style={{
-              transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`,
+              overflow: "hidden",
               display: "flex",
+              flexGrow: "1",
+              width: "100%",
+              height: "100px",
+              outline: "#012d5a solid 3px",
             }}
+            onMouseMove={handleMouseMove}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+            onWheel={handleWheel}
           >
-            <canvas className={floor} ref={canvasRef}></canvas>
+            <div
+              style={{
+                transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`,
+                display: "flex",
+              }}
+            >
+              <canvas className={floor} ref={canvasRef}></canvas>
+            </div>
           </div>
-        </div>
-        <div className={"buttondiv"}>
-          <button onClick={groundFloor} className={"floorButton"}>
-            Ground
-          </button>
-          <button onClick={FloorL1} className={"floorButton"}>
-            L1
-          </button>
-          <button onClick={FloorL2} className={"floorButton"}>
-            L2
-          </button>
-          <button onClick={Floor1} className={"floorButton"}>
-            1
-          </button>
-          <button onClick={Floor2} className={"floorButton"}>
-            2
-          </button>
-          <button onClick={Floor3} className={"floorButton"}>
-            3
-          </button>
         </div>
       </div>
     </div>
