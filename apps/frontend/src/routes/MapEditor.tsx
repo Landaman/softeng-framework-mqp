@@ -12,6 +12,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import NodeDao, { Floor, Node } from "../database/node-dao.ts";
 import EdgeDao, { Edge } from "../database/edge-dao.ts";
 import { round } from "@popperjs/core/lib/utils/math";
+import Card from "react-bootstrap/Card";
+import { Button } from "react-bootstrap";
 
 function createMapEdge(i1: number, i2: number) {
   const index1 = i1;
@@ -53,6 +55,7 @@ const distance = (
   a: { x1: number; y1: number },
   b: { x1: number; y1: number }
 ) => Math.sqrt(Math.pow(a.x1 - b.x1, 2) + Math.pow(a.y1 - b.y1, 2));
+
 function MapEditor() {
   const [mapNodes, setMapNodes] = useState<Array<MapNode>>([]);
   const [mapEdges, setMapEdges] = useState<Array<MapEdge>>([]);
@@ -429,6 +432,7 @@ function MapEditor() {
   }
 
   const [floor, setfloor] = useState("pathfindingCanvas L1");
+
   function FloorGround() {
     setfloor("pathfindingCanvas ground");
     clearCanvas();
@@ -439,26 +443,31 @@ function MapEditor() {
     setMapFloor(Floor.L1);
     buildMap(Floor.L1);
   }
+
   function FloorL2() {
     setfloor("pathfindingCanvas L2");
     setMapFloor(Floor.L2);
     buildMap(Floor.L2);
   }
+
   function Floor1() {
     setfloor("pathfindingCanvas one");
     setMapFloor(Floor.ONE);
     buildMap(Floor.ONE);
   }
+
   function Floor2() {
     setfloor("pathfindingCanvas two");
     setMapFloor(Floor.TWO);
     buildMap(Floor.TWO);
   }
+
   function Floor3() {
     setfloor("pathfindingCanvas three");
     setMapFloor(Floor.THREE);
     buildMap(Floor.THREE);
   }
+
   function clearCanvas() {
     setMapNodes([]);
     setMapEdges([]);
@@ -626,105 +635,283 @@ function MapEditor() {
   }
 
   return (
-    <div className={"Pathfinding"}>
-      <div className={"pathfinding-inputs"}>
-        <h1>Map Editor</h1>
-        <div className={"modesDiv"}>
-          <label className="selection-label">Mode</label>
-          <div className="mode-container" onClick={handlePan}>
-            <input
-              className="checkbox"
-              type="checkbox"
-              checked={panChecked}
-              onChange={handlePan}
-            ></input>
-            <label>Pan and Zoom</label>
-          </div>
-          <div className="mode-container" onClick={handleNode}>
-            <input
-              className="checkbox"
-              type="checkbox"
-              checked={nodeChecked}
-              onChange={handleNode}
-            ></input>
-            <label>Add Node</label>
-          </div>
-          <div className="mode-container" onClick={handleEdge}>
-            <input
-              className="checkbox"
-              type="checkbox"
-              checked={edgeChecked}
-              onChange={handleEdge}
-            ></input>
-            <label>Add Edge</label>
-          </div>
-          <div className="mode-container" onClick={handleMove}>
-            <input
-              className="checkbox"
-              type="checkbox"
-              checked={moveChecked}
-              onChange={handleMove}
-            ></input>
-            <label>Move Nodes</label>
-          </div>
-          <div className="mode-container" onClick={handleDelete}>
-            <input
-              className="checkbox"
-              type="checkbox"
-              checked={deleteChecked}
-              onChange={handleDelete}
-            ></input>
-            <label>Delete</label>
-          </div>
-        </div>
-        <button onClick={FloorGround} className={"floorButton"}>
-          Ground
-        </button>
-        <button onClick={FloorL1} className={"floorButton"}>
-          L1
-        </button>
-        <button onClick={FloorL2} className={"floorButton"}>
-          L2
-        </button>
-        <button onClick={Floor1} className={"floorButton"}>
-          1
-        </button>
-        <button onClick={Floor2} className={"floorButton"}>
-          2
-        </button>
-        <button onClick={Floor3} className={"floorButton"}>
-          3
-        </button>
-        <button onClick={submitChanges} className={"pathfindingButton"}>
-          Submit changes
-        </button>
+    <div className={"map-editor-container"}>
+      <div className={"map-editor-left"}>
+        <Card>
+          <Card.Header
+            className={"heading-text"}
+            style={{ textAlign: "start" }}
+          >
+            Map Editor
+          </Card.Header>
+          <Card.Body>
+            <div className={"pathfinding-inputs"}>
+              <div className={"modesDiv"}>
+                <br />
+                <h5 style={{ textAlign: "start" }}>Mode</h5>
+                <div className="mode-container" onClick={handlePan}>
+                  <input
+                    className={"radio"}
+                    type="radio"
+                    checked={panChecked}
+                    onChange={handlePan}
+                  ></input>
+                  <label>Pan and Zoom</label>
+                </div>
+                <div className="mode-container" onClick={handleNode}>
+                  <input
+                    type="radio"
+                    checked={nodeChecked}
+                    onChange={handleNode}
+                  ></input>
+                  <label>Add Node</label>
+                </div>
+                <div className="mode-container" onClick={handleEdge}>
+                  <input
+                    type="radio"
+                    checked={edgeChecked}
+                    onChange={handleEdge}
+                  ></input>
+                  <label>Add Edge</label>
+                </div>
+                <div className="mode-container" onClick={handleMove}>
+                  <input
+                    type="radio"
+                    checked={moveChecked}
+                    onChange={handleMove}
+                  ></input>
+                  <label>Move Nodes</label>
+                </div>
+                <div className="mode-container" onClick={handleDelete}>
+                  <input
+                    type="radio"
+                    checked={deleteChecked}
+                    onChange={handleDelete}
+                  ></input>
+                  <label>Delete</label>
+                </div>
+              </div>
+              <br />
+              <br />
+              <h5 style={{ textAlign: "start" }}>Floor</h5>
+              <div className={"button-grid"}>
+                <Button
+                  onClick={FloorGround}
+                  variant={
+                    floor == "pathfindingCanvas ground"
+                      ? "primary"
+                      : "outline-dark"
+                  }
+                >
+                  Ground
+                </Button>
+                <Button
+                  onClick={FloorL1}
+                  variant={
+                    floor == "pathfindingCanvas L1" ? "primary" : "outline-dark"
+                  }
+                >
+                  L1
+                </Button>
+                <Button
+                  onClick={FloorL2}
+                  variant={
+                    floor == "pathfindingCanvas L2" ? "primary" : "outline-dark"
+                  }
+                >
+                  L2
+                </Button>
+                <Button
+                  onClick={Floor1}
+                  variant={
+                    floor == "pathfindingCanvas one"
+                      ? "primary"
+                      : "outline-dark"
+                  }
+                >
+                  1
+                </Button>
+                <Button
+                  onClick={Floor2}
+                  variant={
+                    floor == "pathfindingCanvas two"
+                      ? "primary"
+                      : "outline-dark"
+                  }
+                >
+                  2
+                </Button>
+                <Button
+                  onClick={Floor3}
+                  variant={
+                    floor == "pathfindingCanvas three"
+                      ? "primary"
+                      : "outline-dark"
+                  }
+                >
+                  3
+                </Button>
+              </div>
+              <Button onClick={submitChanges} style={{ width: "100%" }}>
+                Submit changes
+              </Button>
+            </div>
+          </Card.Body>
+        </Card>
       </div>
-      <div className={"mapdiv"}>
-        <div
-          style={{
-            overflow: "hidden",
-            display: "flex",
-            flexGrow: "1",
-            width: "100%",
-            height: "100px",
-            outline: "#012d5a solid 3px",
-          }}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onWheel={handleWheel}
-        >
+      <div className={"map-editor-right"}>
+        <div className={"mapdiv"}>
           <div
             style={{
-              transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`,
+              overflow: "hidden",
               display: "flex",
+              flexGrow: "1",
+              width: "100%",
+              height: "100px",
+              outline: "#012d5a solid 3px",
             }}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onWheel={handleWheel}
           >
-            <canvas className={floor} ref={canvasRef}></canvas>
+            <div
+              style={{
+                transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`,
+                display: "flex",
+              }}
+            >
+              <canvas className={floor} ref={canvasRef}></canvas>
+            </div>
+          </div>
+        </div>
+        <div className={"mapdiv"}>
+          <div
+            style={{
+              overflow: "hidden",
+              display: "flex",
+              flexGrow: "1",
+              width: "100%",
+              height: "100px",
+              outline: "#012d5a solid 3px",
+            }}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onWheel={handleWheel}
+          >
+            <div
+              style={{
+                transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`,
+                display: "flex",
+              }}
+            >
+              <canvas className={floor} ref={canvasRef}></canvas>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
+    // <div className={"Pathfinding"}>
+    //   <div className={"pathfinding-inputs"}>
+    //     <h1>Map Editor</h1>
+    //     <div className={"modesDiv"}>
+    //       <label className="selection-label">Mode</label>
+    //       <div className="mode-container" onClick={handlePan}>
+    //         <input
+    //           className="checkbox"
+    //           type="checkbox"
+    //           checked={panChecked}
+    //           onChange={handlePan}
+    //         ></input>
+    //         <label>Pan and Zoom</label>
+    //       </div>
+    //       <div className="mode-container" onClick={handleNode}>
+    //         <input
+    //           className="checkbox"
+    //           type="checkbox"
+    //           checked={nodeChecked}
+    //           onChange={handleNode}
+    //         ></input>
+    //         <label>Add Node</label>
+    //       </div>
+    //       <div className="mode-container" onClick={handleEdge}>
+    //         <input
+    //           className="checkbox"
+    //           type="checkbox"
+    //           checked={edgeChecked}
+    //           onChange={handleEdge}
+    //         ></input>
+    //         <label>Add Edge</label>
+    //       </div>
+    //       <div className="mode-container" onClick={handleMove}>
+    //         <input
+    //           className="checkbox"
+    //           type="checkbox"
+    //           checked={moveChecked}
+    //           onChange={handleMove}
+    //         ></input>
+    //         <label>Move Nodes</label>
+    //       </div>
+    //       <div className="mode-container" onClick={handleDelete}>
+    //         <input
+    //           className="checkbox"
+    //           type="checkbox"
+    //           checked={deleteChecked}
+    //           onChange={handleDelete}
+    //         ></input>
+    //         <label>Delete</label>
+    //       </div>
+    //     </div>
+    //     <button onClick={FloorGround} className={"floorButton"}>
+    //       Ground
+    //     </button>
+    //     <button onClick={FloorL1} className={"floorButton"}>
+    //       L1
+    //     </button>
+    //     <button onClick={FloorL2} className={"floorButton"}>
+    //       L2
+    //     </button>
+    //     <button onClick={Floor1} className={"floorButton"}>
+    //       1
+    //     </button>
+    //     <button onClick={Floor2} className={"floorButton"}>
+    //       2
+    //     </button>
+    //     <button onClick={Floor3} className={"floorButton"}>
+    //       3
+    //     </button>
+    //     <button onClick={submitChanges} className={"pathfindingButton"}>
+    //       Submit changes
+    //     </button>
+    //   </div>
+    //   <div className={"mapdiv"}>
+    //     <div
+    //       style={{
+    //         overflow: "hidden",
+    //         display: "flex",
+    //         flexGrow: "1",
+    //         width: "100%",
+    //         height: "100px",
+    //         outline: "#012d5a solid 3px",
+    //       }}
+    //       onMouseDown={handleMouseDown}
+    //       onMouseMove={handleMouseMove}
+    //       onMouseUp={handleMouseUp}
+    //       onWheel={handleWheel}
+    //     >
+    //       <div
+    //         style={{
+    //           transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`,
+    //           display: "flex",
+    //         }}
+    //       >
+    //         <canvas className={floor} ref={canvasRef}></canvas>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
   );
 }
 
