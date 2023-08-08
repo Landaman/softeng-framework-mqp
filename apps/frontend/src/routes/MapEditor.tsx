@@ -647,7 +647,6 @@ function MapEditor() {
           <Card.Body>
             <div className={"pathfinding-inputs"}>
               <div className={"modesDiv"}>
-                <br />
                 <h5 style={{ textAlign: "start" }}>Mode</h5>
                 <div className="mode-container" onClick={handlePan}>
                   <input
@@ -760,31 +759,6 @@ function MapEditor() {
         </Card>
       </div>
       <div className={"map-editor-right"}>
-        <div className={"mapdiv"}>
-          <div
-            style={{
-              overflow: "hidden",
-              display: "flex",
-              flexGrow: "1",
-              width: "100%",
-              height: "100px",
-              outline: "#012d5a solid 3px",
-            }}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onWheel={handleWheel}
-          >
-            <div
-              style={{
-                transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`,
-                display: "flex",
-              }}
-            >
-              <canvas className={floor} ref={canvasRef}></canvas>
-            </div>
-          </div>
-        </div>
         <div className={"mapdiv"}>
           <div
             style={{
