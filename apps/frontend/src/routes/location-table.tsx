@@ -51,7 +51,7 @@
 //                 table
 //                     .getColumn(id)
 //                     ?.columnDef.meta?.createUpdateArgs(
-//                     table.getRow(index.toString()).original.id,
+//                     table.getRow(index.toString()).original.,
 //                     value
 //                 )
 //             );
@@ -96,9 +96,9 @@
 //     useEffect(() => {
 //         // This trick lets us use an async function in useEffect
 //         const fun = async () => {
-//             const requestDao = new EdgeDao();
+//             const locationDao = new LocationNameDao();
 //             // Get the requests from the API
-//             const requests = await requestDao.getAll(await getAccessTokenSilently());
+//             const locations = await locationDao.getAll(await getAccessTokenSilently());
 //
 //             // Set the requests
 //             setRequests(requests);
@@ -110,7 +110,7 @@
 //
 //     // Set up the columns for the computer request
 //     const columns = useMemo(() => {
-//         const columnHelper = createColumnHelper<Edge>();
+//         const columnHelper = createColumnHelper<LocationNameDao>();
 //         return [
 //             columnHelper.accessor("id", {
 //                 header: "ID",

@@ -82,6 +82,18 @@ function Homepage() {
           <Link to="/mapEditor">
             <Button variant="primary">Map Editor</Button>
           </Link>
+          <div style={{ height: "16px" }}></div>
+          <p className={"text-block"}>
+            Administrators can also make changes through the viewable tables of
+            data.
+          </p>
+          <Link to="/nodeTable">
+            <Button variant="primary">Node Table</Button>
+          </Link>
+          <div style={{ height: "16px" }}></div>
+          <Link to="/edgetable">
+            <Button variant="primary">Edge Table</Button>
+          </Link>
         </div>
       </div>
     </div>

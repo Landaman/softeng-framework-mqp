@@ -170,9 +170,12 @@ export default function ComputerRequestTable() {
       columnHelper.accessor("locationName.longName", {
         header: "Related Locations",
         meta: {
-          isEditable: false,
-          createUpdateArgs: () => {
-            throw "Changing Locations is not supported";
+          isEditable: true,
+          createUpdateArgs: (id, value) => {
+            return {
+              id: id,
+              locationName: value,
+            } satisfies UpdateNode;
           },
         },
       }),

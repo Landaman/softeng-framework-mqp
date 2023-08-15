@@ -122,9 +122,12 @@ export default function EdgeTable() {
       columnHelper.accessor("startNode.id", {
         header: "node1ID",
         meta: {
-          isEditable: false,
-          createUpdateArgs: () => {
-            throw "Changing nodeValues is not supported, please use the node table";
+          isEditable: true,
+          createUpdateArgs: (id, value) => {
+            return {
+              id: id,
+              startNode: value,
+            } satisfies UpdateEdge;
           },
         },
       }),
@@ -149,9 +152,12 @@ export default function EdgeTable() {
       columnHelper.accessor("endNode.id", {
         header: "node2ID",
         meta: {
-          isEditable: false,
-          createUpdateArgs: () => {
-            throw "Changing nodeValues is not supported, please use the node table";
+          isEditable: true,
+          createUpdateArgs: (id, value) => {
+            return {
+              id: id,
+              endNode: value,
+            } satisfies UpdateEdge;
           },
         },
       }),
