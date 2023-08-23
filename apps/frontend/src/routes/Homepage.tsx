@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import ComputerRequestDao from "../database/computer-request-dao.ts";
 import SanitationRequestDao from "../database/sanitation-request-dao.ts";
+import { LinkContainer } from "react-router-bootstrap";
 
 function Homepage() {
   const { user, getAccessTokenSilently } = useAuth0();
@@ -56,13 +57,13 @@ function Homepage() {
             Check out our service requests including Sanitation requests and
             Computer requests
           </p>
-          <Link to="/service-requests/computer/create">
+          <LinkContainer to="/service-requests/computer/create">
             <Button variant="primary">Computer Service Request</Button>
-          </Link>
+          </LinkContainer>
           <div style={{ height: "16px" }}></div>
-          <Link to="/service-requests/sanitation/create">
+          <LinkContainer to="/service-requests/sanitation/create">
             <Button variant="primary">Sanitation Service Request</Button>
-          </Link>
+          </LinkContainer>
         </div>
         <div className={"pathfinding"}>
           <p className={"heading-text"}>Pathfinding</p>

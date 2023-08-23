@@ -11,7 +11,7 @@ import SanitationRequestDao, {
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import { Toast } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { LinkContainer } from "react-router-bootstrap";
 
 export function ComputerService() {
   const { getAccessTokenSilently } = useAuth0();
@@ -82,9 +82,9 @@ export function ComputerService() {
       <Card style={{ width: "80vw" }}>
         <Card.Header className={"service-request-header"}>
           <span className={"heading-text"}>Computer Request</span>
-          <Link to="/service-requests/computer/view">
+          <LinkContainer to="/service-requests/computer/view">
             <Button variant="outline-primary">View all requests</Button>
-          </Link>
+          </LinkContainer>
         </Card.Header>
         <Card.Body>
           <Form className={"service-request-align"}>
@@ -269,9 +269,9 @@ export function SanitationService() {
       <Card style={{ width: "80vw" }}>
         <Card.Header className={"service-request-header"}>
           <span className={"heading-text"}>Sanitation Request</span>
-          <Link to="/service-requests/sanitation/view">
+          <LinkContainer to="/service-requests/sanitation/view">
             <Button variant="outline-primary">View all requests</Button>
-          </Link>
+          </LinkContainer>
         </Card.Header>
         <Card.Body>
           <Form className={"service-request-align"}>
