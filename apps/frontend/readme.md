@@ -57,7 +57,7 @@ It does two things:
 2. It bundles the frontend code and dependencies into a bundle that can be statically served
 
 Vite can be configured in `vite.config.ts`. Vite also requires `index.html`, where you can set
-the name of your page. You probably won't need to change your Vite config.
+the name of your page and configure static resources. You probably won't need to change your Vite config.
 
 Vite also uses the file `/src/vite-env.d.ts` to help your IDE provide type-hinting.
 
