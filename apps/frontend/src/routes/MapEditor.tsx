@@ -81,11 +81,19 @@ function MapEditor() {
   const [origionalX, setOrigionalX] = useState(0);
   const [origionalY, setOrigionalY] = useState(0);
   const [scale, setScale] = useState(1);
+  const [xOffset, setXOffset] = useState(0);
+  const [yOffset, setYOffset] = useState(0);
 
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>;
   const c = useRef() as MutableRefObject<CanvasRenderingContext2D>;
 
+  const leftDiv = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
+    setXOffset(leftDiv.current ? leftDiv.current.offsetWidth + 64 : 0);
+    setYOffset(
+      80 < 0.1 * window.innerHeight ? 0.1 * window.innerHeight + 32 : 112
+    );
     const get = async () => {
       const nodeDao = new NodeDao();
       const nodes: Node[] = await nodeDao.getAll(
@@ -103,8 +111,8 @@ function MapEditor() {
       for (let i = 0; i < nodes.length; i++) {
         const node: Node = nodes[i];
         if (node.floor === "L1") {
-          const x1: number = node.xCoord - 3;
-          const y1: number = node.yCoord - 3;
+          const x1: number = node.xCoord;
+          const y1: number = node.yCoord;
           const fromDatabase = true;
           const deleted = false;
           const mn: MapNode = { x1, y1, node, fromDatabase, deleted };
@@ -322,8 +330,8 @@ function MapEditor() {
   // @ts-ignore
   const handleWheel = (event) => {
     const { clientX, clientY } = event;
-    const adjX = clientX - canvasX / 2 - 512;
-    const adjY = clientY - canvasY / 2 - 114;
+    const adjX = clientX - canvasX / 2 - xOffset;
+    const adjY = clientY - canvasY / 2 - yOffset;
 
     if (event.deltaY > 0 && scale > 1) {
       const x = adjX - (adjX - translateX) / 1.1;
@@ -342,10 +350,10 @@ function MapEditor() {
 
   function updateNode(index: number, x: number, y: number) {
     const x1 = round(
-      (((x - 512 - translateX) * 5000) / canvasX - 2500) / scale + 2500
+      (((x - xOffset - translateX) * 5000) / canvasX - 2500) / scale + 2500
     );
     const y1 = round(
-      (((y - 114 - translateY) * 3400) / canvasY - 1700) / scale + 1700
+      (((y - yOffset - translateY) * 3400) / canvasY - 1700) / scale + 1700
     );
     const n: MapNode = mapNodes[index];
     n.x1 = x1;
@@ -361,14 +369,10 @@ function MapEditor() {
     const lowX = canvasX / 2 - (canvasX / 2) * s;
     const highY = canvasY / -2 - (canvasY / -2) * s;
     const lowY = canvasY / 2 - (canvasY / 2) * s;
-    console.log(highX);
-    console.log(x);
     if (highX < x) {
-      console.log("HighX");
       setTranslateX(highX);
       correct = false;
     } else if (lowX > x) {
-      console.log("LowX");
       setTranslateX(lowX);
       correct = false;
     } else {
@@ -376,10 +380,8 @@ function MapEditor() {
     }
     if (highY < y) {
       setTranslateY(highY);
-      console.log("HighY");
       correct = false;
     } else if (lowY > y) {
-      console.log("LowY");
       setTranslateY(lowY);
       correct = false;
     } else {
@@ -391,10 +393,10 @@ function MapEditor() {
 
   function createMapNode(x: number, y: number) {
     const x1 = round(
-      (((x - 512 - translateX) * 5000) / canvasX - 2500) / scale + 2500
+      (((x - xOffset - translateX) * 5000) / canvasX - 2500) / scale + 2500
     );
     const y1 = round(
-      (((y - 114 - translateY) * 3400) / canvasY - 1700) / scale + 1700
+      (((y - yOffset - translateY) * 3400) / canvasY - 1700) / scale + 1700
     );
     const node: Node = {
       id: 0,
@@ -526,9 +528,9 @@ function MapEditor() {
 
   function findNode(x: number, y: number) {
     const adjX =
-      (((x - 512 - translateX) * 5000) / canvasX - 2500) / scale + 2500;
+      (((x - xOffset - translateX) * 5000) / canvasX - 2500) / scale + 2500;
     const adjY =
-      (((y - 114 - translateY) * 3400) / canvasY - 1700) / scale + 1700;
+      (((y - yOffset - translateY) * 3400) / canvasY - 1700) / scale + 1700;
     for (let i = 0; i < mapNodes.length; i++) {
       if (
         adjX - 12 < mapNodes[i].x1 &&
@@ -544,9 +546,9 @@ function MapEditor() {
 
   function findEdge(x: number, y: number) {
     const x1 =
-      (((x - 512 - translateX) * 5000) / canvasX - 2500) / scale + 2500;
+      (((x - xOffset - translateX) * 5000) / canvasX - 2500) / scale + 2500;
     const y1 =
-      (((y - 114 - translateY) * 3400) / canvasY - 1700) / scale + 1700;
+      (((y - yOffset - translateY) * 3400) / canvasY - 1700) / scale + 1700;
     for (let i = 0; i < mapEdges.length; i++) {
       const n1 = mapNodes[mapEdges[i].index1];
       const n2 = mapNodes[mapEdges[i].index2];
@@ -636,7 +638,7 @@ function MapEditor() {
 
   return (
     <div className={"map-editor-container"}>
-      <div className={"map-editor-left"}>
+      <div ref={leftDiv} className={"map-editor-left"}>
         <Card>
           <Card.Header
             className={"heading-text"}

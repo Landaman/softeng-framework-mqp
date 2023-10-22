@@ -34,8 +34,17 @@ function Pathfinding() {
   const [endButton, setEndButton] = useState("nodeSelectorButton");
   const [pathNodes, setPathNodes] = useState<Array<Node>>([]);
   const [pathBreaks, setPathBreaks] = useState<Array<number>>([]);
+  const [xOffset, setXOffset] = useState(0);
+  const [yOffset, setYOffset] = useState(0);
   const { getAccessTokenSilently } = useAuth0();
+
+  const leftDiv = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
+    setXOffset(leftDiv.current ? leftDiv.current.offsetWidth + 64 : 0);
+    setYOffset(
+      80 < 0.1 * window.innerHeight ? 0.1 * window.innerHeight + 32 : 112
+    );
     const get = async () => {
       const nodeDao = new NodeDao();
       const nodes: Node[] = await nodeDao.getAll(
@@ -522,8 +531,8 @@ function Pathfinding() {
   // @ts-ignore
   const handleWheel = (event) => {
     const { clientX, clientY } = event;
-    const adjX = clientX - canvasX / 2 - 512;
-    const adjY = clientY - canvasY / 2 - 114;
+    const adjX = clientX - canvasX / 2 - xOffset;
+    const adjY = clientY - canvasY / 2 - yOffset;
 
     if (event.deltaY > 0 && scale > 1) {
       const x = adjX - (adjX - translateX) / 1.1;
@@ -576,9 +585,9 @@ function Pathfinding() {
 
   function findNode(x: number, y: number) {
     const adjX =
-      (((x - 512 - translateX) * 5000) / canvasX - 2500) / scale + 2500;
+      (((x - xOffset - translateX) * 5000) / canvasX - 2500) / scale + 2500;
     const adjY =
-      (((y - 114 - translateY) * 3400) / canvasY - 1700) / scale + 1700;
+      (((y - yOffset - translateY) * 3400) / canvasY - 1700) / scale + 1700;
     for (let i = 0; i < mapNodes.length; i++) {
       if (
         adjX - 12 < mapNodes[i].x1 &&
@@ -653,7 +662,7 @@ function Pathfinding() {
 
   return (
     <div className={"pathfinding-container"}>
-      <div className={"pathfinding-left"}>
+      <div ref={leftDiv} className={"pathfinding-left"}>
         <>
           <Card style={{ marginBottom: "64px" }}>
             <Card.Header
