@@ -21,6 +21,7 @@ import Pathfinding from "./routes/Pathfinding.tsx";
 import MapEditor from "./routes/MapEditor.tsx";
 import { AuthenticationGuard } from "./AuthenticationGuard.tsx";
 import SanitationRequestTable from "./routes/SanitationRequestTable.tsx";
+import { PrototypeForm } from "./routes/PrototypeForm.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -112,6 +113,10 @@ function App() {
             {
               path: "*",
               element: <ErrorPage />,
+            },
+            {
+              path: "proto",
+              element: <PrototypeForm />,
             },
           ],
         },
